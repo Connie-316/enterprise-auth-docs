@@ -57,6 +57,20 @@
     .tab:hover { border-color: #1677ff; color: #1677ff; }
     .tab.active { background: #1677ff; color: #fff; border-color: #1677ff; }
 
+    /* v6.8 新增：分组标签 & 特殊tab */
+    .tab-group-label {
+      width: 100%; text-align:left; font-size: 11px; font-weight:600; color:#888;
+      margin-top:10px; padding:2px 4px;border-bottom:1px solid #eee;letter-spacing:0.5px;
+      display:none; /* 初始隐藏，JS激活时显示 */
+    }
+    .tabs.has-groups > .tab-group-label { display:block; }
+    .modal-tab { background:#f9f0ff;color:#722ed1;border-color:#d3adf7; }
+    .modal-tab:hover, .modal-tab.active { background:#722ed1;color:#fff;border-color:#722ed1; }
+    .success-tab { background:#f6ffed;color:#52c41a;border-color:#b7eb8f; }
+    .success-tab:hover, .success-tab.active { background:#52c41a;color:#fff;border-color:#52c41a; }
+    .error-tab { background:#fff1f0;color:#f5222d;border-color:#ffa39e; }
+    .error-tab:hover, .error-tab.active { background:#f5222d;color:#fff;border-color:#f5222d; }
+
     /* 分组标题 */
     .section-label {
       text-align: center;
@@ -513,22 +527,97 @@
 </div>
 <div class="page-subtitle">微信小程序端完整认证交互原型，业务逻辑与H5端一致，仅实现层不同</div>
 
-<!-- 导航tabs -->
-<div class="tabs" id="tabs">
-  <div class="tab active" onclick="showPage('p-entry')">38 认证入口</div>
-  <div class="tab" onclick="showPage('p-company')">74 企业信息填写</div>
-  <div class="tab" onclick="showPage('p-phone')">75 法人+经办人</div>
-  <div class="tab" onclick="showPage('p-checking')">过渡加载</div>
-  <div class="tab" onclick="showPage('p-form')">完整认证表单</div>
-  <div class="tab" onclick="showPage('p-webview')">WebView跳转</div>
-  <div class="tab" onclick="showPage('p-processing')">认证中</div>
-  <div class="tab" onclick="showPage('p-success')">认证成功</div>
-  <div class="tab" onclick="showPage('p-failed')">认证失败</div>
-  <div class="tab" onclick="showPage('p-authz-wait')">授权待处理</div>
-  <div class="tab" onclick="showPage('p-authz-ok')">授权通过</div>
-  <div class="tab" onclick="showPage('p-authz-rej')">授权拒绝</div>
-  <div class="tab" onclick="showPage('p-draft')">草稿恢复</div>
-  <div class="tab" onclick="showPage('p-diff')">⚠️ 与H5端差异说明</div>
+<!-- 导航tabs（v6.8升级：分组式导航+导航面板按钮） -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#001529;padding:4px 12px;display:flex;align-items:center;gap:8px;">
+    <span style="color:#fff;font-size:12px;font-weight:600;">📱 小程序端 v6.8</span>
+    <span style="color:#4a90d9;font-size:10px;">|</span>
+    <span id="mini-breadcrumb" style="color:#8c9bb3;font-size:10px;">当前：<b>认证入口</b></span>
+    <div style="flex:1;"></div>
+    <button onclick="toggleMiniNav()" style="background:#1890ff;color:#fff;border:none;padding:3px 10px;border-radius:4px;cursor:pointer;font-size:10px;">📂 导航</button>
+</div>
+<div class="tabs" id="tabs" style="top:30px;">
+  <div class="tab-group-label">📋 阶段1：表单（步骤1-2）</div>
+  <div class="tab active" onclick="showPage('p-entry')">① 认证入口</div>
+  <div class="tab" onclick="showPage('p-company')">② 企业信息</div>
+  <div class="tab" onclick="showPage('p-phone')">② 法人+经办人</div>
+  <div class="tab" onclick="showPage('p-checking')">②.₅ 过渡加载</div>
+  <div class="tab-group-label">📄 阶段2：提交认证（步骤3）</div>
+  <div class="tab" onclick="showPage('p-form')">④ 完整表单</div>
+  <div class="tab modal-tab" onclick="showPage('p-webview')">◆ WebView</div>
+  <div class="tab-group-label">✅❌ 阶段3：结果状态</div>
+  <div class="tab" onclick="showPage('p-processing')">⏳ 认证中</div>
+  <div class="tab success-tab" onclick="showPage('p-success')">✅ 认证成功</div>
+  <div class="tab error-tab" onclick="showPage('p-failed')">❌ 认证失败</div>
+  <div class="tab-group-label">🔑 场景二：授权（仅场景二）</div>
+  <div class="tab" onclick="showPage('p-authz-wait')">⏳ 等待授权</div>
+  <div class="tab success-tab" onclick="showPage('p-authz-ok')">✅ 授权通过</div>
+  <div class="tab error-tab" onclick="showPage('p-authz-rej')">❌ 授权拒绝</div>
+  <div class="tab-group-label">💾 辅助</div>
+  <div class="tab" onclick="showPage('p-draft')">💾 草稿恢复</div>
+  <div class="tab" onclick="showPage('p-diff')">⚠️ 差异说明</div>
+</div>
+
+<!-- v6.8 新增：小程序导航面板 -->
+<div id="mini-nav-panel" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);" onclick="if(event.target===this)toggleMiniNav()">
+    <div style="position:absolute;top:0;right:0;width:340px;height:100%;background:#fafafa;overflow-y:auto;box-shadow:-4px 0 24px rgba(0,0,0,0.15);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;font-size:13px;">
+        <div style="position:sticky;top:0;background:#fff;padding:14px 18px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;gap:8px;z-index:10;">
+            <span style="font-size:18px;">🗺</span>
+            <div><div style="font-weight:600;font-size:14px;">小程序端 · 页面导航</div><div style="font-size:10px;color:#888;margin-top:1px;">3步流程 | 表单分2页 | 底部弹窗</div></div>
+            <div style="flex:1;"></div>
+            <button onclick="toggleMiniNav()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#999;">&times;</button>
+        </div>
+        <!-- 小程序特有差异提示 -->
+        <div style="margin:10px 14px;padding:10px;border-radius:8px;border:1px dashed #91d5ff;background:#e6f7ff;font-size:11px;">
+            <div style="font-weight:600;color:#096dd9;margin-bottom:4px;">📱 小程序端 vs PC端 3大差异</div>
+            <div style="color:#444;line-height:1.6;">
+                1️⃣ <b>3步</b>（非PC端4步），表单分<b>2页</b>（企业信息 + 法人经办人）<br/>
+                2️⃣ 弹窗用<b>底部弹出层</b>（非PC居中弹窗）<br/>
+                3️⃣ 税号标签 = 「统一社会信用代码」<br/>
+                💡 <b>回跳方案：</b>e签宝H5 → 中间H5页 → wx.miniProgram.navigateBack
+            </div>
+        </div>
+        <!-- 决策卡片 -->
+        <div style="margin:6px 14px;padding:10px;border-radius:8px;border:1px dashed #ffd591;background:#fffbe6;font-size:11px;">
+            <div style="font-weight:600;color:#d48806;margin-bottom:4px;">💎 方案C+（核心）</div>
+            <div style="color:#444;line-height:1.6;">
+                商城侧<b>不做场景分流</b>，统一展示完整表单<br/>
+                场景一/二判断在<b>e签宝H5内部自动完成</b><br/>
+                ⚠️ 开发不要写 isExisted 检测逻辑！
+            </div>
+        </div>
+        <div style="margin:6px 14px;padding:10px;border-radius:8px;border:1px dashed #ffd591;background:#fffbe6;font-size:11px;">
+            <div style="font-weight:600;color:#d48806;margin-bottom:4px;">🔀 决策A：有草稿？</div>
+            <div style="color:#444;line-height:1.6;"><b>Y</b>→草稿恢复页（永久有效）<br/><b>N</b>→认证入口页</div>
+        </div>
+        <div style="margin:6px 14px;padding:10px;border-radius:8px;border:1px dashed #ffd591;background:#fffbe6;font-size:11px;">
+            <div style="font-weight:600;color:#d48806;margin-bottom:4px;">🔀 决策B：e签宝认证结果？</div>
+            <div style="color:#444;line-height:1.6;">
+                <b>成功</b>→场景一：审核中→认证成功 ✅<br/>
+                <b>成功</b>→场景二：等待授权→管理员审批...<br/>
+                <b>失败</b>→认证失败 ❌→【重新认证】回填表单
+            </div>
+        </div>
+        <div style="margin:6px 14px;padding:10px;border-radius:8px;border:1px dashed #ffd591;background:#fffbe6;font-size:11px;">
+            <div style="font-weight:600;color:#d48806;margin-bottom:4px;">🔀 决策C：管理员授权？</div>
+            <div style="color:#444;line-height:1.6;">
+                <b>同意</b>→授权通过 ✅<br/>
+                <b>拒绝</b>→授权拒绝 ❌→【重新申请】最多3次<br/>
+                <b>超时24h</b>→授权超时 ❌
+            </div>
+        </div>
+        <!-- 开发速查 -->
+        <div style="margin:6px 14px;padding:10px;border-radius:8px;border:1px solid #adc6ff;background:#f0f5ff;font-size:11px;">
+            <div style="font-weight:600;color:#1890ff;margin-bottom:4px;">⚡ 小程序开发速查</div>
+            <div style="color:#444;line-height:1.6;">
+                1️⃣ clientType=<b>MINI_APP</b>（PC端=H5）<br/>
+                2️⃣ 回跳：<b>中间H5页</b> + wx.miniProgram.navigateBack<br/>
+                3️⃣ 弹窗：底部弹出层（wx:if 控制）<br/>
+                4️⃣ 税号=统一社会信用代码<br/>
+                5️⃣ 审核时间：<b>5-10分钟</b>（非1-3工作日）<br/>
+                6️⃣ 草稿：<b>永久保存</b>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- ========== 页38: 认证入口（对应截图画面38）========== -->
@@ -1317,13 +1406,26 @@
 </div>
 
 <script>
+// v6.8 新增：导航面板
+function toggleMiniNav() {
+  document.getElementById('mini-nav-panel').style.display =
+    document.getElementById('mini-nav-panel').style.display === 'none' ? 'block' : 'none';
+}
+// v6.8：页面名映射（面包屑）
+var MINI_PAGE_NAMES = {
+  'p-entry':'① 认证入口','p-company':'② 企业信息填写','p-phone':'② 法人+经办人',
+  'p-checking':'②.₅ 过渡加载','p-form':'④ 完整表单','p-webview':'◆ WebView',
+  'p-processing':'⏳ 认证中','p-success':'✅ 认证成功','p-failed':'❌ 认证失败',
+  'p-authz-wait':'⏳ 等待授权','p-authz-ok':'✅ 授权通过','p-authz-rej':'❌ 授权拒绝',
+  'p-draft':'💾 草稿恢复','p-diff':'⚠️ 差异说明'
+};
 function showPage(id) {
   // 隐藏所有页
   document.querySelectorAll('.screen-page').forEach(p => p.classList.remove('visible'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   // 显示目标页
   document.getElementById(id).classList.add('visible');
-  // 激活tab
+  // 激活tab（v6.8更新索引）
   const tabs = document.querySelectorAll('.tab');
   const map = {
     'p-entry': 0, 'p-company': 1, 'p-phone': 2, 'p-checking': 3,
@@ -1332,6 +1434,9 @@ function showPage(id) {
     'p-authz-ok': 10, 'p-authz-rej': 11, 'p-draft': 12, 'p-diff': 13
   };
   if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+  // v6.8：更新面包屑
+  var bc = document.getElementById('mini-breadcrumb');
+  if (bc) bc.innerHTML = '当前：<b>' + (MINI_PAGE_NAMES[id] || id) + '</b>';
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 </script>

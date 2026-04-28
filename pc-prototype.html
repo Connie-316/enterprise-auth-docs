@@ -593,36 +593,330 @@
     ============================================================
 -->
 
-<!-- 原型页面切换导航（仅用于演示） -->
-<div class="proto-nav" style="position: fixed; top: 0; left: 0; right: 0; background: #001529; color: #fff; z-index: 9999; padding: 8px 16px; font-size: 13px; max-height: 80px; overflow-y: auto;">
-    <div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
-        <span style="margin-right: 12px; font-weight: 500; white-space: nowrap;">🎨 页面导航：</span>
-        <button class="proto-btn active" onclick="showPage('flowOverview')">📊 流程总览</button>
-        <button class="proto-btn" onclick="showPage('unverified')">未认证入口</button>
-        <button class="proto-btn" onclick="showPage('page2')">填写企业信息</button>
-        <button class="proto-btn" onclick="showPage('checking')">过渡加载(3.5)</button>
-        <button class="proto-btn" onclick="showPage('draft')">草稿恢复</button>
-        <button class="proto-btn" onclick="showPage('form')">完整认证表单</button>
-        <button class="proto-btn modal-btn" onclick="showPage('esignModal')">🔲 e签宝弹窗</button>
-        <button class="proto-btn modal-btn" onclick="showPage('authzModal')">🔲 授权申请弹窗</button>
-        <button class="proto-btn" onclick="showPage('esignRedirect')">跳转e签宝(场景一)</button>
-        <button class="proto-btn" onclick="showPage('esignRedirectAuthz')">跳转e签宝(场景二)</button>
-        <button class="proto-btn" onclick="showPage('verifying')">审核中</button>
-        <button class="proto-btn" onclick="showPage('verified')">认证+授权通过</button>
-        <button class="proto-btn" onclick="showPage('rejected')">认证失败</button>
-        <button class="proto-btn" onclick="showPage('authzPending')">等待授权</button>
-        <button class="proto-btn" onclick="showPage('authzApproved')">授权通过</button>
-        <button class="proto-btn" onclick="showPage('authzRejected')">授权拒绝</button>
-        <button class="proto-btn" onclick="showPage('authzTimeout')">授权超时</button>
+<!-- 原型页面切换导航（v6.8升级：交互式树形导航+决策卡片） -->
+<div class="proto-nav" style="position: fixed; top: 0; left: 0; right: 0; background: #001529; color: #fff; z-index: 9999; padding: 6px 16px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-weight: 600; white-space: nowrap; font-size: 13px;">🎨 企业认证原型 v6.8</span>
+        <span style="color: #4a90d9; font-size: 11px;">|</span>
+        <span id="nav-breadcrumb" style="font-size: 11px; color: #8c9bb3;">当前：<b>流程总览</b></span>
+        <div style="flex:1;"></div>
+        <button onclick="toggleNavPanel()" style="background:#1890ff;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;">📂 导航面板</button>
     </div>
-    <style>
-        .proto-btn { background: #1890ff; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; white-space: nowrap; }
-        .proto-btn:hover { background: #40a9ff; }
-        .proto-btn.active { background: #52c41a; }
-        .proto-btn.modal-btn { background: #722ed1; }
-        .proto-btn.modal-btn:hover { background: #9254de; }
-    </style>
 </div>
+
+<!-- ====== v6.8 新增：可折叠交互式导航面板 ====== -->
+<div id="nav-panel" style="display:none; position:fixed; top:38px; left:0; right:0; bottom:0; z-index:9998; background:rgba(0,0,0,0.45); backdrop-filter:blur(2px);" onclick="if(event.target===this)toggleNavPanel()">
+    <div style="position:absolute;top:0;left:0;width:380px;height:100%;background:#fafafa;overflow-y:auto;box-shadow:4px 0 24px rgba(0,0,0,0.15);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;">
+        <!-- 面板头部 -->
+        <div style="position:sticky;top:0;background:#fff;padding:16px 20px;border-bottom:1px solid #e8e8e8;z-index:10;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:18px;">🗺</span>
+            <div><div style="font-weight:600;font-size:15px;color:#1a1a1a;">页面导航 & 决策地图</div><div style="font-size:11px;color:#888;margin-top:2px;">点击跳转 · 查看触发条件与跳转关系</div></div>
+            <div style="flex:1;"></div>
+            <button onclick="toggleNavPanel()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#999;line-height:1;">&times;</button>
+        </div>
+
+        <!-- 图例 -->
+        <div style="padding:12px 20px;background:#f0f5ff;border-bottom:1px solid #dce8ff;display:flex;flex-wrap:wrap;gap:8px;font-size:11px;">
+            <span style="color:#1890ff;">● 页面</span>
+            <span style="color:#722ed1;">◆ 弹窗</span>
+            <span style="color:#08979c;">◉ 外部系统</span>
+            <span style="color:#fa8c16;">◇ 判断分支</span>
+            <span style="color:#52c41a;">▣ 成功终态</span>
+            <span style="color:#f5222d;">▣ 失败/异常</span>
+        </div>
+
+        <!-- 树形导航内容 -->
+        <style>
+        .nav-tree { padding: 8px 0; }
+        .nav-group { margin-bottom: 2px; }
+        .nav-group-title { 
+            display:flex;align-items:center;gap:6px;padding:10px 20px;cursor:pointer;
+            font-weight:600;font-size:13px;color:#333;background:#fff;
+            border-left:3px solid transparent;transition:all 0.15s;
+        }
+        .nav-group-title:hover { background:#f5f5f5; }
+        .nav-group-title.active { border-left-color:#1890ff; background:#e6f7ff; color:#1890ff; }
+        .nav-group-arrow { transition:transform 0.2s; font-size:10px; color:#aaa; }
+        .nav-group.open > .nav-group-arrow { transform: rotate(90deg); }
+        .nav-children { display:none; padding-left: 14px; background:#fff; }
+        .nav-group.open > .nav-children { display:block; }
+
+        .nav-leaf {
+            display:flex;align-items:flex-start;gap:8px;padding:7px 20px 7px 28px;
+            cursor:pointer;border-left:3px solid transparent;
+            transition:all 0.12s; position:relative;
+        }
+        .nav-leaf:hover { background:#f0f0f0; }
+        .nav-leaf.current { background:#e6f7ff; border-left-color:#40a9ff; }
+        .nav-leaf-icon { flex-shrink:0;width:18px;text-align:center;font-size:12px;margin-top:1px;}
+        .nav-leaf-body { flex:1; min-width:0; }
+        .nav-leaf-name { font-weight:500;font-size:12.5px;color:#262626;line-height:1.35; }
+        .nav-leaf-desc { font-size:11px;color:#888;margin-top:2px;line-height:1.3;white-space:normal;word-break:break-all; }
+        .nav-leaf-trigger {
+            display:inline-block;margin-top:3px;padding:1px 7px;border-radius:8px;
+            font-size:10px;white-space:nowrap;
+        }
+        .nav-leaf-trigger.page { background:#e6f7ff;color:#1890ff; }
+        .nav-leaf-trigger.modal { background:#f9f0ff;color:#722ed1; }
+        .nav-leaf-trigger.external { background:#e6fffb;color:#08979c; }
+        .nav-leaf-trigger.decision { background:#fffbe6;color:#d48806; }
+        .nav-leaf-trigger.success { background:#f6ffed;color:#52c41a; }
+        .nav-leaf-trigger.error { background:#fff1f0;color:#f5222d; }
+        
+        /* 决策卡片 */
+        .decision-card {
+            margin:4px 16px 8px;padding:10px 14px;border-radius:8px;
+            border:1px dashed #ffd591;background:#fffbe6;font-size:11.5px;
+        }
+        .decision-card-title { font-weight:600;color:#d48806;margin-bottom:4px; }
+        .decision-card-body { color:#666;line-height:1.55; }
+        .decision-card-body b { color:#ad6800; }
+        </style>
+
+        <div class="nav-tree">
+            <!-- 阶段0：入口判断 -->
+            <div class="nav-group open" id="ng-entry">
+                <div class="nav-group-title" onclick="toggleGroup('ng-entry')"><span class="nav-group-arrow">▶</span> 🚀 阶段0：入口与草稿判断</div>
+                <div class="nav-children">
+                    <div class="nav-leaf" onclick="jumpToPage('flowOverview')">
+                        <div class="nav-leaf-icon">📊</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">流程总览图</div>
+                            <div class="nav-leaf-desc">完整业务流程 SVG 图，含所有页面、弹窗、状态流转</div>
+                            <span class="nav-leaf-trigger page">📄 总览页</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 草稿判断决策卡片 -->
+            <div class="decision-card">
+                <div class="decision-card-title">🔀 决策点 A：是否有历史草稿？</div>
+                <div class="decision-card-body">
+                    <b>Y → 有草稿</b> → 进入「草稿恢复页」，用户选择继续或放弃<br/>
+                    <b>N → 无草稿</b> → 直接进入「页面1：认证入口」<br/>
+                    <br/>💡 <b>实现提示：</b>调用后端接口查询该用户是否有未提交的认证草稿记录。草稿永久保存（不过期）。
+                </div>
+            </div>
+
+            <div class="nav-group open" id="ng-start">
+                <div class="nav-group-title" onclick="toggleGroup('ng-start')"><span class="nav-group-arrow">▶</span> 📋 阶段1：表单填写（步骤 1~2）</div>
+                <div class="nav-children">
+                    <div class="nav-leaf" onclick="jumpToPage('unverified')">
+                        <div class="nav-leaf-icon">①</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">页面1：认证入口（权益引导页）</div>
+                            <div class="nav-leaf-desc">展示账期/专属价/合同权益说明 + 【去认证】按钮</div>
+                            <span class="nav-leaf-trigger page">📍 入口 | 触发：无草稿首次进入 / 无草稿放弃后重进</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('page2')">
+                        <div class="nav-leaf-icon">②</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">页面2：填写企业信息（轻量表单）</div>
+                            <div class="nav-leaf-desc">企查查搜索自动填充：企业名称、统一社会信用代码、法人、地址（4字段）</div>
+                            <span class="nav-leaf-trigger page">📍 表单 | 触发：【去认证】或【继续填写】点击后</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('checking')">
+                        <div class="nav-leaf-icon">②.₅</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">页面3.5：过渡加载态</div>
+                            <div class="nav-leaf-desc">纯前端过渡（1-2秒），不调后端API。<b style="color:#722ed1;">方案C+核心：</b>商城侧不做场景分流</div>
+                            <span class="nav-leaf-trigger decision">◇ 过渡态 | 触发：页面2【下一步】自动跳转</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 方案C+ 核心决策 -->
+            <div class="decision-card">
+                <div class="decision-card-title">💎 核心决策：方案C+（商城不做分流）</div>
+                <div class="decision-card-body">
+                    页面3.5 之后<b>统一进入完整表单页（页面4）</b>，不分场景一/二<br/>
+                    <b>场景分流发生在 e签宝H5内部</b>（商城侧不可见）<br/>
+                    <br/>⚠️ <b>开发必读：</b>不要在商城侧写 isExisted 检测逻辑！不要做 if/else 分流！<br/>
+                    商城只需：传 clientType=H5 → 跳转 e签宝 H5 → 等 callback 回调
+                </div>
+            </div>
+
+            <div class="nav-group open" id="ng-form">
+                <div class="nav-group-title" onclick="toggleGroup('ng-form')"><span class="nav-group-arrow">▶</span> 📄 阶段2：完整表单 & 提交认证（步骤 3~4）</div>
+                <div class="nav-children">
+                    <div class="nav-leaf" onclick="jumpToPage('form')">
+                        <div class="nav-leaf-icon">④</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">页面4：完整认证表单</div>
+                            <div class="nav-leaf-desc">法人信息 + 经办人信息 + 协议勾选。企查查预填数据回显。支持保存草稿。</div>
+                            <span class="nav-leaf-trigger page">📍 主表单 | 上一步：页面3.5 自动跳转</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('esignModal')">
+                        <div class="nav-leaf-icon">◆</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">弹窗：确认跳转 e签宝 认证</div>
+                            <div class="nav-leaf-desc">协议勾选 + 【立即认证】按钮。点击后打开 e签宝 WebView。</div>
+                            <span class="nav-leaf-trigger modal">◆ 弹窗 | 触发：【提交认证】点击后弹出</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('esignRedirect')">
+                        <div class="nav-leaf-icon">◉</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">e签宝 H5 页（外部系统）— 场景一</div>
+                            <div class="nav-leaf-desc">首次认证：人脸识别 + 营业执照上传。H5 内部自动判断走哪条路。</div>
+                            <span class="nav-leaf-trigger external">◉ 外部系统 | 场景一：企业首次在 e签宝 认证</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('authzModal')">
+                        <div class="nav-leaf-icon">◆</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">弹窗：授权申请（场景二专用）</div>
+                            <div class="nav-leaf-desc">填写申请人/补充信息 + 协议勾选。<b>由 e签宝 H5 内部触发</b>，非商城侧。</div>
+                            <span class="nav-leaf-trigger modal">◆ 弹窗 | 触发：e签宝H5检测到企业已实名时内部弹出</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('esignRedirectAuthz')">
+                        <div class="nav-leaf-icon">◉</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">e签宝 授权页（外部系统）— 场景二</div>
+                            <div class="nav-leaf-desc">管理员审批授权申请。企业在 e签宝 已有实名认证。</div>
+                            <span class="nav-leaf-trigger external">◉ 外部系统 | 场景二：企业已在 e签宝 实名认证</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- e签宝结果判断 -->
+            <div class="decision-card">
+                <div class="decision-card-title">🔀 决策点 B：e签宝 认证结果？</div>
+                <div class="decision-card-body">
+                    <b>认证成功</b> → 分两种情况：<br/>
+                    　· 场景一直接通过 → 「审核中」→「认证+授权通过」✅<br/>
+                    　· 场景二需管理员授权 → 「等待授权」→ 管理员审批...<br/>
+                    <b>认证失败</b> → 「认证失败」❌ → 可【重新认证】回填表单<br/>
+                    <br/>💡 <b>回调机制：</b>e签宝 通过 POST 回调通知商城 → 验签 → 更新状态
+                </div>
+            </div>
+
+            <div class="nav-group open" id="ng-result">
+                <div class="nav-group-title" onclick="toggleGroup('ng-result')"><span class="nav-group-arrow">▶</span> ✅❌ 阶段3：结果状态页</div>
+                <div class="nav-children">
+                    <div class="nav-leaf" onclick="jumpToPage('verifying')">
+                        <div class="nav-leaf-icon">⏳</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">审核中（VERIFYING）</div>
+                            <div class="nav-leaf-desc">轮询检查认证状态，每5秒一次。<b>实际审核时间：5-10分钟</b></div>
+                            <span class="nav-leaf-trigger decision">⏳ 中间态 | 触发：提交认证后自动进入</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('verified')">
+                        <div class="nav-leaf-icon">✅</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">认证 + 授权 通过（VERIFIED）</div>
+                            <div class="nav-leaf-desc">最终成功页。【去签署合同】按钮跳转合同签署流程。</div>
+                            <span class="nav-leaf-trigger success">✅ 成功终态 | 条件：回调 status=success 且无待授权</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('rejected')">
+                        <div class="nav-leaf-icon">❌</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">认证失败（REJECTED）</div>
+                            <div class="nav-leaf-desc">展示失败原因 + 处理建议。【重新认证】回到页面4（数据已回填）</div>
+                            <span class="nav-leaf-trigger error">❌ 失败态 | 条件：回调 status=failed 或超时</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 授权分支决策 -->
+            <div class="decision-card">
+                <div class="decision-card-title">🔀 决策点 C：场景二 — 管理员是否同意授权？</div>
+                <div class="decision-card-body">
+                    此分支仅在<b>场景二</b>出现（企业已在 e签宝 实名认证）<br/>
+                    <b>同意</b> → 「授权通过」→ 最终成功 ✅<br/>
+                    <b>拒绝</b> → 「授权拒绝」❌ → 可【重新申请】（最多3次，24h有效）<br/>
+                    <b>超时(24h)</b> → 「授权超时」❌ → 可重新发起
+                </div>
+            </div>
+
+            <div class="nav-group open" id="ng-authz">
+                <div class="nav-group-title" onclick="toggleGroup('ng-authz')"><span class="nav-group-arrow">▶</span> 🔑 场景二专用：授权状态页（仅场景二出现）</div>
+                <div class="nav-children">
+                    <div class="nav-leaf" onclick="jumpToPage('authzPending')">
+                        <div class="nav-leaf-icon">⏳</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">等待授权（AUTHZ_PENDING）</div>
+                            <div class="nav-leaf-desc">通知管理员审批中。【刷新状态】手动刷新。授权有效期24小时。</div>
+                            <span class="nav-leaf-trigger decision">⏳ 等待态 | 有效期24h，超时自动失效</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('authzApproved')">
+                        <div class="nav-leaf-icon">✅</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">授权通过（AUTHZ_APPROVED）</div>
+                            <div class="nav-leaf-desc">管理员审批通过。【去签署合同】跳转签署流程。</div>
+                            <span class="nav-leaf-trigger success">✅ 成功 | 条件：管理员同意授权</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('authzRejected')">
+                        <div class="nav-leaf-icon">❌</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">授权拒绝（AUTHZ_REJECTED）</div>
+                            <div class="nav-leaf-desc">拒绝原因 + 处理建议。只有【重新申请】，无取消/撤销按钮。最多3次。</div>
+                            <span class="nav-leaf-trigger error">❌ 拒绝 | 弹出"修改申请理由"弹窗后重新申请</span>
+                        </div>
+                    </div>
+                    <div class="nav-leaf" onclick="jumpToPage('authzTimeout')">
+                        <div class="nav-leaf-icon">⏰</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">授权超时（AUTHZ_TIMEOUT）</div>
+                            <div class="nav-leaf-desc">24小时内管理员未操作。需用户重新发起授权申请。</div>
+                            <span class="nav-leaf-trigger error">❌ 超时 | 24h无响应，自动失效</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 草稿恢复 -->
+            <div class="nav-group" id="ng-draft">
+                <div class="nav-group-title" onclick="toggleGroup('ng-draft')"><span class="nav-group-arrow">▶</span> 💾 辅助：草稿恢复</div>
+                <div class="nav-children">
+                    <div class="nav-leaf" onclick="jumpToPage('draft')">
+                        <div class="nav-leaf-icon">💾</div>
+                        <div class="nav-leaf-body">
+                            <div class="nav-leaf-name">草稿恢复页</div>
+                            <div class="nav-leaf-desc">展示已填写的草稿数据（永久有效）。【继续填写】→ 页面2 / 【放弃】→ 返回首页</div>
+                            <span class="nav-leaf-trigger decision">◇ 分支 | 条件：决策A = Y（有历史草稿）</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 开发速查 -->
+            <div class="decision-card" style="border-color:#adc6ff;background:#f0f5ff;">
+                <div class="decision-card-title" style="color:#1890ff;">⚡ 开发速查清单</div>
+                <div class="decision-card-body" style="color:#444;">
+                    1️⃣ <b>方案C+</b>：商城不做分流，统一完整表单，e签宝H5内部判断场景<br/>
+                    2️⃣ <b>clientType</b>：PC端=H5，小程序=MINI_APP<br/>
+                    3️⃣ <b>X-Platform</b>：请求头标识来源平台<br/>
+                    4️⃣ <b>页面3.5</b>：纯前端过渡，不调任何接口（固定1-2s）<br/>
+                    5️⃣ <b>回调</b>：POST异步 → 验签 → 分布式锁 → 幂等处理<br/>
+                    6️⃣ <b>草稿</b>：永久保存，不过期；恢复后走正常流程到页面4<br/>
+                    7️⃣ <b>重新认证</b>：回到页面4并自动回填之前数据（不经草稿页）<br/>
+                    8️⃣ <b>重新申请</b>：仅修改申请理由，最多3次，24h有效
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .proto-btn { background: #1890ff; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; white-space: nowrap; }
+    .proto-btn:hover { background: #40a9ff; }
+    .proto-btn.active { background: #52c41a; }
+    .proto-btn.modal-btn { background: #722ed1; }
+    .proto-btn.modal-btn:hover { background: #9254de; }
+</style>
 
 <body style="padding-top: 40px;">
     <div class="container">
@@ -2365,6 +2659,29 @@
         
         // ==================== 原型页面切换函数 ====================
         
+        // v6.8 新增：导航面板控制
+        function toggleNavPanel() {
+            const panel = document.getElementById('nav-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+        function toggleGroup(id) {
+            document.getElementById(id).classList.toggle('open');
+        }
+        // v6.8 新增：从导航面板跳转页面（自动关闭面板）
+        function jumpToPage(pageName) {
+            toggleNavPanel();
+            showPage(pageName);
+        }
+        // v6.8 新增：更新面包屑
+        const PAGE_NAMES = {
+            'flowOverview':'流程总览','unverified':'页面1：认证入口','page2':'页面2：填写企业信息',
+            'checking':'页面3.5：过渡加载','draft':'草稿恢复','form':'页面4：完整认证表单',
+            'esignModal':'弹窗：e签宝认证确认','authzModal':'弹窗：授权申请',
+            'esignRedirect':'e签宝H5（场景一）','esignRedirectAuthz':'e签宝授权（场景二）',
+            'verifying':'审核中','verified':'认证+授权通过','rejected':'认证失败',
+            'authzPending':'等待授权','authzApproved':'授权通过','authzRejected':'授权拒绝','authzTimeout':'授权超时'
+        };
+
         function showPage(pageName) {
             // ============================================================
             // v5.4: 全量页面列表（含新增页面）
@@ -2407,6 +2724,11 @@
             if (event && event.target && event.target.classList.contains('proto-btn')) {
                 event.target.classList.add('active');
             }
+            // v6.8：更新面包屑
+            var bc = document.getElementById('nav-breadcrumb');
+            if (bc) bc.innerHTML = '当前：<b>' + (PAGE_NAMES[pageName] || pageName) + '</b>';
+            // v6.8：更新导航面板当前项高亮
+            document.querySelectorAll('.nav-leaf.current').forEach(function(el){ el.classList.remove('current'); });
             
             // ============================================================
             // 显示对应页面
