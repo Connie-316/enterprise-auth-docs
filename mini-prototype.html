@@ -548,34 +548,14 @@
 </div>
 <div class="page-subtitle">微信小程序端完整认证交互原型，业务逻辑与H5端一致，仅实现层不同</div>
 
-<!-- 导航tabs（v6.8升级：分组式导航+导航面板按钮） -->
-<div style="position:fixed;top:0;left:260px;right:0;z-index:9999;background:#001529;padding:4px 12px;display:flex;align-items:center;gap:8px;">
+<!-- 顶部导航（隐藏，因为左侧已有导航） -->
+<div style="position:fixed;top:0;left:260px;right:0;z-index:9999;background:#001529;padding:4px 12px;display:flex;align-items:center;gap:8px;opacity:0;pointer-events:none;">
     <button onclick="goBack()" id="backBtn" style="background:#595959;color:#fff;border:none;padding:3px 8px;border-radius:4px;cursor:pointer;font-size:10px;display:none;">← 返回</button>
     <span style="color:#fff;font-size:12px;font-weight:600;">📱 小程序端 v6.9</span>
     <span style="color:#4a90d9;font-size:10px;">|</span>
     <span id="mini-breadcrumb" style="color:#8c9bb3;font-size:10px;">当前：<b>认证入口</b></span>
 </div>
-<div class="tabs" id="tabs" style="top:30px;left:260px;">
-  <div class="tab-group-label">📋 阶段1：表单（步骤1-2）</div>
-  <div class="tab active" onclick="showPage('p-entry')">① 认证入口</div>
-  <div class="tab" onclick="showPage('p-company')">② 企业信息</div>
-  <div class="tab" onclick="showPage('p-phone')">② 法人+经办人</div>
-  <div class="tab" onclick="showPage('p-checking')">②.₅ 过渡加载</div>
-  <div class="tab-group-label">📄 场景一·提交认证（步骤3）</div>
-  <div class="tab" onclick="showPage('p-form')">④ 完整表单</div>
-  <div class="tab modal-tab" onclick="showPage('p-webview')">◆ WebView</div>
-  <div class="tab-group-label">✅❌ 场景一·结果状态</div>
-  <div class="tab" onclick="showPage('p-processing')">⏳ 认证中</div>
-  <div class="tab success-tab" onclick="showPage('p-success')">✅ 认证成功</div>
-  <div class="tab error-tab" onclick="showPage('p-failed')">❌ 认证失败</div>
-  <div class="tab-group-label">🔑 场景二：授权（仅场景二）</div>
-  <div class="tab" onclick="showPage('p-authz-wait')">⏳ 等待授权</div>
-  <div class="tab success-tab" onclick="showPage('p-authz-ok')">✅ 授权通过</div>
-  <div class="tab error-tab" onclick="showPage('p-authz-rej')">❌ 授权拒绝</div>
-  <div class="tab-group-label">💾 辅助</div>
-  <div class="tab" onclick="showPage('p-draft')">💾 草稿恢复</div>
-  <div class="tab" onclick="showPage('p-diff')">⚠️ 差异说明</div>
-</div>
+<div class="tabs" id="tabs" style="display:none;">
 
 <!-- ====== v6.9：固定左侧页面导航侧边栏（小程序端） ====== -->
 <div id="mini-sidebar" style="position:fixed;top:0;left:0;width:260px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:10000;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;font-size:13px;box-shadow:2px 0 12px rgba(0,0,0,.08);">
