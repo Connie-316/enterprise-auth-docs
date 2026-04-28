@@ -631,23 +631,15 @@
         <!-- 阶段3：结果 -->
         <div class="nav-group open" id="ng-result" style="margin-bottom:4px;">
             <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-result')">
-                <span id="ng-result-arrow" style="font-size:10px;transition:transform .2s;">▶</span> ✅❌ 场景一·结果状态
+                <span id="ng-result-arrow" style="font-size:10px;transition:transform .2s;">▶</span> ✅❌ 结果状态
             </div>
             <div id="ng-result-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-processing')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#fa8c16;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⏳ 审核中(5-10分钟)</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-success')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">✅ 认证成功</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-failed')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">❌ 认证失败</div>
-            </div>
-        </div>
-        <!-- 场景二：授权 -->
-        <div class="nav-group" id="ng-authz" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#cf1322;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-authz')">
-                <span id="ng-authz-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 🔑 场景二：授权（仅场景二）
-            </div>
-            <div id="ng-authz-children" style="padding-left:8px;display:none;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-wait')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⏳ 等待授权</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-ok')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">✅ 授权通过</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-rej')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">❌ 授权拒绝</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-processing')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7.5 审核中</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-success')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8A 认证+授权通过</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-failed')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8B 认证失败</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-wait')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8C 等待授权</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-ok')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7A 授权通过</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-rej')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7B 授权拒绝</div>
             </div>
         </div>
         <!-- 辅助 -->
@@ -657,7 +649,7 @@
             </div>
             <div id="ng-aux-children" style="padding-left:8px;display:none;">
                 <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-draft')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">💾 草稿恢复</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-diff')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⚠️ 差异说明</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-diff')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⚠️ PC/小程序差异</div>
             </div>
         </div>
     </div>

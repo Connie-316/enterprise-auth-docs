@@ -680,69 +680,63 @@
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignModal')">
                         <div class="nav-leaf-icon">◆</div>
-                        <div class="nav-leaf-body">弹窗：确认跳转 e签宝 认证
+                        <div class="nav-leaf-body">确认跳转e签宝弹窗
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignRedirect')">
                         <div class="nav-leaf-icon">◉</div>
-                        <div class="nav-leaf-body">e签宝 H5 页（外部系统）— 场景一
+                        <div class="nav-leaf-body">e签宝 H5（PC端跳转）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzModal')">
                         <div class="nav-leaf-icon">◆</div>
-                        <div class="nav-leaf-body">弹窗：授权申请（场景二专用）
+                        <div class="nav-leaf-body">授权申请弹窗（场景二）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignRedirectAuthz')">
                         <div class="nav-leaf-icon">◉</div>
-                        <div class="nav-leaf-body">e签宝 授权页（外部系统）— 场景二
+                        <div class="nav-leaf-body">e签宝 授权页（PC端跳转）
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="nav-group open" id="ng-result">
-                <div class="nav-group-title" onclick="toggleGroup('ng-result')"><span class="nav-group-arrow">▶</span> ✅❌ 场景一 · 结果状态</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-result')"><span class="nav-group-arrow">▶</span> ✅❌ 结果状态</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('verifying')">
-                        <div class="nav-leaf-icon">⏳</div>
+                        <div class="nav-leaf-icon">7.5</div>
                         <div class="nav-leaf-body">审核中（VERIFYING）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('verified')">
-                        <div class="nav-leaf-icon">✅</div>
-                        <div class="nav-leaf-body">认证 + 授权 通过（VERIFIED）
+                        <div class="nav-leaf-icon">8A</div>
+                        <div class="nav-leaf-body">认证+授权通过
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('rejected')">
-                        <div class="nav-leaf-icon">❌</div>
-                        <div class="nav-leaf-body">认证失败（REJECTED）
+                        <div class="nav-leaf-icon">8B</div>
+                        <div class="nav-leaf-body">认证失败
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="nav-group open" id="ng-authz">
-                <div class="nav-group-title" onclick="toggleGroup('ng-authz')"><span class="nav-group-arrow">▶</span> 🔑 场景二专用：授权状态页（仅场景二出现）</div>
-                <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('authzPending')">
-                        <div class="nav-leaf-icon">⏳</div>
-                        <div class="nav-leaf-body">等待授权（AUTHZ_PENDING）
+                        <div class="nav-leaf-icon">8C</div>
+                        <div class="nav-leaf-body">等待授权（场景一）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzApproved')">
-                        <div class="nav-leaf-icon">✅</div>
-                        <div class="nav-leaf-body">授权通过（AUTHZ_APPROVED）
+                        <div class="nav-leaf-icon">7A</div>
+                        <div class="nav-leaf-body">授权通过（场景二）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzRejected')">
-                        <div class="nav-leaf-icon">❌</div>
-                        <div class="nav-leaf-body">授权拒绝（AUTHZ_REJECTED）
+                        <div class="nav-leaf-icon">7B</div>
+                        <div class="nav-leaf-body">授权拒绝
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzTimeout')">
-                        <div class="nav-leaf-icon">⏰</div>
-                        <div class="nav-leaf-body">授权超时（AUTHZ_TIMEOUT）
+                        <div class="nav-leaf-icon">7C</div>
+                        <div class="nav-leaf-body">授权超时
                         </div>
                     </div>
                 </div>
