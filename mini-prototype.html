@@ -523,7 +523,7 @@
 
 <div class="page-title">企业认证 · 小程序端原型</div>
 <div class="center">
-  <span class="version-tag">v6.7 · 方案C+ · 三端一致性最终交付版 · 数智聚模小程序</span>
+  <span class="version-tag">v6.8 · 统一表单架构 · 数智聚模小程序 · 数智聚模小程序</span>
 </div>
 <div class="page-subtitle">微信小程序端完整认证交互原型，业务逻辑与H5端一致，仅实现层不同</div>
 
@@ -578,11 +578,11 @@
         </div>
         <!-- 决策卡片 -->
         <div style="margin:6px 14px;padding:10px;border-radius:8px;border:1px dashed #ffd591;background:#fffbe6;font-size:11px;">
-            <div style="font-weight:600;color:#d48806;margin-bottom:4px;">💎 方案C+（核心）</div>
+            <div style="font-weight:600;color:#d48806;margin-bottom:4px;">💎 核心架构</div>
             <div style="color:#444;line-height:1.6;">
                 商城侧<b>不做场景分流</b>，统一展示完整表单<br/>
                 场景一/二判断在<b>e签宝H5内部自动完成</b><br/>
-                ⚠️ 开发不要写 isExisted 检测逻辑！
+                ⚠️ 商城不写场景判断逻辑！
             </div>
         </div>
         <div style="margin:6px 14px;padding:10px;border-radius:8px;border:1px dashed #ffd591;background:#fffbe6;font-size:11px;">
@@ -780,7 +780,7 @@
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation" style="max-width:200px;">对应截图画面74<br>企查查搜索选择 → 自动填充4字段<br><span style="color:#cf1322;">⚠️ 方案C+：无营业执照上传，由e签宝H5处理</span></div>
+      <div class="annotation" style="max-width:200px;">对应截图画面74<br>企查查搜索选择 → 自动填充4字段<br><span style="color:#cf1322;">⚠️ 营业执照上传在e签宝H5内完成，商城侧无需处理</span></div>
     </div>
   </div>
 </div>
@@ -874,7 +874,7 @@
 
 <!-- ========== 过渡加载页面 ========== -->
 <div class="screen-page" id="p-checking">
-  <div class="group-header"><div class="line"></div><div class="text">页面3.5 · 准备认证材料（方案C+ 纯前端过渡态）</div><div class="line"></div></div>
+  <div class="group-header"><div class="line"></div><div class="text">页面3.5 · 准备认证材料（纯前端过渡态）</div><div class="line"></div></div>
   <div class="phones-row">
     <div class="phone-wrap">
       <div class="phone-label">页面3.5 · 过渡加载</div>
@@ -891,7 +891,7 @@
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation blue" style="max-width:200px;">方案C+ 纯前端过渡态（1-2s），不调用后端API<br>商城侧不做场景分流，统一展示完整表单<br>e签宝H5内部自动检测并适配首次认证/已认证授权</div>
+      <div class="annotation blue" style="max-width:200px;">纯前端过渡态（1-2s），不调用后端API<br>商城侧不做场景分流，统一展示完整表单<br>e签宝H5内部自动检测并适配首次认证/已认证授权</div>
     </div>
   </div>
 </div>
