@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企业认证 - 小程序端原型 v6.7</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: #f0f0f0;
+      color: #333;
+    }
+    .page-title {
+      text-align: center;
+      padding: 24px 0 8px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .page-subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .version-tag {
+      display: inline-block;
+      background: #1677ff;
+      color: #fff;
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 2px 8px;
+      margin-bottom: 20px;
+    }
+    .center { text-align: center; }
+
+    /* 导航 tabs */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 20px 16px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 1.5px solid #d0d0d0;
+      font-size: 13px;
+      cursor: pointer;
+      background: #fff;
+      color: #555;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .tab:hover { border-color: #1677ff; color: #1677ff; }
+    .tab.active { background: #1677ff; color: #fff; border-color: #1677ff; }
+
+    /* 分组标题 */
+    .section-label {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      letter-spacing: 1px;
+      margin: 8px 0 12px;
+      text-transform: uppercase;
+    }
+
+    /* 手机框容器 */
+    .phones-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 0 20px 32px;
+      flex-wrap: wrap;
+    }
+
+    /* 手机外壳 */
+    .phone-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .phone-label {
+      font-size: 12px;
+      color: #888;
+      font-weight: 500;
+      text-align: center;
+      max-width: 200px;
+    }
+    .phone {
+      width: 240px;
+      background: #1a1a1a;
+      border-radius: 36px;
+      padding: 10px 6px 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.28);
+      position: relative;
+    }
+    .phone-notch {
+      width: 70px;
+      height: 20px;
+      background: #1a1a1a;
+      border-radius: 0 0 14px 14px;
+      margin: 0 auto 4px;
+      position: relative;
+      z-index: 2;
+    }
+    .phone-screen {
+      background: #fff;
+      border-radius: 26px;
+      overflow: hidden;
+      min-height: 460px;
+      position: relative;
+    }
+    .phone-home-bar {
+      width: 60px;
+      height: 4px;
+      background: rgba(255,255,255,.5);
+      border-radius: 2px;
+      margin: 8px auto 0;
+    }
+
+    /* 状态栏 */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px 5px;
+      background: #fff;
+      font-size: 11px;
+      color: #333;
+    }
+    .status-bar .time { font-weight: 700; font-size: 12px; }
+    .status-icons { display: flex; gap: 4px; align-items: center; font-size: 10px; }
+
+    /* 导航栏 */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      padding: 9px 14px;
+      background: #fff;
+      border-bottom: .5px solid #f0f0f0;
+      position: relative;
+    }
+    .nav-bar .back { font-size: 14px; color: #333; cursor: pointer; min-width: 40px; }
+    .nav-bar .title { flex: 1; text-align: center; font-size: 15px; font-weight: 600; color: #1a1a1a; }
+    .nav-bar .more { font-size: 16px; color: #333; min-width: 20px; text-align: right; }
+
+    /* 通用内容区 */
+    .screen-body { padding: 14px; overflow-y: auto; }
+
+    /* 大按钮 */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      background: #1677ff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-ghost {
+      display: block;
+      width: 100%;
+      background: #fff;
+      color: #1677ff;
+      border: 1.5px solid #1677ff;
+      border-radius: 8px;
+      padding: 11px 0;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-gray {
+      display: block;
+      width: 100%;
+      background: #f5f5f5;
+      color: #bbb;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 0;
+      font-size: 15px;
+      text-align: center;
+      cursor: not-allowed;
+      margin-top: 10px;
+    }
+
+    /* 输入框 - 微信小程序 weui 风格 */
+    .form-item { margin-bottom: 0; }
+    .form-cell {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: .5px solid #f0f0f0;
+    }
+    .form-cell .cell-label {
+      font-size: 14px;
+      color: #333;
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+    .form-cell .cell-label .req { color: #e74c3c; margin-right: 2px; }
+    .form-cell .cell-label .opt { font-size: 11px; color: #aaa; margin-left: 3px; }
+    .form-cell .cell-value {
+      flex: 1;
+      font-size: 14px;
+      color: #333;
+      text-align: right;
+    }
+    .form-cell .cell-value.placeholder { color: #c8c8c8; }
+    .form-cell .cell-arrow { color: #c8c8c8; margin-left: 6px; font-size: 12px; }
+    .form-hint { font-size: 11px; color: #aaa; padding: 4px 0 8px; line-height: 1.4; }
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      padding: 14px 0 6px;
+      letter-spacing: .5px;
+    }
+    .optional-tag { 
+      display: inline-block; 
+      color: #aaa; 
+      font-size: 12px; 
+      margin-left: 4px; 
+    }
+    /* 旧式输入框（用于搜索页等） */
+    .form-label { font-size: 13px; color: #555; margin-bottom: 5px; }
+    .form-label .required { color: #e74c3c; }
+    .form-input {
+      width: 100%;
+      border: .5px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: #333;
+      background: #fafafa;
+    }
+
+    /* 步骤指示器 */
+    .steps {
+      display: flex;
+      align-items: center;
+      padding: 12px 10px 10px;
+      background: #fff;
+      border-bottom: .5px solid #f0f0f0;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      right: -50%;
+      width: 100%;
+      height: 1.5px;
+      background: #d9d9d9;
+      z-index: 0;
+    }
+    .step-item.done:not(:last-child)::after,
+    .step-item.active:not(:last-child)::after { background: #1677ff; }
+    .step-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: #d9d9d9;
+      color: #fff;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 4px;
+    }
+    .step-item.done .step-dot { background: #1677ff; }
+    .step-item.active .step-dot { background: #1677ff; box-shadow: 0 0 0 4px rgba(22,119,255,.15); }
+    .step-text { font-size: 10px; color: #aaa; text-align: center; line-height: 1.3; }
+    .step-item.done .step-text,
+    .step-item.active .step-text { color: #1677ff; font-weight: 600; }
+
+    /* 状态卡片 */
+    .status-card {
+      border-radius: 10px;
+      padding: 14px 12px;
+      margin-bottom: 10px;
+    }
+    .status-card.success { background: linear-gradient(135deg, #e8f5e9, #f1f8f0); }
+    .status-card.warning { background: linear-gradient(135deg, #fff8e1, #fffde7); }
+    .status-card.error { background: linear-gradient(135deg, #fce4ec, #fde8ed); }
+    .status-card.pending { background: linear-gradient(135deg, #e3f2fd, #e8f4fd); }
+    .status-icon { font-size: 28px; text-align: center; margin-bottom: 6px; }
+    .status-title { font-size: 14px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+    .status-desc { font-size: 11px; color: #888; text-align: center; line-height: 1.5; }
+
+    /* 信息行 */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: .5px solid #f5f5f5;
+      font-size: 11px;
+    }
+    .info-row .label { color: #888; }
+    .info-row .value { color: #1a1a1a; font-weight: 500; max-width: 120px; text-align: right; }
+
+    /* 上传区域 */
+    .upload-area {
+      border: 1.5px dashed #d0d0d0;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      background: #fafafa;
+      margin-bottom: 10px;
+    }
+    .upload-icon { font-size: 24px; color: #aaa; margin-bottom: 4px; }
+    .upload-text { font-size: 11px; color: #aaa; }
+    .upload-hint { font-size: 10px; color: #ccc; margin-top: 3px; }
+
+    /* 注册选择入口 */
+    .reg-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1.5px solid #e8e8e8;
+      padding: 18px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .reg-card:hover { border-color: #1677ff; }
+    .reg-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: #f0f4ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .reg-content { flex: 1; }
+    .reg-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 3px; }
+    .reg-desc { font-size: 11px; color: #888; line-height: 1.4; }
+    .reg-arrow { color: #ccc; font-size: 14px; }
+
+    /* webview页 */
+    .webview-frame {
+      background: #f8f8f8;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      border: 1.5px dashed #d0d0d0;
+      margin: 8px 0;
+    }
+    .webview-bar {
+      background: #fff;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 10px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 8px;
+      border: 1px solid #eee;
+    }
+
+    /* 标注/注释 */
+    .annotation {
+      background: #fffbe6;
+      border: 1px solid #ffe58f;
+      border-radius: 5px;
+      padding: 6px 8px;
+      font-size: 10px;
+      color: #ad6800;
+      line-height: 1.5;
+      margin: 6px 0;
+    }
+    .annotation.red {
+      background: #fff2f0;
+      border-color: #ffccc7;
+      color: #cf1322;
+    }
+    .annotation.blue {
+      background: #e6f4ff;
+      border-color: #91caff;
+      color: #0958d9;
+    }
+
+    /* 协议行 */
+    .agreement-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 10px;
+      color: #888;
+      margin: 8px 0;
+    }
+    .agreement-row .checkbox {
+      width: 13px; height: 13px;
+      border: 1px solid #1677ff;
+      border-radius: 3px;
+      margin-top: 1px;
+      flex-shrink: 0;
+      background: #1677ff;
+    }
+    .agreement-link { color: #1677ff; }
+
+    /* 底部tab */
+    .bottom-tab {
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 4px;
+      border-top: .5px solid #e8e8e8;
+      background: #fff;
+    }
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 9px;
+      color: #aaa;
+    }
+    .tab-item.active { color: #1677ff; }
+    .tab-item .icon { font-size: 18px; }
+
+    /* 搜索框 */
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 7px 10px;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .search-box input { background: none; border: none; font-size: 12px; color: #333; flex: 1; outline: none; }
+    .search-box .search-icon { color: #aaa; font-size: 13px; }
+
+    /* 下拉候选 */
+    .search-dropdown {
+      border: 1px solid #e8e8e8;
+      border-radius: 6px;
+      background: #fff;
+      margin-top: -4px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .search-item {
+      padding: 8px 10px;
+      border-bottom: .5px solid #f5f5f5;
+      font-size: 11px;
+    }
+    .search-item .name { font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+    .search-item .code { color: #aaa; font-size: 10px; }
+
+    /* loading */
+    .loading-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 12px;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid #e8e8e8;
+      border-top: 3px solid #1677ff;
+      border-radius: 50%;
+    }
+    .loading-text { font-size: 13px; color: #666; }
+    .loading-hint { font-size: 11px; color: #aaa; }
+
+    /* 标签页 */
+    .group-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 24px 0 10px;
+      padding: 0 16px;
+    }
+    .group-header .line { flex: 1; height: 1px; background: #e8e8e8; }
+    .group-header .text { font-size: 12px; color: #aaa; white-space: nowrap; }
+
+    /* 页面可见控制 */
+    .screen-page { display: none; }
+    .screen-page.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="page-title">企业认证 · 小程序端原型</div>
+<div class="center">
+  <span class="version-tag">v6.7 · 方案C+ · 三端一致性最终交付版 · 数智聚模小程序</span>
+</div>
+<div class="page-subtitle">微信小程序端完整认证交互原型，业务逻辑与H5端一致，仅实现层不同</div>
+
+<!-- 导航tabs -->
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="showPage('p-entry')">38 认证入口</div>
+  <div class="tab" onclick="showPage('p-company')">74 企业信息填写</div>
+  <div class="tab" onclick="showPage('p-phone')">75 法人+经办人</div>
+  <div class="tab" onclick="showPage('p-checking')">过渡加载</div>
+  <div class="tab" onclick="showPage('p-form')">完整认证表单</div>
+  <div class="tab" onclick="showPage('p-webview')">WebView跳转</div>
+  <div class="tab" onclick="showPage('p-processing')">认证中</div>
+  <div class="tab" onclick="showPage('p-success')">认证成功</div>
+  <div class="tab" onclick="showPage('p-failed')">认证失败</div>
+  <div class="tab" onclick="showPage('p-authz-wait')">授权待处理</div>
+  <div class="tab" onclick="showPage('p-authz-ok')">授权通过</div>
+  <div class="tab" onclick="showPage('p-authz-rej')">授权拒绝</div>
+  <div class="tab" onclick="showPage('p-draft')">草稿恢复</div>
+  <div class="tab" onclick="showPage('p-diff')">⚠️ 与H5端差异说明</div>
+</div>
+
+<!-- ========== 页38: 认证入口（对应截图画面38）========== -->
+<div class="screen-page visible" id="p-entry">
+  <div class="group-header"><div class="line"></div><div class="text">画面 38 · 认证功能入口</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">企业注册 / 认证入口选择页</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span class="time">12:30</span>
+            <div class="status-icons">📶 WiFi 🔋</div>
+          </div>
+          <div class="nav-bar">
+            <span class="back">←</span>
+            <span class="title">数智聚模</span>
+            <span class="more">⊙</span>
+          </div>
+          <div class="screen-body" style="padding-top:28px;">
+            <div class="reg-card">
+              <div class="reg-icon">🏢</div>
+              <div class="reg-content">
+                <div class="reg-title">企业注册</div>
+                <div class="reg-desc">注册企业账号，完成企业实名认证，开通电子合同功能</div>
+              </div>
+              <span class="reg-arrow">›</span>
+            </div>
+            <div class="reg-card">
+              <div class="reg-icon">👤</div>
+              <div class="reg-content">
+                <div class="reg-title">个人注册</div>
+                <div class="reg-desc">注册个人账号，浏览商品，无法使用合同功能</div>
+              </div>
+              <span class="reg-arrow">›</span>
+            </div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+      <div class="annotation blue" style="max-width:200px;">对应截图画面38<br>企业注册 → 跳转企业认证流程</div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone-label">已登录用户 · 认证入口状态页</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span class="time">12:30</span>
+            <div class="status-icons">📶 WiFi 🔋</div>
+          </div>
+          <div class="nav-bar">
+            <span class="back">←</span>
+            <span class="title">企业认证</span>
+            <span class="more">⊙</span>
+          </div>
+          <div class="screen-body" style="padding-top:14px;">
+            <div class="status-card pending">
+              <div class="status-icon">🏢</div>
+              <div class="status-title">企业尚未认证</div>
+              <div class="status-desc">完成企业实名认证后<br>可开通电子合同签署功能</div>
+            </div>
+            <div style="font-size:11px;color:#888;margin-bottom:10px;line-height:1.6;">
+              认证后可享受：<br>
+              ✅ 电子合同在线签署<br>
+              ✅ 企业采购记录管理<br>
+              ✅ 发票自动归集
+            </div>
+            <div class="btn-primary">立即认证</div>
+            <div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;">
+              认证过程约5分钟，需企业相关资料
+            </div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+      <div class="annotation blue" style="max-width:200px;">H5端页面1对应<br>小程序认证入口状态页</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 页74: 企业信息填写（对应截图画面74）========== -->
+<div class="screen-page" id="p-company">
+  <div class="group-header"><div class="line"></div><div class="text">画面 74 · 企业信息填写（步骤1/3）</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">企业信息填写页<br>（企查查搜索+自动填充）</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span class="time">12:30</span>
+            <div class="status-icons">📶 WiFi 🔋</div>
+          </div>
+          <div class="nav-bar">
+            <span class="back">← 企业注册</span>
+            <span class="title"></span>
+            <span class="more">⊙</span>
+          </div>
+          <div class="steps">
+            <div class="step-item active">
+              <div class="step-dot">1</div>
+              <div class="step-text">企业信息</div>
+            </div>
+            <div class="step-item">
+              <div class="step-dot">2</div>
+              <div class="step-text">法人经办人</div>
+            </div>
+            <div class="step-item">
+              <div class="step-dot">3</div>
+              <div class="step-text">e签宝认证</div>
+            </div>
+          </div>
+          <!-- 步骤说明：小程序端为3步流程，H5端为4步（含独立「认证完成」步骤）。PRD第13章第13.2节有差异说明。 -->
+          <div class="screen-body">
+            <!-- 企业名称搜索（企查查API） -->
+            <div class="form-item" style="margin-top:10px;">
+              <div class="form-label">企业名称 <span class="required">*</span></div>
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="请输入企业名称搜索" value="">
+              </div>
+              <div class="search-dropdown">
+                <div class="search-item" style="background:#f0f6ff;">
+                  <div class="name">启泰智能装备有限公司</div>
+                  <div class="code">91441900MA53K2XJ3X · 法人：张三</div>
+                </div>
+                <div class="search-item">
+                  <div class="name">东莞市启泰精密模具有限公司</div>
+                  <div class="code">91441900MA53K2XJ4Y · 法人：李四</div>
+                </div>
+                <div class="search-item">
+                  <div class="name">深圳启泰科技有限公司</div>
+                  <div class="code">91440300MA5F8XJ3X2 · 法人：王五</div>
+                </div>
+              </div>
+            </div>
+            <!-- 税号（统一社会信用代码）：小程序端标签用「税号」，对应PC端「统一社会信用代码」，字段值相同 -->
+            <div class="form-item">
+              <div class="form-label">税号 <span class="required">*</span> <span style="color:#aaa;font-size:10px;">（统一社会信用代码，企查查自动填充）</span></div>
+              <div class="form-input">91441900MA53K2XJ3X</div>
+              <div class="form-hint">18位统一社会信用代码，唯一标识企业。此字段与PC端「统一社会信用代码」字段相同，仅标签名不同。</div>
+            </div>
+            <!-- 法定代表人：企查查自动填充，不可编辑 -->
+            <div class="form-item">
+              <div class="form-label">法定代表人 <span class="required">*</span> <span style="color:#aaa;font-size:10px;">（企查查自动填充）</span></div>
+              <div class="form-input" style="color:#888;background:#f5f5f5;">张三</div>
+              <div class="form-hint">从企查查自动填入，仅展示，不可修改。PC端相同逻辑。</div>
+            </div>
+            <!-- 注册地址：企查查自动填充 -->
+            <div class="form-item">
+              <div class="form-label">注册地址 <span class="required">*</span> <span style="color:#aaa;font-size:10px;">（企查查自动填充）</span></div>
+              <div class="form-input" style="color:#888;background:#f5f5f5;">广东省东莞市长安镇</div>
+            </div>
+            <div class="btn-primary">下一步</div>
+            <div class="annotation" style="margin-top:8px;font-size:10px;color:#aaa;">⚠️ 「税号」= PC端「统一社会信用代码」，字段名在小程序端简化展示，后端字段名统一为 credit_code</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+      <div class="annotation" style="max-width:200px;">对应截图画面74<br>企查查搜索选择 → 自动填充4字段<br><span style="color:#cf1322;">⚠️ 方案C+：无营业执照上传，由e签宝H5处理</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 页75: 法人+经办人（对应截图画面75）========== -->
+<div class="screen-page" id="p-phone">
+  <div class="group-header"><div class="line"></div><div class="text">画面 75 · 法人与经办人信息（步骤1/3 续）</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">法人+经办人信息填写</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar">
+            <span class="time">12:30</span>
+            <div class="status-icons">📶 WiFi 🔋</div>
+          </div>
+          <div class="nav-bar">
+            <span class="back">← 企业注册</span>
+            <span class="title"></span>
+            <span class="more">⊙</span>
+          </div>
+          <div class="steps">
+            <div class="step-item done">
+              <div class="step-dot">✓</div>
+              <div class="step-text">企业信息</div>
+            </div>
+            <div class="step-item active">
+              <div class="step-dot">2</div>
+              <div class="step-text">法人经办人</div>
+            </div>
+            <div class="step-item">
+              <div class="step-dot">3</div>
+              <div class="step-text">e签宝认证</div>
+            </div>
+          </div>
+          <div class="screen-body">
+            <div class="form-section-title">法定代表人信息</div>
+            <div class="form-item">
+              <!-- 法定代表人姓名：从页面74企查查自动填入，只读 -->
+              <div class="form-label">法定代表人 <span class="required">*</span> <span style="color:#aaa;font-size:10px;">（已自动填入）</span></div>
+              <div class="form-input" style="color:#888;background:#f5f5f5;">张三</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">法定代表人身份证号 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入18位身份证号</div>
+            </div>
+            <div class="form-section-title">经办人信息</div>
+            <div class="form-item">
+              <div class="form-label">经办人姓名 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">经办人身份证号 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入18位身份证号</div>
+            </div>
+            <div class="form-item">
+              <!-- 对应PRD字段：接收订单消息电话（order_phone）；注意：此字段无短信验证码验证 -->
+              <div class="form-label">接收订单消息电话 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入手机号</div>
+              <div class="form-hint">📌 该号码用于接收订单通知短信，无需验证码验证。对应PC端相同字段「接收订单消息电话」。</div>
+            </div>
+            <div class="form-section-title">补充信息 <span class="optional-tag">选填</span></div>
+            <div class="form-item">
+              <div class="form-label">经营类型 <span class="optional-tag">（选填）</span></div>
+              <div class="form-input" style="color:#aaa;">请选择 ▾</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">公司电话 <span class="optional-tag">（选填）</span></div>
+              <div class="form-input" style="color:#aaa;">请输入</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">邮箱 <span class="optional-tag">（选填）</span></div>
+              <div class="form-input" style="color:#aaa;">请输入邮箱地址</div>
+            </div>
+            <div class="agreement-row">
+              <div class="checkbox"></div>
+              <span>我已阅读并同意 <span class="agreement-link">《认证服务协议》</span> 及 <span class="agreement-link">《e签宝用户授权协议》</span></span>
+            </div>
+            <div class="btn-primary">下一步</div>
+            <div class="btn-ghost">上一步</div>
+            <div class="annotation" style="margin-top:8px;font-size:10px;color:#aaa;">⚠️ 「接收订单消息电话」= PC端同名字段，对应数据库 order_phone。无短信验证码，直接填写。选填字段（经营类型/公司电话/邮箱）与PC端完全一致。</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+      <div class="annotation" style="max-width:200px;">对应截图画面75<br>步骤1/3 续：法人+经办人</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 过渡加载页面 ========== -->
+<div class="screen-page" id="p-checking">
+  <div class="group-header"><div class="line"></div><div class="text">页面3.5 · 准备认证材料（方案C+ 纯前端过渡态）</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">页面3.5 · 过渡加载</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back">←</span><span class="title">企业核验</span><span class="more">步骤 2/3</span></div>
+          <div class="loading-wrap">
+            <div class="spinner"></div>
+            <div class="loading-text">正在准备认证材料...</div>
+            <div class="loading-hint">请稍候，预计1-2秒</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+      <div class="annotation blue" style="max-width:200px;">方案C+ 纯前端过渡态（1-2s），不调用后端API<br>商城侧不做场景分流，统一展示完整表单<br>e签宝H5内部自动检测并适配首次认证/已认证授权</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 完整认证表单 ========== -->
+<div class="screen-page" id="p-form">
+  <div class="group-header"><div class="line"></div><div class="text">场景一 · 完整认证表单（步骤2/3）</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">页面4 · 首次认证表单</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back">←</span><span class="title">企业实名认证</span><span class="more"></span></div>
+          <div class="steps">
+            <div class="step-item done"><div class="step-dot">✓</div><div class="step-text">企业信息</div></div>
+            <div class="step-item active"><div class="step-dot">2</div><div class="step-text">法人经办人</div></div>
+            <div class="step-item"><div class="step-dot">3</div><div class="step-text">e签宝认证</div></div>
+          </div>
+          <!-- 步骤说明：p-form属于场景一「完整认证表单」，对应小程序3步流程的第2步；H5端此处是步骤3/4。PRD 13.1有差异说明。 -->
+          <div class="screen-body">
+            <div class="annotation" style="margin-bottom:10px;">ℹ️ 请完善以下信息，提交后将在e签宝完成实名认证与授权</div>
+            <div class="form-section-title">企业信息（已填，不可修改）</div>
+            <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
+            <div class="info-row"><span class="label">统一社会信用代码</span><span class="value" style="font-size:10px;">91441900MA53K2XJ3X</span></div>
+            <div class="info-row"><span class="label">法定代表人</span><span class="value">张三</span></div>
+            <div class="form-section-title">法定代表人信息</div>
+            <div class="form-item">
+              <div class="form-label">法定代表人身份证号 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入18位身份证号</div>
+            </div>
+            <div class="form-section-title">经办人信息</div>
+            <div class="form-item">
+              <div class="form-label">经办人姓名 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">经办人身份证号 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入18位身份证号</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">接收订单消息电话 <span class="required">*</span></div>
+              <div class="form-input" style="color:#aaa;">请输入手机号</div>
+              <div class="form-hint">📌 用于接收订单通知短信，无需短信验证码</div>
+            </div>
+            <div class="form-section-title">补充信息 <span class="optional-tag">（选填）</span></div>
+            <div class="form-item">
+              <div class="form-label">经营类型</div>
+              <div class="form-input" style="color:#aaa;">请选择 ▾</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">公司电话</div>
+              <div class="form-input" style="color:#aaa;">请输入</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">邮箱</div>
+              <div class="form-input" style="color:#aaa;">请输入邮箱地址</div>
+            </div>
+            <div class="agreement-row">
+              <div class="checkbox"></div>
+              <span>我已阅读并同意 <span class="agreement-link">《认证服务协议》</span> 及 <span class="agreement-link">《e签宝用户授权协议》</span></span>
+            </div>
+            <div class="btn-primary">提交认证</div>
+            <div class="btn-ghost">保存草稿</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WebView跳转e签宝 ========== -->
+<div class="screen-page" id="p-webview">
+  <div class="group-header"><div class="line"></div><div class="text">步骤3/3 · WebView加载e签宝H5</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">小程序WebView页面<br>（内嵌e签宝H5认证）</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back">←</span><span class="title">e签宝认证</span><span class="more">步骤 3/3</span></div>
+          <div style="padding:10px;">
+            <div class="webview-bar">
+              🔒 <span>openapi.esign.cn</span>
+              <span style="margin-left:auto;font-size:10px;color:#1677ff;">e签宝 · 安全认证</span>
+            </div>
+            <div class="webview-frame">
+              <div style="font-size:20px;margin-bottom:8px;">🔐</div>
+              <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;">e签宝企业实名认证</div>
+              <div style="font-size:11px;color:#888;line-height:1.6;margin-bottom:12px;">
+                请完成以下步骤：<br>
+                1. 人脸识别（经办人）<br>
+                2. 营业执照上传<br>
+                3. 管理员扫码授权
+              </div>
+              <div style="background:#1677ff;color:#fff;border-radius:6px;padding:10px;font-size:13px;">开始认证</div>
+            </div>
+            <div class="annotation blue">小程序端通过 &lt;web-view&gt; 组件内嵌e签宝H5页面。e签宝认证完成后回调中间页，再用 wx.miniProgram.navigateTo 跳回小程序。</div>
+            <div class="annotation red">⚠️ clientType 必须传 MINI_APP（非 H5/ALL），否则e签宝页面在WebView内渲染异常</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone-label">场景二 · 已认证授权弹窗</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back">←</span><span class="title">申请授权</span><span class="more">步骤 2/3</span></div>
+          <div class="screen-body">
+            <div style="font-size:12px;font-weight:600;color:#1a1a1a;margin-bottom:10px;">申请授权</div>
+            <div class="form-section-title">认证企业信息</div>
+            <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
+            <div class="info-row"><span class="label">信用代码</span><span class="value">91441900MA53K2XJ3X</span></div>
+            <div class="form-section-title">申请人信息 <span class="optional-tag">选填</span></div>
+            <div class="form-item">
+              <div class="form-label">申请人姓名 <span class="optional-tag">选填</span></div>
+              <div class="form-input" style="color:#aaa;">请输入</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">申请人手机 <span class="optional-tag">选填</span></div>
+              <div class="form-input" style="color:#aaa;">请输入</div>
+            </div>
+            <div class="form-item">
+              <div class="form-label">申请理由</div>
+              <div class="form-input">申请在物料商城使用电子合同功能</div>
+            </div>
+            <div class="agreement-row">
+              <div class="checkbox"></div>
+              <span>我已阅读并同意 <span class="agreement-link">《认证服务协议》</span> 及 <span class="agreement-link">《e签宝用户授权协议》</span></span>
+            </div>
+            <div class="btn-primary">提交申请</div>
+            <div class="btn-ghost">取消</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 认证中 ========== -->
+<div class="screen-page" id="p-processing">
+  <div class="group-header"><div class="line"></div><div class="text">认证进行中 · 等待回调</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">页面7.5 · 认证+授权等待页</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back"></span><span class="title">认证进度</span><span class="more">步骤 3/3</span></div>
+          <div class="steps">
+            <div class="step-item done"><div class="step-dot">✓</div><div class="step-text">企业信息</div></div>
+            <div class="step-item done"><div class="step-dot">✓</div><div class="step-text">法人经办人</div></div>
+            <div class="step-item active"><div class="step-dot">3</div><div class="step-text">e签宝认证</div></div>
+          </div>
+          <div class="loading-wrap">
+            <div class="spinner"></div>
+            <div class="loading-text">审核中，请耐心等待</div>
+            <div class="loading-hint">审核预计5-10分钟</div>
+          </div>
+          <div style="padding:0 12px 12px;">
+            <div class="btn-ghost">刷新状态</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 认证成功 ========== -->
+<div class="screen-page" id="p-success">
+  <div class="group-header"><div class="line"></div><div class="text">认证+授权全部通过</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">页面8A · AUTHZ_APPROVED</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back"></span><span class="title">认证完成</span><span class="more"></span></div>
+          <div class="screen-body">
+            <div class="status-card success">
+              <div class="status-icon">✅</div>
+              <div class="status-title">认证+授权通过</div>
+              <div class="status-desc">企业实名认证已完成<br>可开始使用电子合同功能</div>
+            </div>
+            <div class="form-section-title">认证企业信息</div>
+            <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
+            <div class="info-row"><span class="label">信用代码</span><span class="value">91441900MA53K2XJ3X</span></div>
+            <div class="info-row"><span class="label">法定代表人</span><span class="value">张三</span></div>
+            <div class="info-row"><span class="label">认证时间</span><span class="value">2026-04-24</span></div>
+            <div class="btn-primary" style="margin-top:16px;">去签合同</div>
+            <div class="btn-ghost">返回首页</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 认证失败 ========== -->
+<div class="screen-page" id="p-failed">
+  <div class="group-header"><div class="line"></div><div class="text">认证失败 · 可重新认证</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">页面8B · REJECTED → DRAFT</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back"></span><span class="title">认证结果</span><span class="more"></span></div>
+          <div class="screen-body">
+            <div class="status-card error">
+              <div class="status-icon">❌</div>
+              <div class="status-title">认证失败</div>
+              <div class="status-desc">人脸识别失败：与身份证信息不匹配<br>请检查信息后重新认证</div>
+            </div>
+            <div class="info-row"><span class="label">失败原因</span><span class="value" style="color:#e74c3c;">人脸识别失败</span></div>
+            <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
+            <div class="annotation red">已填写的企业信息全部保留，只需修改错误字段后重新提交。状态自动回退至草稿(DRAFT)。</div>
+            <div class="btn-primary">重新认证</div>
+            <div class="btn-ghost">稍后再试</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 授权待处理 ========== -->
+<div class="screen-page" id="p-authz-wait">
+  <div class="group-header"><div class="line"></div><div class="text">认证通过 · 授权审批中</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">页面7C/8C · AUTHZ_PENDING</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back"></span><span class="title">授权状态</span><span class="more"></span></div>
+          <div class="screen-body">
+            <div class="status-card warning">
+              <div class="status-icon">⏳</div>
+              <div class="status-title">等待管理员授权</div>
+              <div class="status-desc">实名认证已通过<br>企业管理员审批授权中，请耐心等待</div>
+            </div>
+            <div class="form-section-title">认证企业信息</div>
+            <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
+            <div class="info-row"><span class="label">信用代码</span><span class="value">91441900MA53K2XJ3X</span></div>
+            <div class="info-row"><span class="label">申请时间</span><span class="value">2026-04-24 10:30</span></div>
+            <div class="info-row"><span class="label">审批预计</span><span class="value">5-10分钟</span></div>
+            <div class="btn-ghost">刷新状态</div>
+            <div style="text-align:center;font-size:10px;color:#aaa;margin-top:10px;">如长时间未审批，请联系企业管理员</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 授权通过 ========== -->
+<div class="screen-page" id="p-authz-ok">
+  <div class="group-header"><div class="line"></div><div class="text">授权通过</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">授权通过状态页 · AUTHZ_APPROVED</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back"></span><span class="title">企业认证</span><span class="more"></span></div>
+          <div class="screen-body">
+            <div class="status-card success">
+              <div class="status-icon">🎉</div>
+              <div class="status-title">授权通过</div>
+              <div class="status-desc">企业认证已完成，电子合同功能已开通</div>
+            </div>
+            <div class="form-section-title">已开通权益</div>
+            <div style="font-size:11px;color:#555;line-height:1.8;margin-bottom:14px;">
+              ✅ 电子合同在线签署<br>
+              ✅ 合同状态实时追踪<br>
+              ✅ 企业采购记录管理<br>
+              ✅ 发票自动归集
+            </div>
+            <div class="btn-primary">去签合同</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 授权拒绝 ========== -->
+<div class="screen-page" id="p-authz-rej">
+  <div class="group-header"><div class="line"></div><div class="text">授权被拒绝 · 可重新申请</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">授权拒绝页 · AUTHZ_REJECTED</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back"></span><span class="title">授权结果</span><span class="more"></span></div>
+          <div class="screen-body">
+            <div class="status-card error">
+              <div class="status-icon">🚫</div>
+              <div class="status-title">授权申请被拒绝</div>
+              <div class="status-desc">拒绝原因：申请理由不充分<br>请修改申请理由后重新提交</div>
+            </div>
+            <div class="info-row"><span class="label">拒绝原因</span><span class="value" style="color:#e74c3c;">申请理由不充分</span></div>
+            <div class="info-row"><span class="label">剩余申请次数</span><span class="value">2次（共3次）</span></div>
+            <div class="annotation">点击【重新申请】弹出"修改申请理由"弹窗，只需修改申请理由，无需重新填写其他字段。</div>
+            <div class="btn-primary">重新申请</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 草稿恢复 ========== -->
+<div class="screen-page" id="p-draft">
+  <div class="group-header"><div class="line"></div><div class="text">检测到历史草稿</div><div class="line"></div></div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">草稿恢复页</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="status-bar"><span class="time">12:30</span><div class="status-icons">📶 WiFi 🔋</div></div>
+          <div class="nav-bar"><span class="back">←</span><span class="title">企业认证</span><span class="more"></span></div>
+          <div class="screen-body">
+            <div class="status-card pending" style="margin-bottom:14px;">
+              <div class="status-icon">📋</div>
+              <div class="status-title">检测到未完成的认证</div>
+              <div class="status-desc">上次填写的信息已保存<br>是否继续完成认证？</div>
+            </div>
+            <div class="form-section-title">草稿信息</div>
+            <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
+            <div class="info-row"><span class="label">保存时间</span><span class="value">2026-04-24 09:20</span></div>
+            <div class="info-row"><span class="label">认证场景</span><span class="value">首次认证</span></div>
+            <div class="btn-primary">继续认证</div>
+            <div class="btn-ghost">重新填写</div>
+            <div class="annotation red" style="margin-top:8px;">点击【重新填写】将清空该草稿（物理删除），跳转至企业信息填写页重新开始。</div>
+          </div>
+        </div>
+        <div class="phone-home-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 与H5端差异说明 ========== -->
+<div class="screen-page" id="p-diff">
+  <div class="group-header"><div class="line"></div><div class="text">小程序端 vs H5端 关键差异</div><div class="line"></div></div>
+  <div style="max-width:900px;margin:0 auto;padding:0 20px 40px;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);">
+      <thead>
+        <tr style="background:#1677ff;color:#fff;">
+          <th style="padding:12px 16px;text-align:left;">差异项</th>
+          <th style="padding:12px 16px;text-align:left;">H5 Web端</th>
+          <th style="padding:12px 16px;text-align:left;">微信小程序端</th>
+          <th style="padding:12px 16px;text-align:left;">开发优先级</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">跳转e签宝H5</td>
+          <td style="padding:12px 16px;color:#555;">window.location.href = authUrl</td>
+          <td style="padding:12px 16px;color:#e74c3c;font-weight:600;">&lt;web-view src="{{authUrl}}"&gt;<br>组件内嵌</td>
+          <td style="padding:12px 16px;"><span style="background:#fff2f0;color:#cf1322;padding:2px 8px;border-radius:4px;font-size:11px;">P0 必须修改</span></td>
+        </tr>
+        <tr style="background:#fafafa;border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">clientType参数</td>
+          <td style="padding:12px 16px;color:#555;">H5</td>
+          <td style="padding:12px 16px;color:#e74c3c;font-weight:600;">MINI_APP（传错渲染异常）</td>
+          <td style="padding:12px 16px;"><span style="background:#fff2f0;color:#cf1322;padding:2px 8px;border-radius:4px;font-size:11px;">P0 必须修改</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">认证完成回跳</td>
+          <td style="padding:12px 16px;color:#555;">普通redirectUrl (HTTP)</td>
+          <td style="padding:12px 16px;color:#e74c3c;font-weight:600;">中间H5页 + wx.miniProgram.navigateTo 跳回小程序</td>
+          <td style="padding:12px 16px;"><span style="background:#fff2f0;color:#cf1322;padding:2px 8px;border-radius:4px;font-size:11px;">P0 必须修改</span></td>
+        </tr>
+        <tr style="background:#fafafa;border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">本地草稿存储</td>
+          <td style="padding:12px 16px;color:#555;">localStorage</td>
+          <td style="padding:12px 16px;color:#e67e22;font-weight:600;">wx.setStorageSync<br>（小程序无localStorage）</td>
+          <td style="padding:12px 16px;"><span style="background:#fff7e6;color:#d46b08;padding:2px 8px;border-radius:4px;font-size:11px;">P1 需适配</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">页面路由方式</td>
+          <td style="padding:12px 16px;color:#555;">浏览器URL路由</td>
+          <td style="padding:12px 16px;color:#e67e22;">wx.navigateTo /<br>wx.redirectTo（页面栈≤10层）</td>
+          <td style="padding:12px 16px;"><span style="background:#fff7e6;color:#d46b08;padding:2px 8px;border-radius:4px;font-size:11px;">P1 需适配</span></td>
+        </tr>
+        <tr style="background:#fafafa;border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">Platform Header</td>
+          <td style="padding:12px 16px;color:#555;">X-Platform: h5</td>
+          <td style="padding:12px 16px;color:#e67e22;">X-Platform: miniapp（后端识别用）</td>
+          <td style="padding:12px 16px;"><span style="background:#fff7e6;color:#d46b08;padding:2px 8px;border-radius:4px;font-size:11px;">P1 需适配</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">后端接口</td>
+          <td style="padding:12px 16px;color:#555;">/api/company/* 全套</td>
+          <td style="padding:12px 16px;color:#27ae60;font-weight:600;">✅ 完全复用，无需分别实现</td>
+          <td style="padding:12px 16px;"><span style="background:#f6ffed;color:#389e0d;padding:2px 8px;border-radius:4px;font-size:11px;">无需修改</span></td>
+        </tr>
+        <tr style="background:#fafafa;">
+          <td style="padding:12px 16px;font-weight:600;">数据表/状态机</td>
+          <td style="padding:12px 16px;color:#555;">company_auth / company_auth_draft</td>
+          <td style="padding:12px 16px;color:#27ae60;font-weight:600;">✅ 完全复用，无需分别实现</td>
+          <td style="padding:12px 16px;"><span style="background:#f6ffed;color:#389e0d;padding:2px 8px;border-radius:4px;font-size:11px;">无需修改</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">字段标签名差异</td>
+          <td style="padding:12px 16px;color:#555;">「统一社会信用代码」「法定代表人姓名」「接收订单消息电话」「邮箱」</td>
+          <td style="padding:12px 16px;color:#e67e22;font-weight:600;">「税号」「法定代表人」「接收订单消息电话」「邮箱」<br><span style="font-size:11px;font-weight:400;color:#aaa;">（税号=统一社会信用代码，前端标签不同，后端字段credit_code相同）</span></td>
+          <td style="padding:12px 16px;"><span style="background:#fff7e6;color:#d46b08;padding:2px 8px;border-radius:4px;font-size:11px;">P1 仅前端标签</span></td>
+        </tr>
+        <tr style="background:#fafafa;border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">步骤指示器步数</td>
+          <td style="padding:12px 16px;color:#555;">4步：填写企业信息 → 企业核验 → e签宝实名认证 → 认证完成</td>
+          <td style="padding:12px 16px;color:#e67e22;font-weight:600;">3步：企业信息 → 法人经办人 → e签宝认证<br><span style="font-size:11px;font-weight:400;color:#aaa;">（认证完成合并到步骤3）</span></td>
+          <td style="padding:12px 16px;"><span style="background:#fff7e6;color:#d46b08;padding:2px 8px;border-radius:4px;font-size:11px;">P1 仅UI差异</span></td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px 16px;font-weight:600;">表单字段分页方式</td>
+          <td style="padding:12px 16px;color:#555;">单页滚动：企业信息+法人信息+经办人信息+选填字段在同一页（页面4）</td>
+          <td style="padding:12px 16px;color:#e67e22;font-weight:600;">分2页：页74（企业信息）→ 页75（法人+经办人+选填字段）<br><span style="font-size:11px;font-weight:400;color:#aaa;">（小程序屏幕小，拆分为2个页面减少滚动）</span></td>
+          <td style="padding:12px 16px;"><span style="background:#fff7e6;color:#d46b08;padding:2px 8px;border-radius:4px;font-size:11px;">P1 UX分页</span></td>
+        </tr>
+        <tr style="background:#fafafa;">
+          <td style="padding:12px 16px;font-weight:600;">手机验证码</td>
+          <td style="padding:12px 16px;color:#555;">「接收订单消息电话」字段无短信验证码验证（直接填写）</td>
+          <td style="padding:12px 16px;color:#27ae60;font-weight:600;">✅ 同H5端，无验证码，直接填写手机号</td>
+          <td style="padding:12px 16px;"><span style="background:#f6ffed;color:#389e0d;padding:2px 8px;border-radius:4px;font-size:11px;">无需修改</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:24px;background:#fff2f0;border:1px solid #ffccc7;border-radius:8px;padding:16px;">
+      <div style="font-size:14px;font-weight:700;color:#cf1322;margin-bottom:8px;">⚠️ 后端开发必须修改的3项（P0）</div>
+      <div style="font-size:13px;color:#555;line-height:1.8;">
+        1. <strong>clientType 动态识别</strong>：读取请求Header的 X-Platform 字段，小程序端传 MINI_APP，H5端传 H5<br>
+        2. <strong>redirectUrl 适配</strong>：小程序端的 redirectUrl 应指向部署在业务域名下的中间H5页（miniapp-callback.html），由该页面调用 wx.miniProgram.navigateTo 跳回小程序<br>
+        3. <strong>业务域名配置</strong>：小程序后台配置 webviewUrl 业务域名，否则 web-view 组件无法加载 e签宝 H5 页面
+      </div>
+    </div>
+
+    <!-- v6.4新增：小程序接入前置条件 -->
+    <div style="margin-top:20px;background:#e6f7ff;border:1px solid #91d5ff;border-radius:8px;padding:16px;">
+      <div style="font-size:14px;font-weight:700;color:#0958d9;margin-bottom:10px;">📋 小程序端接入前置条件（v6.4新增，开发前必读）</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <tr style="background:#1677ff;color:#fff;">
+          <th style="padding:8px;text-align:left;">序号</th><th style="padding:8px;text-align:left;">前置条件</th><th style="padding:8px;text-align:left;">配置位置</th><th style="padding:8px;text-align:left;">状态</th>
+        </tr>
+        <tr><td style="padding:8px;border:1px solid #d9d9d9;">1</td><td style="padding:8px;border:1px solid #d9d9d9;">添加业务域名 <code>openapi.esign.cn</code></td><td style="padding:8px;border:1px solid #d9d9d9;">微信公众平台 → 开发管理 → 业务域名</td><td style="padding:8px;border:1px solid #d9d9d9;"><span style="color:#fa8c16;">⏳ 待配置</span></td></tr>
+        <tr style="background:#fafafa;"><td style="padding:8px;border:1px solid #d9d9d9;">2</td><td style="padding:8px;border:1px solid #d9d9d9;">部署微信校验txt文件到服务器根目录</td><td style="padding:8px;border:1px solid #d9d9d9;">从微信公众平台下载 → 放到Nginx/Apache根目录</td><td style="padding:8px;border:1px solid #d9d9d9;"><span style="color:#fa8c16;">⏳ 待部署</span></td></tr>
+        <tr><td style="padding:8px;border:1px solid #d9d9d9;">3</td><td style="padding:8px;border:1px solid #d9d9d9;">部署回调中间页 <code>/auth/miniapp-callback.html</code></td><td style="padding:8px;border:1px solid #d9d9d9;">商城Web服务器公开静态资源目录</td><td style="padding:8px;border:1px solid #d9d9d9;"><span style="color:#fa8c16;">⏳ 待部署</span></td></tr>
+        <tr style="background:#fafafa;"><td style="padding:8px;border:1px solid #d9d9d9;">4</td><td style="padding:8px;border:1px solid #d9d9d9;">申请e签宝 appId / appSecret（沙箱+正式）</td><td style="padding:8px;border:1px solid #d9d9d9;">e签宝开放平台 → 应用管理</td><td style="padding:8px;border:1px solid #d9d9d9;"><span style="color:#fa8c16;">⏳ 待申请</span></td></tr>
+        <tr><td style="padding:8px;border:1px solid #d9d9d9;">5</td><td style="padding:8px;border:1px solid #d9d9d9;">配置HTTPS证书有效（所有回调URL）</td><td style="padding:8px;border:1px solid #d9d9d9;">SSL证书服务商 / 运维</td><td style="padding:8px;border:1px solid #d9d9d9;"><span style="color:#fa8c16;">⏳ 待确认</span></td></tr>
+      </table>
+      <div style="margin-top:10px;font-size:11px;color:#888;line-height:1.6;">
+        💡 e签宝运维经理确认支持txt文件验证方式。参考文档：<a href="https://open.esign.cn/doc/opendoc/case3/ahb0sg" target="_blank" style="color:#1677ff;">内嵌H5方式集成签署/认证页</a>
+      </div>
+    </div>
+
+    <!-- v6.4新增：e签宝API调用链路 -->
+    <div style="margin-top:16px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:16px;">
+      <div style="font-size:14px;font-weight:700;color:#389e0d;margin-bottom:10px;">🔗 e签宝接口调用时序（小程序端）</div>
+      <div style="font-size:12px;color:#555;line-height:2;white-space:pre-wrap;font-family:monospace;background:#fff;padding:12px;border-radius:4px;border:1px solid #d9d9d9;">
+① 小程序前端 POST /api/company/auth/submit
+   Header: { Authorization, X-Platform: miniapp }
+   
+② 商城后端 获取AccessToken (HMAC-SHA256鉴权)
+   POST /v3/oauth2/access_token
+   → 缓存Redis (有效期7200秒)
+
+③ 商城后端 调用e签宝接口1 (获取认证页面链接)
+   POST /v3/org-auth/create
+   clientType=MINI_APP  ← 关键！
+   redirectUrl=https://xxx.com/auth/miniapp-callback.html
+   notifyUrl=https://xxx.com/api/company/auth/callback
+   
+④ 返回 authUrl → 前端 WebView 加载
+
+⑤ 用户在WebView完成认证 → 
+   e签宝跳转redirectUrl(中间H5页)
+   
+⑥ 中间H5页 wx.miniProgram.navigateTo
+   → 跳转小程序结果页
+
+⑦ e签宝异步回调 notifyUrl
+   → 后端验签(HMAC-SHA256) → 查询接口2 → 更新数据库
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  // 隐藏所有页
+  document.querySelectorAll('.screen-page').forEach(p => p.classList.remove('visible'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  // 显示目标页
+  document.getElementById(id).classList.add('visible');
+  // 激活tab
+  const tabs = document.querySelectorAll('.tab');
+  const map = {
+    'p-entry': 0, 'p-company': 1, 'p-phone': 2, 'p-checking': 3,
+    'p-form': 4, 'p-webview': 5, 'p-processing': 6,
+    'p-success': 7, 'p-failed': 8, 'p-authz-wait': 9,
+    'p-authz-ok': 10, 'p-authz-rej': 11, 'p-draft': 12, 'p-diff': 13
+  };
+  if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2902 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业认证 - 物料商城 (v6.7)</title>
+    <!-- Mermaid.js for professional flowcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#e6f7ff',
+                primaryTextColor: '#333',
+                primaryBorderColor: '#91d5ff',
+                lineColor: '#8c8c8c',
+                secondaryColor: '#f6ffed',
+                tertiaryColor: '#fff7e6',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
+                fontSize: '14px'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20
+            }
+        });
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 左侧导航 */
+        .sidebar {
+            width: 200px;
+            background: #fff;
+            border-right: 1px solid #e8e8e8;
+            padding: 20px 0;
+        }
+        
+        .nav-item {
+            padding: 12px 24px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item:hover {
+            color: #1890ff;
+            background: #f0f5ff;
+        }
+        
+        .nav-item.active {
+            color: #1890ff;
+            background: #e6f7ff;
+            border-right: 3px solid #1890ff;
+        }
+        
+        .nav-section {
+            padding: 8px 24px;
+            color: #999;
+            font-size: 12px;
+            margin-top: 16px;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            padding: 24px 32px;
+        }
+        
+        .page-header {
+            margin-bottom: 24px;
+        }
+        
+        .page-header h1 {
+            font-size: 20px;
+            font-weight: 500;
+            color: #262626;
+        }
+        
+        /* 认证状态卡片 */
+        .status-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .status-icon.pending {
+            background: #fff7e6;
+            color: #fa8c16;
+        }
+        
+        .status-icon.verified {
+            background: #f6ffed;
+            color: #52c41a;
+        }
+        
+        .status-icon.rejected {
+            background: #fff1f0;
+            color: #ff4d4f;
+        }
+        
+        .status-icon.error {
+            background: #fff1f0;
+            color: #ff4d4f;
+        }
+        
+        .status-info h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .status-info p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* 表单卡片 */
+        .form-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 32px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #262626;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 48px;
+            margin-bottom: 24px;
+        }
+        
+        .form-group {
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .form-group.full-width {
+            max-width: 848px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #262626;
+            margin-bottom: 8px;
+        }
+        
+        .form-label .required {
+            color: #ff4d4f;
+            margin-right: 4px;
+        }
+        
+        .form-label .optional {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-input:hover {
+            border-color: #40a9ff;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        .form-input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        
+        /* 企查查搜索 */
+        .search-wrapper {
+            position: relative;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1890ff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            margin-top: 4px;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .search-dropdown.show {
+            display: block;
+        }
+        
+        .search-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .search-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .search-item .company-name {
+            font-size: 14px;
+            color: #262626;
+            margin-bottom: 4px;
+        }
+        
+        .search-item .company-code {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        /* 上传区域 */
+        .upload-area {
+            width: 120px;
+            height: 120px;
+            border: 2px dashed #d9d9d9;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+        
+        .upload-area:hover {
+            border-color: #1890ff;
+            background: #f0f5ff;
+        }
+        
+        .upload-area.has-file {
+            border-color: #52c41a;
+            background: #f6ffed;
+        }
+        
+        .upload-icon {
+            font-size: 32px;
+            color: #bfbfbf;
+            margin-bottom: 8px;
+        }
+        
+        .upload-area:hover .upload-icon {
+            color: #1890ff;
+        }
+        
+        .upload-text {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .upload-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+        }
+        
+        /* 提交按钮 */
+        .form-actions {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .btn {
+            height: 40px;
+            padding: 0 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #1890ff;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+        
+        .btn-primary:disabled {
+            background: #bfbfbf;
+            cursor: not-allowed;
+        }
+        
+        .btn-default {
+            background: #fff;
+            color: #595959;
+            border: 1px solid #d9d9d9;
+            margin-left: 12px;
+        }
+        
+        .btn-default:hover {
+            border-color: #40a9ff;
+            color: #40a9ff;
+        }
+        
+        /* 认证信息展示 */
+        .info-display {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .info-display h4 {
+            font-size: 14px;
+            color: #52c41a;
+            margin-bottom: 12px;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-label {
+            width: 120px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            flex: 1;
+            color: #262626;
+            font-size: 14px;
+        }
+        
+        /* 提示信息 */
+        .tips {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+        }
+        
+        .tips-title {
+            font-size: 14px;
+            color: #fa8c16;
+            margin-bottom: 8px;
+        }
+        
+        .tips-list {
+            font-size: 13px;
+            color: #666;
+            padding-left: 16px;
+        }
+        
+        .tips-list li {
+            margin-bottom: 4px;
+        }
+        
+        /* e签宝认证弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal {
+            background: #fff;
+            border-radius: 8px;
+            width: 480px;
+            padding: 32px;
+            text-align: center;
+        }
+        
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: #e6f7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        
+        .modal h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .modal p {
+            color: #666;
+            margin-bottom: 24px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .modal-actions .btn {
+            min-width: 120px;
+        }
+        
+        /* 标签 */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        
+        .tag-success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+        
+        .tag-warning {
+            background: #fff7e6;
+            color: #fa8c16;
+            border: 1px solid #ffd591;
+        }
+        
+        /* 流程步骤 */
+        .steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+            padding: 24px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #d9d9d9;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .step.active .step-number {
+            background: #1890ff;
+        }
+        
+        .step.completed .step-number {
+            background: #52c41a;
+        }
+        
+        .step-text {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .step.active .step-text {
+            color: #1890ff;
+            font-weight: 500;
+        }
+        
+        .step.completed .step-text {
+            color: #52c41a;
+        }
+        
+        .step-arrow {
+            margin: 0 24px;
+            color: #d9d9d9;
+        }
+    </style>
+</head>
+<!--
+    ============================================================
+    企业认证原型 - 业务逻辑说明 (v6.7)
+    ============================================================
+    【整体流程】（方案C+）
+    1. 未认证 → 权益入口页(页面1) → 企业信息填写(页面2) → 过渡态(页面3.5,纯前端1-2s)
+       → 完整表单(页面4) → e签宝H5认证 → 审核 → 通过/失败/等待授权
+    2. 方案C+核心：商城侧不做场景分流，统一展示完整表单；e签宝H5内部自动检测
+       企业是否已实名认证，自行适配展示内容
+    3. 草稿永久保存：任何环节可保存草稿，后续随时继续认证
+    4. 授权申请最多3次，超时24h自动失效
+
+    【v6.7变更要点（基于v6.6第二轮监察室审核修复）】
+    - 修复CSS缺少.status-icon.error定义（3处JS使用但无样式）
+    - 修复步骤指示器文案不一致（e签宝实名认证→统一为e签宝认证授权）
+    - 修复审核时间描述矛盾（1-3个工作日→统一为5-10分钟）
+    - 修复SVG预览尺寸不匹配（fcNaturalW 960→1100与viewBox一致）
+    - 统一测试数据企业名称和信用代码（消除福州启泰/启泰智能装备混用）
+    - 删除submitAuth中遗留isExistedInEsign分流逻辑（方案C+完全落地）
+    - 更新授权申请弹窗注释（标注由e签宝H5内部触发）
+    - 更新草稿恢复页场景说明（方案C+下统一走完整表单）
+    - 页面4企业信息区块补充法定代表人只读字段
+    - 所有版本号更新为v6.7
+    ============================================================
+-->
+
+<!-- 原型页面切换导航（仅用于演示） -->
+<div class="proto-nav" style="position: fixed; top: 0; left: 0; right: 0; background: #001529; color: #fff; z-index: 9999; padding: 8px 16px; font-size: 13px; max-height: 80px; overflow-y: auto;">
+    <div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
+        <span style="margin-right: 12px; font-weight: 500; white-space: nowrap;">🎨 页面导航：</span>
+        <button class="proto-btn active" onclick="showPage('flowOverview')">📊 流程总览</button>
+        <button class="proto-btn" onclick="showPage('unverified')">未认证入口</button>
+        <button class="proto-btn" onclick="showPage('page2')">填写企业信息</button>
+        <button class="proto-btn" onclick="showPage('checking')">过渡加载(3.5)</button>
+        <button class="proto-btn" onclick="showPage('draft')">草稿恢复</button>
+        <button class="proto-btn" onclick="showPage('form')">完整认证表单</button>
+        <button class="proto-btn modal-btn" onclick="showPage('esignModal')">🔲 e签宝弹窗</button>
+        <button class="proto-btn modal-btn" onclick="showPage('authzModal')">🔲 授权申请弹窗</button>
+        <button class="proto-btn" onclick="showPage('esignRedirect')">跳转e签宝(场景一)</button>
+        <button class="proto-btn" onclick="showPage('esignRedirectAuthz')">跳转e签宝(场景二)</button>
+        <button class="proto-btn" onclick="showPage('verifying')">审核中</button>
+        <button class="proto-btn" onclick="showPage('verified')">认证+授权通过</button>
+        <button class="proto-btn" onclick="showPage('rejected')">认证失败</button>
+        <button class="proto-btn" onclick="showPage('authzPending')">等待授权</button>
+        <button class="proto-btn" onclick="showPage('authzApproved')">授权通过</button>
+        <button class="proto-btn" onclick="showPage('authzRejected')">授权拒绝</button>
+        <button class="proto-btn" onclick="showPage('authzTimeout')">授权超时</button>
+    </div>
+    <style>
+        .proto-btn { background: #1890ff; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; white-space: nowrap; }
+        .proto-btn:hover { background: #40a9ff; }
+        .proto-btn.active { background: #52c41a; }
+        .proto-btn.modal-btn { background: #722ed1; }
+        .proto-btn.modal-btn:hover { background: #9254de; }
+    </style>
+</div>
+
+<body style="padding-top: 40px;">
+    <div class="container">
+        <!-- 左侧导航 -->
+        <aside class="sidebar">
+            <div class="nav-item">企业信息</div>
+            <div class="nav-item active">企业认证</div>
+            <div class="nav-item">组织架构</div>
+            <div class="nav-item">流程管理</div>
+            <div class="nav-item">物料管理</div>
+            <div class="nav-item">采购中心</div>
+            <div class="nav-item">账户安全</div>
+            <div class="nav-item">会员信息</div>
+            <div class="nav-item">收货地址</div>
+            <div class="nav-item">开户银行</div>
+            <div class="nav-item">我的消息</div>
+            
+            <div class="nav-section">财务中心</div>
+            <div class="nav-item">账期对账</div>
+            <div class="nav-item">我的余额</div>
+            <div class="nav-item">我的优惠券</div>
+            <div class="nav-item">月结记账</div>
+            <div class="nav-item">我的积分</div>
+            
+            <div class="nav-section">关注中心</div>
+            <div class="nav-item">我的收藏</div>
+            <div class="nav-item">我的足迹</div>
+            
+            <div class="nav-section">服务中心</div>
+            <div class="nav-item">我的发票</div>
+            <div class="nav-item">发票管理</div>
+        </aside>
+        
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>企业认证</h1>
+            </div>
+            
+            <!-- ==================== 页面1：认证入口页（未认证状态，UNVERIFIED） ==================== -->
+            <!--
+                ============================================================
+                页面：认证入口页（UNVERIFIED）
+                ============================================================
+                【PRD对应】3.3 页面1（路径：/company/auth）
+                【触发条件】用户首次进入企业认证，无历史草稿，无认证记录
+                【v5.4修复】原型v5.3中「未认证」状态直接展示完整表单，与PRD不符。
+                  正确逻辑：页面1是轻量引导页（权益说明+【去认证】按钮），用户点击后
+                  才跳转到页面2（企业信息填写），不直接展示表单。
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="unverifiedCard" style="display:none">
+                <div style="text-align: center; padding: 48px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px; color: #262626;">企业未认证</h3>
+                    <p style="color: #666; margin-bottom: 32px; font-size: 14px;">完成企业实名认证后，可享受以下权益：</p>
+                    <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 0 auto 32px; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f0f5ff; border-radius: 8px;">
+                            <span style="font-size: 20px;">💳</span>
+                            <div>
+                                <div style="font-size: 14px; color: #262626; font-weight: 500;">申请账期支付</div>
+                                <div style="font-size: 12px; color: #999;">先采购后付款，灵活资金周转</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f0f5ff; border-radius: 8px;">
+                            <span style="font-size: 20px;">🏷️</span>
+                            <div>
+                                <div style="font-size: 14px; color: #262626; font-weight: 500;">企业专属价格</div>
+                                <div style="font-size: 12px; color: #999;">享受企业协议价，降低采购成本</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f0f5ff; border-radius: 8px;">
+                            <span style="font-size: 20px;">📝</span>
+                            <div>
+                                <div style="font-size: 14px; color: #262626; font-weight: 500;">电子合同签署</div>
+                                <div style="font-size: 12px; color: #999;">在线签署合同，具备法律效力</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f0f5ff; border-radius: 8px;">
+                            <span style="font-size: 20px;">👥</span>
+                            <div>
+                                <div style="font-size: 14px; color: #262626; font-weight: 500;">子账号管理</div>
+                                <div style="font-size: 12px; color: #999;">支持多员工账号统一管理</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="min-width: 200px; height: 44px; font-size: 16px;" onclick="showPage('page2')">去认证</button>
+                </div>
+            </div>
+            
+            <!-- ==================== 页面2：企业信息填写（轻量表单） ==================== -->
+            <!--
+                ============================================================
+                页面：企业信息填写（页面2）
+                ============================================================
+                【PRD对应】3.3 页面2（路径：/company/auth/form）
+                【步骤指示器】步骤1/4 active
+                【v5.4修复】页面2只包含企业基本信息（4个字段）+【下一步】按钮，
+                  不包含法人身份证号/经办人信息（这些在页面4）。
+                  点击【下一步】后跳转页面3.5（过渡加载），而非直接进入完整表单。
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="page2Card" style="display:none">
+                <div class="steps" style="display:flex; margin-bottom: 24px;">
+                    <div class="step active"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step"><div class="step-number">2</div><div class="step-text">企业核验</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step"><div class="step-number">3</div><div class="step-text">e签宝认证授权</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step"><div class="step-number">4</div><div class="step-text">认证完成</div></div>
+                </div>
+                
+                <div class="section-title">企业信息</div>
+                <div style="background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 4px; padding: 10px 16px; margin-bottom: 20px; font-size: 13px; color: #1890ff;">
+                    ℹ️ 请输入企业名称，系统将通过企查查自动核验并填充企业信息
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>企业名称
+                            <span class="tag tag-success" id="qccTag2" style="display:none">已核验</span>
+                        </label>
+                        <div class="search-wrapper">
+                            <input type="text" class="form-input" id="companyName2" placeholder="请输入企业名称（输入2字以上自动搜索）" autocomplete="off">
+                            <span class="search-icon" onclick="searchCompany2()">🔍</span>
+                            <div class="search-dropdown" id="searchDropdown2">
+                                <div class="search-item" onclick="selectCompany2('启泰智能装备有限公司', '91441900MA53K2XJ3X', '张三', '广东省东莞市长安镇')">
+                                    <div class="company-name">启泰智能装备有限公司</div>
+                                    <div class="company-code">91441900MA53K2XJ3X · 法定代表人：张三</div>
+                                </div>
+                                <div class="search-item" onclick="selectCompany2('东莞市启泰精密模具有限公司', '91441900MA53K2XJ4Y', '李四', '广东省东莞市塘厦镇')">
+                                    <div class="company-name">东莞市启泰精密模具有限公司</div>
+                                    <div class="company-code">91441900MA53K2XJ4Y · 法定代表人：李四</div>
+                                </div>
+                                <div class="search-item" onclick="selectCompany2('深圳启泰科技有限公司', '91440300MA5F8XJ3X2', '王五', '广东省深圳市南山区')">
+                                    <div class="company-name">深圳启泰科技有限公司</div>
+                                    <div class="company-code">91440300MA5F8XJ3X2 · 法定代表人：王五</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>统一社会信用代码
+                        </label>
+                        <input type="text" class="form-input" id="creditCode2" placeholder="企查查选择后自动填充" readonly style="background:#f5f5f5;">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>法定代表人
+                        </label>
+                        <input type="text" class="form-input" id="legalName2" placeholder="企查查选择后自动填充" readonly style="background:#f5f5f5;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">注册地址</label>
+                        <input type="text" class="form-input" id="regAddress2" placeholder="企查查选择后自动填充" readonly style="background:#f5f5f5;">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="page2NextBtn" onclick="submitPage2()" disabled style="background:#bfbfbf; cursor:not-allowed;">下一步</button>
+                    <span style="font-size: 12px; color: #999; margin-left: 12px;">请先选择企业完成核验</span>
+                </div>
+            </div>
+            
+            <!-- ==================== 页面3.5：过渡加载 ==================== -->
+            <!--
+                ============================================================
+                页面：过渡加载（3.5）
+                ============================================================
+                【PRD对应】3.3 页面3.5（路径：/company/auth/checking）
+                【步骤指示器】步骤2/4 active
+                【v6.6修复】页面2点击【下一步】后，此页面作为纯前端过渡状态显示约1-2秒，
+                  用于"准备认证材料"的UX体验优化（方案C+）。
+                  不再调用后端API判断企业认证状态——这是e签宝H5的职责。
+                  用户点击【下一步】后固定展示1-2秒，然后统一跳转到完整表单（页面4）。
+                  e签宝H5内部会自动检测企业是否已实名认证，并自行适配展示内容。
+                【注意】此页面是独立的视觉状态，不能用表单loading态代替
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="checkingCard" style="display:none">
+                <div class="steps" style="display:flex; margin-bottom: 24px;">
+                    <div class="step completed"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step active"><div class="step-number">2</div><div class="step-text">企业核验</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step"><div class="step-number">3</div><div class="step-text">e签宝认证授权</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step"><div class="step-number">4</div><div class="step-text">认证完成</div></div>
+                </div>
+                <div style="text-align: center; padding: 48px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px; animation: spin 2s linear infinite; display: inline-block;">⏳</div>
+                    <style>@keyframes spin { 0%{ transform: rotate(0deg); } 100%{ transform: rotate(360deg); } }</style>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">正在准备认证材料</h3>
+                    <p style="color: #666; margin-bottom: 8px;">正在为您准备e签宝实名认证...</p>
+                    <p style="color: #999; font-size: 13px;">请稍候，预计1-2秒</p>
+                </div>
+            </div>
+            <div class="status-card" id="statusCard" style="display:none;">
+                <div class="status-icon pending" id="statusIcon">⏳</div>
+                <div class="status-info">
+                    <h3 id="statusTitle">企业未认证</h3>
+                    <p id="statusDesc">完成企业认证后，可享受账期支付、企业专属价格等权益</p>
+                </div>
+            </div>
+            
+            <!-- 认证流程 -->
+            <div class="steps" id="steps" style="display:none;">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-text">填写企业信息</div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-text">企业核验</div>
+                </div>
+                <div class="step-arrow">→</div>
+                        <div class="step" id="step3">
+                            <div class="step-number">3</div>
+                            <div class="step-text">e签宝认证授权</div>
+                        </div>
+                <div class="step-arrow">→</div>
+                <div class="step" id="step4">
+                    <div class="step-number">4</div>
+                    <div class="step-text">认证完成</div>
+                </div>
+            </div>
+            
+            <!-- 流程图入口提示 -->
+            <div style="background: #f0f5ff; border: 1px solid #91d5ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 20px;">📊</span>
+                    <div>
+                        <div style="font-size: 14px; color: #1890ff; font-weight: 500;">查看完整业务流程</div>
+                        <div style="font-size: 12px; color: #666;">包含页面关系、状态流转、触发条件</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="font-size: 12px; padding: 6px 16px;" onclick="showPage('flowOverview')">查看流程图</button>
+            </div>
+            
+            <!-- 提示信息 -->
+            <div class="tips" id="tips" style="display:none;">
+                <div class="tips-title">📋 认证须知</div>
+                <ul class="tips-list">
+                    <li>企业名称支持企查查模糊搜索，自动填充企业信息</li>
+                    <li>营业执照将在e签宝认证页面上传，无需在此上传</li>
+                    <li>认证+授权在e签宝H5内一体化完成</li>
+                    <li>认证信息审核通常需要5-10分钟</li>
+                </ul>
+            </div>
+            
+            <!--
+                ============================================================
+                页面：完整认证表单（页面4，首次认证）
+                ============================================================
+                【PRD对应】3.3 页面4（路径：/company/auth/first-time）
+                【步骤指示器】步骤3/4 active（由外层steps统一控制，避免重复）
+                【v5.5修复】删除内部重复steps，统一使用外层id="steps"的步骤指示器
+                【v6.6修复】企业信息字段（名称/信用代码/地址）改为只读，从页面2自动填充
+                【v5.4说明】此表单用于场景一（首次认证），包含：
+                - 企业信息（从页面2自动填充，不可编辑）
+                - 法人信息（法人身份证号需用户填写）
+                - 经办人信息（全部需用户填写）
+                - 补充信息（选填，位于底部）
+                - 协议确认（必填）
+                - 操作按钮：【提交认证】+【保存草稿】
+                ============================================================
+            -->
+            <!-- 表单区域 -->
+            <div class="form-card" id="formCard" style="display:none;">
+                <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 4px; padding: 10px 16px; margin-bottom: 20px; font-size: 13px; color: #d46b08;">
+                    ℹ️ 请完善以下信息，提交后将在e签宝完成实名认证与授权
+                </div>
+                
+                <!-- 企业信息 -->
+                <div class="section-title">企业信息</div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>企业名称
+                            <span class="tag tag-warning" id="qccTag" style="display:none">已核验</span>
+                        </label>
+                        <div class="search-wrapper">
+                            <input type="text" class="form-input" id="companyName" placeholder="企查查选择后自动填充（不可编辑）" readonly style="background:#f5f5f5;" autocomplete="off">
+                            <div class="search-dropdown" id="searchDropdown">
+                                <div class="search-item" onclick="selectCompany('启泰智能装备有限公司', '91441900MA53K2XJ3X', '张三', '广东省东莞市长安镇')">
+                                    <div class="company-name">启泰智能装备有限公司</div>
+                                    <div class="company-code">91441900MA53K2XJ3X</div>
+                                </div>
+                                <div class="search-item" onclick="selectCompany('东莞市启泰精密模具有限公司', '91441900MA53K2XJ4Y', '李四', '广东省东莞市塘厦镇')">
+                                    <div class="company-name">东莞市启泰精密模具有限公司</div>
+                                    <div class="company-code">91441900MA53K2XJ4Y</div>
+                                </div>
+                                <div class="search-item" onclick="selectCompany('深圳启泰科技有限公司', '91440300MA5F8XJ3X2', '王五', '广东省深圳市南山区')">
+                                    <div class="company-name">深圳启泰科技有限公司</div>
+                                    <div class="company-code">91440300MA5F8XJ3X2</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>统一社会信用代码
+                        </label>
+                        <input type="text" class="form-input" id="creditCode" placeholder="企查查选择后自动填充（不可编辑）" readonly style="background:#f5f5f5;" maxlength="18">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>法定代表人
+                        </label>
+                        <input type="text" class="form-input" id="legalNamePage4RO" placeholder="企查查选择后自动填充（不可编辑）" readonly style="background:#f5f5f5;">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label class="form-label">
+                            <span class="required">*</span>注册地址
+                        </label>
+                        <input type="text" class="form-input" id="regAddress" placeholder="企查查选择后自动填充（不可编辑）" readonly style="background:#f5f5f5;">
+                    </div>
+                </div>
+                
+                <!-- 法人信息 -->
+                <div class="section-title">法人信息 <span class="tag tag-warning">e签宝实名认证必填</span></div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>法定代表人姓名
+                        </label>
+                        <input type="text" class="form-input" id="legalName" placeholder="请输入法定代表人姓名">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>法定代表人身份证号
+                        </label>
+                        <input type="text" class="form-input" id="legalIdNo" placeholder="请输入18位身份证号" maxlength="18">
+                    </div>
+                </div>
+                
+                <!-- 经办人信息 -->
+                <div class="section-title">经办人信息 <span class="tag tag-warning">e签宝实名认证必填</span></div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>经办人姓名
+                        </label>
+                        <input type="text" class="form-input" id="operatorName" placeholder="请输入经办人姓名">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>经办人身份证号
+                        </label>
+                        <input type="text" class="form-input" id="operatorIdNo" placeholder="请输入18位身份证号" maxlength="18">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="required">*</span>接收订单消息电话
+                        </label>
+                        <input type="text" class="form-input" id="orderPhone" placeholder="请输入手机号">
+                    </div>
+                </div>
+                
+                <!-- 补充信息（选填） -->
+                <div class="section-title">补充信息 <span class="tag tag-warning">选填</span></div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            经营类型
+                        </label>
+                        <select class="form-input" id="businessType">
+                            <option value="">请选择经营类型</option>
+                            <option value="生产企业">生产企业</option>
+                            <option value="贸易企业">贸易企业</option>
+                            <option value="服务企业">服务企业</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            公司电话
+                        </label>
+                        <input type="text" class="form-input" id="companyPhone" placeholder="请输入公司电话">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            邮箱地址
+                        </label>
+                        <input type="email" class="form-input" id="email" placeholder="请输入邮箱地址">
+                    </div>
+                </div>
+                
+                <!-- 提交按钮 -->
+                <div class="form-actions">
+                    <!-- 协议确认（必填，v5.4新增） -->
+                    <div style="margin-bottom: 20px; padding: 12px 16px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 4px;">
+                        <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 13px; color: #666;">
+                            <input type="checkbox" id="agreeProtocol" style="margin-top: 2px; flex-shrink: 0;">
+                            <span>我已阅读并同意
+                                <a href="javascript:void(0)" style="color:#1890ff;">《认证服务协议》</a>
+                                和
+                                <a href="javascript:void(0)" style="color:#1890ff;">《e签宝用户授权协议》</a>
+                            </span>
+                        </label>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <button class="btn btn-primary" onclick="submitAuth()">提交认证</button>
+                        <button class="btn btn-default" onclick="saveDraft()">保存草稿</button>
+                        <span style="font-size: 12px; color: #999;">草稿将永久保存</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 认证+授权成功信息展示（默认隐藏） -->
+            <div class="form-card" id="successCard" style="display:none">
+                <div class="section-title">认证授权信息</div>
+                <div class="info-display">
+                    <h4>✅ 企业认证授权已通过</h4>
+                    <div class="info-item">
+                        <div class="info-label">企业名称：</div>
+                        <div class="info-value" id="successCompanyName">启泰智能装备有限公司</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">统一社会信用代码：</div>
+                        <div class="info-value" id="successCreditCode">91441900MA53K2XJ3X</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">法定代表人：</div>
+                        <div class="info-value" id="successLegalName">张三</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">认证时间：</div>
+                        <div class="info-value" id="successTime">2026-04-20 14:30:00</div>
+                    </div>
+                    <div class="info-item" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #b7eb8f;">
+                        <div class="info-label" style="color: #52c41a;">🎉 已开通权益：</div>
+                        <div class="info-value">电子合同签署 · 企业专属价格 · 账期申请资格</div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="goToContract()">去签署合同</button>
+                    <button class="btn btn-default" onclick="showPage('flowOverview')">返回首页</button>
+                </div>
+            </div>
+            
+            <!-- 授权申请中展示（默认隐藏） -->
+            <!-- 
+                ============================================================
+                页面：授权待处理（AUTHZ_PENDING）
+                ============================================================
+                【PRD对应】3.3 页面8C（路径：/company/auth/authz-pending）
+                【v5.4修复】补充认证企业信息展示区块（名称/信用代码/法人/认证时间）；
+                  删除原来的"授权说明"Tips（与PRD不符）；保留【刷新状态】按钮；
+                  无撤销/取消功能。
+                ============================================================
+            -->
+            <div class="form-card" id="authzPendingCard" style="display:none">
+                <div style="text-align: center; padding-top: 32px; padding-bottom: 16px;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">⏳</div>
+                    <h3 style="font-size: 18px; margin-bottom: 4px;">认证已通过</h3>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 0;">等待管理员授权</p>
+                </div>
+                
+                <div style="max-width: 520px; margin: 0 auto; padding: 0 24px 32px;">
+                    <!-- 认证信息展示 -->
+                    <div style="background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+                        <div style="font-size: 13px; color: #52c41a; font-weight: 500; margin-bottom: 12px;">✅ 认证信息</div>
+                        <div class="info-item">
+                            <div class="info-label">企业名称：</div>
+                            <div class="info-value" id="authzPendingCompanyName">启泰智能装备有限公司</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">信用代码：</div>
+                            <div class="info-value">91441900MA53K2XJ3X</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">法定代表人：</div>
+                            <div class="info-value">张三</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">认证时间：</div>
+                            <div class="info-value">2026-04-20 10:35:00</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 当前状态 -->
+                    <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+                        <div style="font-size: 13px; color: #d46b08; font-weight: 500; margin-bottom: 8px;">📨 当前状态</div>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 4px;">等待企业管理员授权审批</p>
+                        <p style="font-size: 13px; color: #999;">管理员将在e签宝平台收到审批通知，审批通过后即可使用电子合同功能</p>
+                    </div>
+                    
+                    <div style="font-size: 12px; color: #999; margin-bottom: 16px; text-align: center;">
+                        💡 如长时间未收到回复，请联系企业管理员尽快处理
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" onclick="checkAuthzStatus()">刷新状态</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 授权已通过展示（默认隐藏） -->
+            <div class="form-card" id="authzApprovedCard" style="display:none">
+                <div class="section-title">授权信息</div>
+                <div class="info-display">
+                    <h4>✅ 企业授权已通过</h4>
+                    <div class="info-item">
+                        <div class="info-label">企业名称：</div>
+                        <div class="info-value" id="authzApprovedCompanyName">启泰智能装备有限公司</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">统一社会信用代码：</div>
+                        <div class="info-value">91441900MA53K2XJ3X</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">法定代表人：</div>
+                        <div class="info-value">张三</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">授权时间：</div>
+                        <div class="info-value" id="authzApprovedTime">2026-04-20 15:00:00</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">审批人：</div>
+                        <div class="info-value" id="authzApprover">王经理</div>
+                    </div>
+                </div>
+                <div class="tips" style="margin-top: 24px; background: #f6ffed; border-color: #b7eb8f;">
+                    <div class="tips-title" style="color: #52c41a;">🎉 授权权益</div>
+                    <ul class="tips-list">
+                        <li>您现在可以使用电子合同签署功能</li>
+                        <li>支持在物料商城进行在线签约</li>
+                        <li>合同具有法律效力，可下载存档</li>
+                    </ul>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="goToContract()">去签署合同</button>
+                </div>
+            </div>
+            
+            <!-- ==================== 业务流程图综述页面 ==================== -->
+            
+            <!-- 
+                ============================================================
+                页面：业务流程图综述（FLOW_OVERVIEW）
+                ============================================================
+                【功能说明】
+                本页面用于展示企业认证完整的业务流程图，包括：
+                1. 整体流程图：从入口到完成的完整路径
+                2. 页面关系图：主页面、子页面、弹窗的层级关系
+                3. 状态流转图：各状态之间的转换条件
+                
+                【使用场景】
+                - 产品经理、开发人员快速理解业务全貌
+                - 需求评审时作为流程参考
+                - 原型演示时先展示整体流程
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="flowOverviewCard" style="display:block; padding: 32px;">
+                <div class="section-title">📊 企业认证业务流程总览</div>
+                
+                <!-- 1. 整体流程图（v6.6：方案C+落地，SVG内嵌；移除商城侧分流判断） -->
+                <div style="margin-bottom: 40px;">
+                    <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
+                        一、整体业务流程图
+                        <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">物料商城API同步接入"e签宝"企业认证业务流程图 v6.7（方案C+）</span>
+                    </div>
+
+                    <!-- v5.4 优化说明 -->
+                    <div style="background: #fffbe6; border: 1px solid #ffe58f; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: #614700;">
+                        <strong>📌 v6.7 流程图要点（方案C+核心变更）：</strong>
+                        <ol style="margin: 6px 0 0 18px; line-height: 1.9;">
+                            <li><strong>方案C+落地</strong>：页面3.5从"后端API阻塞检测"改为"纯前端过渡态(1-2s)"</li>
+                            <li><strong>移除商城侧分流</strong>：删除"企业是否已在e签宝认证"判断菱形，统一走完整表单页</li>
+                            <li><strong>e签宝H5自适应</strong>：H5内部自动检测企业认证状态，自行适配首次认证/授权两种场景</li>
+                            <li>新增「页面1权益入口 → 页面2企业信息轻量表单」两个节点（与原型对齐）</li>
+                            <li>「授权超时（7C）」分支及循环——超过24h未处理 → 超时页 → 重新授权（最多3次）</li>
+                            <li>「草稿永久保存」：有效期从7天改为永久，删除过期逻辑</li>
+                        </ol>
+                    </div>
+
+                    <div style="background: #fafafa; border-radius: 8px; padding: 16px; overflow-x: auto; text-align: center;">
+                        <svg id="flowchart-svg" viewBox="0 0 1100 1580" xmlns="http://www.w3.org/2000/svg"
+                             style="width:100%; max-width:1100px; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif; cursor:zoom-in;"
+                             onclick="openSvgPreview()">
+                            <defs>
+                                <!-- 箭头标记 -->
+                                <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L8,3 z" fill="#595959"/>
+                                </marker>
+                                <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L8,3 z" fill="#1890ff"/>
+                                </marker>
+                                <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L8,3 z" fill="#f5222d"/>
+                                </marker>
+                                <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L8,3 z" fill="#52c41a"/>
+                                </marker>
+                                <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L8,3 z" fill="#fa8c16"/>
+                                </marker>
+                            </defs>
+
+                            <!-- ===== 标题 ===== -->
+                            <text x="550" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#262626">物料商城API同步接入"e签宝"企业认证业务流程图</text>
+
+                            <!-- ===== 图例 ===== -->
+                            <rect x="20" y="45" width="920" height="36" rx="4" fill="#f0f5ff" stroke="#adc6ff" stroke-width="1"/>
+                            <rect x="36" y="55" width="16" height="16" rx="8" fill="#1890ff"/>
+                            <text x="58" y="67" font-size="12" fill="#444">圆角矩形=操作步骤</text>
+                            <polygon points="116,63 128,55 140,63 128,71" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="148" y="67" font-size="12" fill="#444">菱形=判断</text>
+                            <rect x="220" y="55" width="16" height="16" rx="2" fill="#f6ffed" stroke="#52c41a" stroke-width="1.5"/>
+                            <text x="242" y="67" font-size="12" fill="#444">绿色矩形=成功终态</text>
+                            <rect x="365" y="55" width="16" height="16" rx="2" fill="#fff1f0" stroke="#f5222d" stroke-width="1.5"/>
+                            <text x="387" y="67" font-size="12" fill="#444">红色矩形=失败/异常</text>
+                            <rect x="520" y="55" width="16" height="16" rx="2" fill="#e6f7ff" stroke="#1890ff" stroke-width="1.5"/>
+                            <text x="542" y="67" font-size="12" fill="#444">蓝色矩形=外部系统</text>
+                            <line x1="676" y1="63" x2="706" y2="63" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
+                            <text x="712" y="67" font-size="12" fill="#444">场景一</text>
+                            <line x1="780" y1="63" x2="810" y2="63" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
+                            <text x="816" y="67" font-size="12" fill="#444">场景二</text>
+
+                            <!-- =====================================================
+                                 公共起始段：开始 → 草稿判断 → 草稿恢复 → 继续？ → 页面1入口
+                                 ===================================================== -->
+
+                            <!-- 开始 -->
+                            <ellipse cx="480" cy="115" rx="44" ry="22" fill="#1890ff" stroke="#0050b3" stroke-width="1.5"/>
+                            <text x="480" y="120" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">开始</text>
+                            <line x1="480" y1="137" x2="480" y2="158" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                            <!-- 判断：是否有历史草稿 -->
+                            <polygon points="480,162 560,195 480,228 400,195" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="480" y="190" text-anchor="middle" font-size="13" fill="#333">是否有</text>
+                            <text x="480" y="207" text-anchor="middle" font-size="13" fill="#333">历史草稿？</text>
+                            <!-- Y → 草稿恢复页 -->
+                            <line x1="480" y1="228" x2="480" y2="258" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+                            <text x="488" y="248" font-size="11" fill="#595959">Y</text>
+                            <!-- N → 页面1 -->
+                            <line x1="560" y1="195" x2="720" y2="195" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+                            <text x="618" y="189" font-size="11" fill="#595959">N</text>
+
+                            <!-- 草稿恢复页 (页面3) -->
+                            <rect x="380" y="258" width="200" height="46" rx="6" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="480" y="277" text-anchor="middle" font-size="13" fill="#333" font-weight="500">草稿恢复页</text>
+                            <text x="480" y="294" text-anchor="middle" font-size="11" fill="#8c8c8c">（永久有效，展示已填信息）</text>
+                            <line x1="480" y1="304" x2="480" y2="330" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                            <!-- 判断：是否继续填写 -->
+                            <polygon points="480,334 560,367 480,400 400,367" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="480" y="362" text-anchor="middle" font-size="13" fill="#333">是否继续</text>
+                            <text x="480" y="379" text-anchor="middle" font-size="13" fill="#333">填写？</text>
+                            <!-- Y → 向右到与"N草稿"汇合点 -->
+                            <line x1="560" y1="367" x2="720" y2="367" stroke="#595959" stroke-width="1.5"/>
+                            <text x="618" y="361" font-size="11" fill="#595959">Y（继续填写）</text>
+                            <!-- N → 返回首页 -->
+                            <line x1="400" y1="367" x2="240" y2="367" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+                            <text x="296" y="361" font-size="11" fill="#595959">N（放弃）</text>
+
+                            <!-- 返回首页 -->
+                            <rect x="140" y="346" width="100" height="40" rx="6" fill="#f5f5f5" stroke="#d9d9d9" stroke-width="1.5"/>
+                            <text x="190" y="370" text-anchor="middle" font-size="13" fill="#595959">返回首页</text>
+
+                            <!-- 汇合：N无草稿 和 Y继续填写 → 竖线到页面1 -->
+                            <!-- 竖线：x=720, 从y=195到y=430（汇合点） -->
+                            <line x1="720" y1="195" x2="720" y2="430" stroke="#595959" stroke-width="1.5"/>
+                            <line x1="720" y1="367" x2="720" y2="430" stroke="#595959" stroke-width="1.5"/>
+                            <line x1="720" y1="430" x2="630" y2="430" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                            <!-- 页面1：权益入口页 (v5.4新增) -->
+                            <rect x="430" y="408" width="200" height="46" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+                            <text x="530" y="427" text-anchor="middle" font-size="13" fill="#1890ff" font-weight="500">📋 页面1：权益入口</text>
+                            <text x="530" y="444" text-anchor="middle" font-size="11" fill="#1890ff">展示账期/专属价/合同等权益</text>
+                            <line x1="530" y1="454" x2="530" y2="478" stroke="#1890ff" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+                            <!-- 页面2：企业信息轻量表单 (v5.4新增) -->
+                            <rect x="430" y="478" width="200" height="46" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+                            <text x="530" y="497" text-anchor="middle" font-size="13" fill="#1890ff" font-weight="500">📝 页面2：填写企业信息</text>
+                            <text x="530" y="514" text-anchor="middle" font-size="11" fill="#1890ff">企查查搜索自动填充，4个字段</text>
+                            <line x1="530" y1="524" x2="530" y2="548" stroke="#1890ff" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+
+                            <!-- 页面3.5：准备认证材料过渡态（v6.6修复：方案C+，纯前端过渡） -->
+                            <rect x="395" y="548" width="270" height="46" rx="6" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
+                            <text x="530" y="567" text-anchor="middle" font-size="13" fill="#722ed1" font-weight="500">🔍 页面3.5：准备认证材料</text>
+                            <text x="530" y="584" text-anchor="middle" font-size="11" fill="#722ed1">纯前端过渡态(1-2s)，不调用后端API（方案C+）</text>
+                            <line x1="530" y1="594" x2="530" y2="622" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                            <!-- =====================================================
+                                 场景一：前端展示完整表单 → e签宝H5自动适配
+                                 方案C+：商城侧不做分流，统一走完整表单页，
+                                 e签宝H5内部自动检测企业是否已认证并自行适配。
+                                 ===================================================== -->
+
+                            <!-- 方案C+（v6.6）：页面3.5(纯前端过渡)后直接进入完整表单页 -->
+                            <line x1="530" y1="594" x2="530" y2="718" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+                            <!-- 页面4：完整认证表单（场景一） -->
+                            <rect x="380" y="718" width="300" height="56" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+                            <text x="530" y="741" text-anchor="middle" font-size="13" fill="#1890ff" font-weight="500">📄 页面4：完整认证表单</text>
+                            <text x="530" y="757" text-anchor="middle" font-size="11" fill="#1890ff">法人信息+经办人信息+协议勾选</text>
+                            <text x="530" y="769" text-anchor="middle" font-size="10" fill="#8c8c8c">（企查查预填 | 可保存草稿）</text>
+                            <line x1="530" y1="774" x2="530" y2="798" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+                            <!-- e签宝认证弹窗 -->
+                            <rect x="390" y="798" width="280" height="40" rx="6" fill="#f9f0ff" stroke="#722ed1" stroke-width="1.5" stroke-dasharray="5,3"/>
+                            <text x="530" y="813" text-anchor="middle" font-size="13" fill="#722ed1" font-weight="500">🔲 弹窗：确认跳转e签宝认证</text>
+                            <text x="530" y="829" text-anchor="middle" font-size="11" fill="#722ed1">勾选协议 → 点击【立即认证】</text>
+                            <line x1="530" y1="838" x2="530" y2="862" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
+
+                            <!-- e签宝H5认证页（外部） -->
+                            <rect x="380" y="862" width="300" height="46" rx="6" fill="#e6fffb" stroke="#13c2c2" stroke-width="2"/>
+                            <text x="530" y="881" text-anchor="middle" font-size="13" fill="#08979c" font-weight="500">🌐 e签宝H5页（外部系统）</text>
+                            <text x="530" y="898" text-anchor="middle" font-size="11" fill="#08979c">方案C+：H5内部自动检测并适配首次认证/已认证授权</text>
+                            <line x1="530" y1="908" x2="530" y2="932" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                            <!-- 判断：认证是否成功 -->
+                            <polygon points="530,936 620,969 530,1002 440,969" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="530" y="964" text-anchor="middle" font-size="13" fill="#333">e签宝认证</text>
+                            <text x="530" y="981" text-anchor="middle" font-size="13" fill="#333">是否成功？</text>
+
+                            <!-- 认证成功 Y -->
+                            <line x1="620" y1="969" x2="760" y2="969" stroke="#52c41a" stroke-width="2" marker-end="url(#arr-green)"/>
+                            <text x="677" y="962" font-size="11" fill="#52c41a" font-weight="500">Y 成功</text>
+
+                            <!-- 认证失败 N -->
+                            <line x1="530" y1="1002" x2="530" y2="1028" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
+                            <text x="538" y="1020" font-size="11" fill="#f5222d" font-weight="500">N 失败</text>
+
+                            <!-- 认证失败页（8B） -->
+                            <rect x="380" y="1028" width="300" height="46" rx="6" fill="#fff1f0" stroke="#f5222d" stroke-width="1.5"/>
+                            <text x="530" y="1048" text-anchor="middle" font-size="13" fill="#cf1322" font-weight="500">❌ 页面8B：认证失败</text>
+                            <text x="530" y="1065" text-anchor="middle" font-size="11" fill="#cf1322">展示失败原因 + 处理建议</text>
+                            <!-- 重新认证 → 回到表单页（预填） -->
+                            <line x1="380" y1="1051" x2="280" y2="1051" stroke="#f5222d" stroke-width="1.5"/>
+                            <line x1="280" y1="1051" x2="280" y2="741" stroke="#f5222d" stroke-width="1.5"/>
+                            <line x1="280" y1="741" x2="380" y2="741" stroke="#f5222d" stroke-width="1.5" marker-end="url(#arr-red)"/>
+                            <rect x="160" y="880" width="100" height="36" rx="4" fill="#fff1f0" stroke="#f5222d" stroke-width="1"/>
+                            <text x="210" y="898" text-anchor="middle" font-size="12" fill="#cf1322">重新认证</text>
+                            <text x="210" y="912" text-anchor="middle" font-size="10" fill="#8c8c8c">（表单预填）</text>
+
+                            <!-- =====================================================
+                                 认证成功后汇入：通知管理员授权（x=760区域）
+                                 场景二也汇入此处
+                                 ===================================================== -->
+
+                            <!-- 场景二右侧分支（v6.6说明：场景二分流发生在e签宝H5内部，非商城侧）
+                                 当企业在e签宝已实名认证时，H5自动切换为授权流程（无需人脸识别+营业执照），
+                                 认证通过后商城侧收到回调，展示授权相关状态页。 -->
+                            <!-- 授权申请弹窗 -->
+                            <rect x="760" y="638" width="170" height="40" rx="6" fill="#fff0f6" stroke="#eb2f96" stroke-width="1.5" stroke-dasharray="5,3"/>
+                            <text x="845" y="654" text-anchor="middle" font-size="12" fill="#c41d7f" font-weight="500">🔲 弹窗：授权申请</text>
+                            <text x="845" y="669" text-anchor="middle" font-size="11" fill="#c41d7f">填写申请人/补充信息/协议</text>
+                            <line x1="845" y1="678" x2="845" y2="702" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
+
+                            <!-- 场景二：跳转e签宝授权过渡页 -->
+                            <rect x="760" y="702" width="170" height="46" rx="6" fill="#fff0f6" stroke="#eb2f96" stroke-width="1.5"/>
+                            <text x="845" y="721" text-anchor="middle" font-size="12" fill="#c41d7f" font-weight="500">🌐 跳转e签宝授权页</text>
+                            <text x="845" y="737" text-anchor="middle" font-size="11" fill="#c41d7f">管理员在e签宝完成审批</text>
+                            <line x1="845" y1="748" x2="845" y2="969" stroke="#f5222d" stroke-width="2"/>
+                            <line x1="845" y1="969" x2="760" y2="969" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
+
+                            <!-- 通知管理员授权 (x=760,y=969 汇合点) -->
+                            <rect x="760" y="948" width="170" height="42" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="1.5"/>
+                            <text x="845" y="966" text-anchor="middle" font-size="12" fill="#1890ff" font-weight="500">📨 通知管理员授权</text>
+                            <text x="845" y="981" text-anchor="middle" font-size="11" fill="#1890ff">系统发送授权申请通知</text>
+                            <line x1="845" y1="990" x2="845" y2="1014" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                            <!-- 等待授权（AUTHZ_PENDING）页面8C -->
+                            <rect x="760" y="1014" width="170" height="42" rx="6" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="845" y="1032" text-anchor="middle" font-size="12" fill="#d46b08" font-weight="500">⏳ 页面8C：等待授权</text>
+                            <text x="845" y="1048" text-anchor="middle" font-size="11" fill="#d46b08">授权中（24h有效）</text>
+                            <line x1="845" y1="1056" x2="845" y2="1080" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
+
+                            <!-- 判断：管理员是否授权 -->
+                            <polygon points="845,1084 925,1117 845,1150 765,1117" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="845" y="1112" text-anchor="middle" font-size="12" fill="#333">管理员</text>
+                            <text x="845" y="1129" text-anchor="middle" font-size="12" fill="#333">是否授权？</text>
+
+                            <!-- Y 授权通过 -->
+                            <line x1="845" y1="1150" x2="845" y2="1178" stroke="#52c41a" stroke-width="2" marker-end="url(#arr-green)"/>
+                            <text x="854" y="1168" font-size="11" fill="#52c41a" font-weight="500">Y 授权</text>
+
+                            <!-- N 拒绝 → 向右 -->
+                            <line x1="925" y1="1117" x2="940" y2="1117" stroke="#f5222d" stroke-width="1.5"/>
+                            <line x1="940" y1="1117" x2="940" y2="1230" stroke="#f5222d" stroke-width="1.5" marker-end="url(#arr-red)"/>
+                            <text x="930" y="1110" font-size="11" fill="#f5222d" font-weight="500">N 拒绝</text>
+
+                            <!-- 超时 → 向左 -->
+                            <line x1="765" y1="1117" x2="650" y2="1117" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+                            <text x="693" y="1110" font-size="11" fill="#fa8c16" font-weight="500">超时(24h)</text>
+
+                            <!-- 授权成功 -->
+                            <rect x="770" y="1178" width="150" height="42" rx="6" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
+                            <text x="845" y="1196" text-anchor="middle" font-size="13" fill="#237804" font-weight="500">✅ 授权成功</text>
+                            <text x="845" y="1212" text-anchor="middle" font-size="11" fill="#389e0d">可签署电子合同</text>
+                            <line x1="845" y1="1220" x2="845" y2="1480" stroke="#52c41a" stroke-width="2"/>
+                            <line x1="845" y1="1480" x2="498" y2="1480" stroke="#52c41a" stroke-width="2" marker-end="url(#arr-green)"/>
+
+                            <!-- 授权超时页（7C，v5.4新增） -->
+                            <rect x="560" y="1097" width="170" height="42" rx="6" fill="#fff1f0" stroke="#fa8c16" stroke-width="1.5"/>
+                            <text x="645" y="1115" text-anchor="middle" font-size="12" fill="#d4380d" font-weight="500">⏰ 页面7C：授权超时</text>
+                            <text x="645" y="1131" text-anchor="middle" font-size="11" fill="#d4380d">超24h未处理，自动失效</text>
+
+                            <!-- 超时 → 重新申请循环（最多3次） -->
+                            <line x1="645" y1="1139" x2="645" y2="1165" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+                            <rect x="560" y="1165" width="170" height="36" rx="6" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5" stroke-dasharray="4,3"/>
+                            <text x="645" y="1183" text-anchor="middle" font-size="12" fill="#d46b08">🔄 重新申请授权</text>
+                            <text x="645" y="1196" text-anchor="middle" font-size="10" fill="#8c8c8c">（最多3次）</text>
+                            <!-- 重新申请 → 回到通知管理员 -->
+                            <line x1="645" y1="1201" x2="645" y2="1260" stroke="#fa8c16" stroke-width="1.5"/>
+                            <line x1="645" y1="1260" x2="760" y2="1260" stroke="#fa8c16" stroke-width="1.5"/>
+                            <line x1="760" y1="1260" x2="760" y2="969" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+                            <text x="700" y="1255" font-size="10" fill="#fa8c16">重新发起申请</text>
+
+                            <!-- 超过3次 → 提示联系管理员 -->
+                            <line x1="560" y1="1183" x2="450" y2="1183" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+                            <rect x="310" y="1165" width="140" height="36" rx="6" fill="#fff1f0" stroke="#f5222d" stroke-width="1"/>
+                            <text x="380" y="1183" text-anchor="middle" font-size="12" fill="#cf1322">超3次上限</text>
+                            <text x="380" y="1196" text-anchor="middle" font-size="10" fill="#8c8c8c">联系管理员处理</text>
+                            <text x="532" y="1176" font-size="10" fill="#fa8c16">超次数</text>
+
+                            <!-- 授权拒绝页（7B-fail） -->
+                            <rect x="900" y="1210" width="150" height="46" rx="6" fill="#fff1f0" stroke="#f5222d" stroke-width="1.5"/>
+                            <text x="975" y="1229" text-anchor="middle" font-size="12" fill="#cf1322" font-weight="500">❌ 授权被拒绝</text>
+                            <text x="975" y="1245" text-anchor="middle" font-size="11" fill="#cf1322">展示拒绝原因</text>
+                            <text x="975" y="1257" text-anchor="middle" font-size="10" fill="#8c8c8c">可重新申请（最多3次）</text>
+                            <!-- 重新申请 → 回授权申请弹窗 -->
+                            <line x1="975" y1="1256" x2="975" y2="1290" stroke="#f5222d" stroke-width="1.5"/>
+                            <line x1="975" y1="1290" x2="845" y2="1290" stroke="#f5222d" stroke-width="1.5"/>
+                            <line x1="845" y1="1290" x2="845" y2="1150" stroke="#f5222d" stroke-width="1.5" marker-end="url(#arr-red)"/>
+                            <text x="895" y="1285" font-size="10" fill="#f5222d">重新申请（最多3次）</text>
+
+                            <!-- 结束 -->
+                            <ellipse cx="480" cy="1490" rx="44" ry="22" fill="#52c41a" stroke="#237804" stroke-width="1.5"/>
+                            <text x="480" y="1495" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">结束</text>
+
+                            <!-- 场景分区背景 -->
+                            <rect x="340" y="700" width="370" height="300" rx="8" fill="none" stroke="#1890ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
+                            <text x="356" y="716" font-size="11" fill="#1890ff" opacity="0.7">场景一：首次认证（e签宝实名认证+授权一体化）</text>
+
+                            <rect x="740" y="625" width="210" height="185" rx="8" fill="none" stroke="#eb2f96" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
+                            <text x="756" y="641" font-size="11" fill="#eb2f96" opacity="0.7">场景二：已认证，申请管理员授权</text>
+                        </svg>
+
+                        <div style="margin-top: 12px; font-size: 12px; color: #8c8c8c; text-align: right;">
+                            点击流程图可放大查看 &nbsp;|&nbsp; v6.7 方案C+最终版（第二轮监察室审核） &nbsp;|&nbsp; 2026-04-24
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 2. 页面层级关系图 -->
+                <div style="margin-bottom: 40px;">
+                    <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
+                        二、页面层级关系图
+                    </div>
+                    <div style="background: #fafafa; border-radius: 8px; padding: 24px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                            <thead>
+                                <tr style="background: #e6f7ff;">
+                                    <th style="padding: 12px 16px; text-align: left; border: 1px solid #d9d9d9; width: 15%;">层级</th>
+                                    <th style="padding: 12px 16px; text-align: left; border: 1px solid #d9d9d9; width: 25%;">页面类型</th>
+                                    <th style="padding: 12px 16px; text-align: left; border: 1px solid #d9d9d9; width: 35%;">页面名称</th>
+                                    <th style="padding: 12px 16px; text-align: left; border: 1px solid #d9d9d9; width: 25%;">触发条件</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- L1 主入口 -->
+                                <tr style="background: #f6ffed;">
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #52c41a;">L1 主入口</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">企业认证入口页</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">用户首次进入/有草稿</td>
+                                </tr>
+                                <!-- L2 表单填写 -->
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #1890ff;" rowspan="2">L2 表单填写</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">认证表单填写页</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">点击【立即认证】/继续草稿</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff; color: #722ed1;">弹窗</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">🔲 企查查搜索下拉</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">输入企业名称时触发</td>
+                                </tr>
+                                <!-- L3 认证/授权 -->
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #1890ff;" rowspan="3">L3 认证/授权</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff; color: #722ed1;">弹窗</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">🔲 e签宝实名认证弹窗</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">首次认证企业</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff; color: #722ed1;">弹窗</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">🔲 企业授权申请弹窗</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">企业已在e签宝认证</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">外部页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">e签宝H5认证页</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">点击【立即认证】跳转</td>
+                                </tr>
+                                <!-- L4 状态页 -->
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #fa8c16;" rowspan="6">L4 状态页</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">⏳ 审核中</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">提交e签宝认证后</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">✅ 认证+授权通过</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">e签宝认证+授权均通过</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">❌ 认证失败</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">e签宝审核失败</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">⏳ 授权中</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">提交授权申请后</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">✅ 授权通过</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">管理员同意授权</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">❌ 授权拒绝</td>
+                                    <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">管理员拒绝授权</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div style="margin-top: 16px; font-size: 12px; color: #666;">
+                            <span style="display: inline-block; margin-right: 16px;"><span style="display: inline-block; width: 12px; height: 12px; background: #e6f7ff; border: 1px solid #1890ff; margin-right: 4px; vertical-align: middle;"></span> 主页面</span>
+                            <span style="display: inline-block; margin-right: 16px;"><span style="display: inline-block; width: 12px; height: 12px; background: #f9f0ff; border: 1px dashed #722ed1; margin-right: 4px; vertical-align: middle;"></span> 弹窗</span>
+                            <span style="display: inline-block;"><span style="display: inline-block; width: 12px; height: 12px; background: #fff; border: 1px solid #d9d9d9; margin-right: 4px; vertical-align: middle;"></span> 外部页面</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 3. 状态流转图 -->
+                <div style="margin-bottom: 24px;">
+                    <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
+                        三、认证状态流转图
+                    </div>
+                    <div style="background: #fafafa; border-radius: 8px; padding: 24px;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+                            <!-- 状态卡片 -->
+                            <div style="flex: 1; min-width: 140px; background: #f5f5f5; border: 2px solid #d9d9d9; border-radius: 8px; padding: 16px; text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">⚪</div>
+                                <div style="font-size: 13px; font-weight: 500; color: #999;">UNVERIFIED</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">未认证</div>
+                            </div>
+                            <div style="display: flex; align-items: center; color: #999; font-size: 20px;">→</div>
+                            <div style="flex: 1; min-width: 140px; background: #e6f7ff; border: 2px solid #1890ff; border-radius: 8px; padding: 16px; text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">📝</div>
+                                <div style="font-size: 13px; font-weight: 500; color: #1890ff;">DRAFT</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">草稿</div>
+                            </div>
+                            <div style="display: flex; align-items: center; color: #999; font-size: 20px;">→</div>
+                            <div style="flex: 1; min-width: 140px; background: #fff7e6; border: 2px solid #fa8c16; border-radius: 8px; padding: 16px; text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">⏳</div>
+                                <div style="font-size: 13px; font-weight: 500; color: #fa8c16;">VERIFYING</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">审核中</div>
+                            </div>
+                            <div style="display: flex; align-items: center; color: #999; font-size: 20px;">⇣</div>
+                            <div style="flex: 1; min-width: 140px; background: #f6ffed; border: 2px dashed #52c41a; border-radius: 8px; padding: 16px; text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">✅</div>
+                                <div style="font-size: 13px; font-weight: 500; color: #52c41a;">VERIFIED</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">认证通过(瞬态)</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+                            <div style="flex: 1; min-width: 140px; background: #fff1f0; border: 2px solid #ff4d4f; border-radius: 8px; padding: 16px; text-align: center; max-width: 160px;">
+                                <div style="font-size: 24px; margin-bottom: 8px;">❌</div>
+                                <div style="font-size: 13px; font-weight: 500; color: #ff4d4f;">REJECTED</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">认证失败</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 状态流转说明表 -->
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                            <thead>
+                                <tr style="background: #f5f5f5;">
+                                    <th style="padding: 10px 12px; text-align: left; border: 1px solid #d9d9d9;">当前状态</th>
+                                    <th style="padding: 10px 12px; text-align: left; border: 1px solid #d9d9d9;">触发事件</th>
+                                    <th style="padding: 10px 12px; text-align: left; border: 1px solid #d9d9d9;">下一状态</th>
+                                    <th style="padding: 10px 12px; text-align: left; border: 1px solid #d9d9d9;">页面跳转</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">UNVERIFIED</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">点击【立即认证】</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">DRAFT</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">认证表单页</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">DRAFT</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">确认提交</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">VERIFYING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">认证中</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">VERIFYING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">e签宝认证+授权均通过</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">AUTHZ_APPROVED</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">认证+授权成功页</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">VERIFYING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">e签宝认证通过但授权待审批</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">VERIFIED → AUTHZ_PENDING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">认证通过等待授权页</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">VERIFYING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">e签宝认证失败</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">REJECTED → DRAFT</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">认证失败页 → 回填表单修改重提</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">REJECTED</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">点击【重新认证】</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">DRAFT</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">认证表单页（预填数据，修改后重提）</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">AUTHZ_PENDING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">管理员同意授权</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">AUTHZ_APPROVED</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">授权成功页</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">AUTHZ_PENDING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">管理员拒绝授权</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">AUTHZ_REJECTED</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">授权拒绝页（可修改理由重新申请）</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">AUTHZ_REJECTED</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">点击【重新申请】</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">AUTHZ_PENDING</td>
+                                    <td style="padding: 10px 12px; border: 1px solid #d9d9d9;">修改申请理由，重新等审批（最多3次）</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 快速导航 -->
+                <div style="background: #f0f5ff; border-radius: 8px; padding: 20px;">
+                    <div style="font-size: 14px; font-weight: 500; color: #1890ff; margin-bottom: 12px;">🚀 快速导航到原型页面</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('unverified')">未认证</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('draft')">草稿</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('form')">填写表单</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px; background: #722ed1;" onclick="showPage('esignModal')">e签宝弹窗</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px; background: #722ed1;" onclick="showPage('authzModal')">授权弹窗</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('verifying')">审核中</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('verified')">认证+授权通过</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('rejected')">认证失败</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('authzPending')">等待授权</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('authzApproved')">授权通过</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('authzRejected')">授权拒绝</button>
+                        <button class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;" onclick="showPage('esignRedirect')">跳转e签宝(场景一)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ==================== 缺失页面补充 ==================== -->
+            
+            <!-- 
+                ============================================================
+                页面：草稿恢复（DRAFT）
+                ============================================================
+                【触发条件】
+                - 用户有未提交的认证草稿（draft_status=1）
+                - 用户进入企业认证页面时自动检查
+                - 或用户从个人中心点击【继续认证】
+                
+                【业务逻辑】
+                1. 显示草稿企业名称和上次编辑时间
+                2. 显示已填写/待填写的字段清单
+                3. 用户可选择【继续认证】恢复草稿
+                4. 用户可选择【重新填写】清空草稿
+                5. 草稿永久保存，可随时恢复
+                
+                【数据恢复】
+                - 调用 GET /api/company/auth/draft 获取草稿数据
+                - 自动填充到表单对应字段
+                - 敏感字段（身份证）需重新输入
+                
+                ⚠️ 【场景差异说明（开发注意）】
+                - 方案C+（v6.6）：商城侧统一走完整表单页，场景分流由e签宝H5内部处理
+                - 草稿数据统一为场景一格式（企业信息+法人信息+经办人信息）
+                - 点击【继续认证】跳转到完整认证表单（页面4），数据自动回填
+                - 原型此处仅展示草稿恢复的示例UI
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="draftCard" style="display:none">
+                <div style="text-align: center; padding: 48px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">企业认证未完成</h3>
+                    <p style="color: #666; margin-bottom: 24px;">
+                        您有未完成的企业认证：<br>
+                        <strong style="color: #333; font-size: 16px;">启泰智能装备有限公司</strong><br>
+                        <span style="font-size: 13px;">上次编辑：2026-04-20 10:30</span>
+                    </p>
+                    <div style="background: #f5f5f5; border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto;">
+                        <div style="font-size: 13px; color: #666; margin-bottom: 8px;">已填写信息：</div>
+                        <div style="font-size: 14px; color: #333; line-height: 2;">
+                            <div>✓ 企业名称</div>
+                            <div>✓ 统一社会信用代码</div>
+                            <div>✓ 法定代表人</div>
+                            <div>✗ 法人身份证号（待填写）</div>
+                            <div>✗ 经办人信息（待填写）</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button class="btn btn-default" onclick="showPage('unverified')">重新填写</button>
+                        <button class="btn btn-primary" onclick="showPage('form')">继续认证</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 
+                ============================================================
+                页面：审核中（VERIFYING）
+                ============================================================
+                【触发条件】
+                - 用户完成e签宝H5认证后返回
+                - e签宝回调通知认证已提交，正在审核
+                
+                【业务逻辑】
+                1. 页面自动轮询查询审核状态（每5秒）
+                2. 认证+授权均通过 → 跳转认证+授权通过页
+                3. 认证通过但授权待审批 → 跳转等待授权页
+                4. 认证失败 → 跳转认证失败页
+                5. 用户可手动刷新状态
+                
+                【接口调用】
+                - 查询机构认证信息 - 根据authFlowId查询认证+授权状态
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="verifyingCard" style="display:none">
+                <div style="text-align: center; padding: 48px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">认证审核中</h3>
+                    <p style="color: #666; margin-bottom: 32px;">请耐心等待，审核通过后将自动通知您</p>
+                    
+                    <div style="background: #f5f5f5; border-radius: 8px; padding: 24px; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">企业名称</div>
+                            <div style="font-size: 14px; color: #333;">启泰智能装备有限公司</div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">提交时间</div>
+                            <div style="font-size: 14px; color: #333;">2026-04-20 10:30:00</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">预计审核时间</div>
+                            <div style="font-size: 14px; color: #1890ff;">5-10分钟</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 32px;">
+                        <div style="font-size: 13px; color: #666; margin-bottom: 12px;">审核进度</div>
+                        <div style="width: 300px; height: 8px; background: #e8e8e8; border-radius: 4px; margin: 0 auto 8px; overflow: hidden;">
+                            <div style="width: 60%; height: 100%; background: linear-gradient(90deg, #1890ff, #52c41a); border-radius: 4px;"></div>
+                        </div>
+                        <div style="font-size: 13px; color: #1890ff;">当前状态：等待e签宝审核结果</div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button class="btn btn-default" onclick="alert('刷新状态')">刷新状态</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 
+                ============================================================
+                页面：认证失败（REJECTED）
+                ============================================================
+                【触发条件】
+                - e签宝回调通知认证失败
+                - 用户主动查询审核状态返回失败
+                
+                【业务逻辑】
+                1. 显示e签宝返回的具体失败原因
+                2. 提供针对性的处理建议
+                3. 保留用户已填写的信息（除错误字段）
+                4. 用户点击【重新认证】返回表单页修改
+                5. 支持多次重新认证，无次数限制
+                
+                【失败原因类型】
+                - 身份信息不符（法人/经办人）
+                - 人脸识别失败（光线/遮挡/非本人）
+                - 营业执照问题（模糊/过期/伪造）
+                - 企业状态异常（注销/吊销/列入异常）
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="rejectedCard" style="display:none">
+                <div style="text-align: center; padding: 48px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px; color: #ff4d4f;">认证未通过</h3>
+                    <p style="color: #666; margin-bottom: 32px;">请根据失败原因修改后重新提交</p>
+                    
+                    <div style="background: #fff1f0; border: 1px solid #ffccc7; border-radius: 8px; padding: 24px; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="font-size: 14px; color: #ff4d4f; font-weight: 500; margin-bottom: 16px;">失败原因：</div>
+                        <ul style="font-size: 14px; color: #333; line-height: 2; padding-left: 20px;">
+                            <li>法人身份信息与营业执照不符</li>
+                            <li>人脸识别未通过（光线不足/面部遮挡）</li>
+                            <li>营业执照照片不清晰，无法识别</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 16px; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="font-size: 13px; color: #52c41a; margin-bottom: 8px;">💡 建议处理方式：</div>
+                        <ul style="font-size: 13px; color: #666; line-height: 1.8; padding-left: 16px;">
+                            <li>核对法人身份证信息是否准确</li>
+                            <li>重新进行人脸识别，确保光线充足、面部无遮挡</li>
+                            <li>重新拍摄营业执照，确保清晰完整</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="font-size: 13px; color: #999; margin-bottom: 16px;">已填写的信息将保留（预填回原表单），只需修改错误字段后重新提交</div>
+                    <!-- v5.4 Fix #4: 重新认证 → 跳转页面4完整表单（预填数据），而非草稿页 -->
+                    <button class="btn btn-primary" onclick="showPage('form')">重新认证（修改后重提）</button>
+                </div>
+            </div>
+            
+            <!-- 
+                ============================================================
+                页面：e签宝跳转过渡页（ESIGN_REDIRECT）
+                ============================================================
+                【触发条件】
+                - 用户在e签宝实名认证弹窗中点击【立即认证】后
+                - 跳转e签宝H5认证页面前的过渡说明页
+                
+                【业务逻辑】
+                1. 展示e签宝认证+授权一体化流程说明
+                2. 用户点击【前往e签宝认证】打开H5页面
+                3. 页面保持轮询等待e签宝回调
+                4. 提示用户不要关闭当前页面
+                
+                【v5.0变更】认证+授权在e签宝H5内一体化完成
+                【对应PRD】3.3 页面5：跳转e签宝
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="esignRedirectCard" style="display:none">
+                <!-- 场景说明标注 -->
+                <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #d46b08;">
+                    ⚠️ <strong>页面归属：场景一（首次认证）专用</strong> — 路径：<code>/company/auth/redirect</code><br>
+                    场景二（已认证授权）的跳转说明页路径为 <code>/company/auth/redirect-authz</code>，文案不同（无人脸识别/营业执照步骤）。<br>
+                    <em>原型共用此页演示，实际开发请按场景区分实现。</em>
+                </div>
+                <div class="steps" style="display:flex; margin-bottom: 24px;">
+                    <div class="step completed"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step completed"><div class="step-number">2</div><div class="step-text">企业核验</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step active"><div class="step-number">3</div><div class="step-text">e签宝认证授权</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step"><div class="step-number">4</div><div class="step-text">认证完成</div></div>
+                </div>
+                <div style="text-align: center; padding: 32px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">即将跳转至e签宝</h3>
+                    <p style="color: #666; margin-bottom: 24px;">完成实名认证与管理员授权</p>
+                    
+                    <div style="background: #f5f5f5; border-radius: 8px; padding: 24px; margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="font-size: 14px; color: #333; font-weight: 500; margin-bottom: 16px;">认证授权流程：</div>
+                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 28px; height: 28px; background: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">1</div>
+                            <div>
+                                <div style="font-size: 14px; color: #333; font-weight: 500;">人脸识别</div>
+                                <div style="font-size: 12px; color: #999;">法人/经办人进行人脸识别</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 28px; height: 28px; background: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">2</div>
+                            <div>
+                                <div style="font-size: 14px; color: #333; font-weight: 500;">上传营业执照</div>
+                                <div style="font-size: 12px; color: #999;">拍摄或上传营业执照原件</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 28px; height: 28px; background: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">3</div>
+                            <div>
+                                <div style="font-size: 14px; color: #333; font-weight: 500;">管理员授权</div>
+                                <div style="font-size: 12px; color: #999;">企业管理员审批授权申请</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 28px; height: 28px; background: #1890ff; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">4</div>
+                            <div>
+                                <div style="font-size: 14px; color: #333; font-weight: 500;">确认提交</div>
+                                <div style="font-size: 12px; color: #999;">确认信息无误后提交</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="showPage('verifying')" style="margin-bottom: 16px;">前往e签宝认证</button>
+                    <div style="font-size: 12px; color: #fa8c16;">⚠️ 请勿关闭此页面，认证完成后将自动返回</div>
+                </div>
+            </div>
+            
+            <!-- 
+                ============================================================
+                页面：授权拒绝（AUTHZ_REJECTED）
+                ============================================================
+                【PRD对应】4.3 页面7B（路径：/company/auth/authz-rejected）
+                【v5.4修复】
+                  1. 移除【取消】按钮（v5.3已删除撤销功能，v5.4再次确认无取消入口）
+                  2. 【重新申请】按钮点击弹出"修改申请理由"弹窗（reapplyModal），
+                     而非直接跳转到 authzPending 页面
+                  3. 重新申请最多3次，超出提示"已达上限"
+                ============================================================
+            -->
+            <div class="form-card proto-page" id="authzRejectedCard" style="display:none">
+                <div style="text-align: center; padding: 48px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px; color: #ff4d4f;">授权申请被拒绝</h3>
+                    <p style="color: #666; margin-bottom: 32px;">企业管理员拒绝了您的授权申请</p>
+                    
+                    <div style="background: #f5f5f5; border-radius: 8px; padding: 24px; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">企业名称</div>
+                            <div style="font-size: 14px; color: #333;">启泰智能装备有限公司</div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">审批人</div>
+                            <div style="font-size: 14px; color: #333;">王经理</div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">拒绝时间</div>
+                            <div style="font-size: 14px; color: #333;">2026-04-20 16:00:00</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">拒绝原因</div>
+                            <div style="font-size: 14px; color: #ff4d4f;">申请人身份未核实</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 8px; padding: 16px; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="font-size: 13px; color: #52c41a; margin-bottom: 8px;">💡 您可以：</div>
+                        <ul style="font-size: 13px; color: #666; line-height: 1.8; padding-left: 16px;">
+                            <li>修改申请理由，补充详细说明</li>
+                            <li>核实身份后重新提交授权申请（已用 <span id="rejectCount">1</span>/3 次）</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <!-- v5.4修复：移除【取消】按钮；【重新申请】弹出修改理由弹窗 -->
+                        <button class="btn btn-primary" onclick="openReapplyModal()">重新申请</button>
+                    </div>
+                    <div style="font-size: 12px; color: #999; margin-top: 12px;">
+                        💡 重新申请将修改申请理由，提交后等待管理员重新审批
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ==================== 场景二：跳转e签宝授权页（v5.4新增） ==================== -->
+            <div class="form-card proto-page" id="esignRedirectAuthzCard" style="display:none">
+                <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #d46b08;">
+                    ⚠️ <strong>场景二（已认证授权）专用</strong> — 路径：<code>/company/auth/redirect-authz</code>，步骤指示器3步，无「e签宝实名认证」步骤
+                </div>
+                <div class="steps" style="display:flex; margin-bottom: 24px; justify-content: center;">
+                    <div class="step completed"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step active"><div class="step-number">2</div><div class="step-text">申请授权</div></div>
+                    <div class="step-arrow">→</div>
+                    <div class="step"><div class="step-number">3</div><div class="step-text">等待授权结果</div></div>
+                </div>
+                <div style="text-align: center; padding: 32px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px;">即将跳转至e签宝</h3>
+                    <p style="color: #666; margin-bottom: 24px;">完成管理员授权</p>
+                    <div style="background: #f5f5f5; border-radius: 8px; padding: 24px; margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="font-size: 14px; font-weight: 500; margin-bottom: 16px;">授权流程：</div>
+                        <div style="margin-bottom: 12px; display: flex; gap: 12px;"><div style="width:28px;height:28px;background:#1890ff;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">1</div><div><div style="font-size:14px;font-weight:500;">管理员登录e签宝</div><div style="font-size:12px;color:#999;">企业管理员登录e签宝平台</div></div></div>
+                        <div style="margin-bottom: 12px; display: flex; gap: 12px;"><div style="width:28px;height:28px;background:#1890ff;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">2</div><div><div style="font-size:14px;font-weight:500;">审批授权申请</div><div style="font-size:12px;color:#999;">确认授权信息，同意或拒绝</div></div></div>
+                        <div style="display: flex; gap: 12px;"><div style="width:28px;height:28px;background:#1890ff;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">3</div><div><div style="font-size:14px;font-weight:500;">授权完成</div><div style="font-size:12px;color:#999;">授权结果自动同步至商城</div></div></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showPage('authzPending')" style="margin-bottom: 16px;">前往e签宝授权</button>
+                    <div style="font-size: 12px; color: #fa8c16;">⚠️ 请勿关闭此页面，授权完成后将自动返回</div>
+                </div>
+            </div>
+            
+            <!-- ==================== 授权超时等待页（v5.4补充，PRD 4.3 页面7C） ==================== -->
+            <div class="form-card proto-page" id="authzTimeoutCard" style="display:none">
+                <div style="text-align: center; padding: 48px 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
+                    <h3 style="font-size: 18px; margin-bottom: 8px; color: #fa8c16;">授权结果等待中</h3>
+                    <p style="color: #666; margin-bottom: 32px;">授权申请提交已超过24小时</p>
+                    <div style="background: #f5f5f5; border-radius: 8px; padding: 24px; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left;">
+                        <div style="margin-bottom: 12px;"><div style="font-size: 13px; color: #666; margin-bottom: 4px;">企业名称</div><div style="font-size: 14px; color: #333;">启泰智能装备有限公司</div></div>
+                        <div style="margin-bottom: 12px;"><div style="font-size: 13px; color: #666; margin-bottom: 4px;">申请时间</div><div style="font-size: 14px; color: #333;">2026-04-20 11:00:00</div></div>
+                        <div><div style="font-size: 13px; color: #666; margin-bottom: 4px;">已等待</div><div style="font-size: 14px; color: #fa8c16; font-weight: 500;">24小时以上</div></div>
+                    </div>
+                    <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 8px; padding: 16px; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; text-align: left; font-size: 13px; color: #666;">
+                        💡 授权审批可能需要较长时间，管理员将在e签宝平台收到审批通知。审批结果将自动同步至商城。
+                    </div>
+                    <button class="btn btn-primary" onclick="alert('刷新状态，重新查询授权结果')">刷新状态</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    
+    <!-- 重新申请弹窗（修改申请理由，v5.4新增） -->
+    <div class="modal-overlay" id="reapplyModal">
+        <div class="modal" style="width: 440px;">
+            <h3 style="margin-bottom: 8px;">重新申请授权</h3>
+            <p style="color: #666; font-size: 13px; margin-bottom: 20px;">请修改申请理由后重新提交，管理员将重新审批</p>
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label style="font-size: 14px; color: #262626; display: block; margin-bottom: 8px;">申请理由 <span style="font-size: 12px; color: #999;">（说明清楚您的申请用途，有助于管理员审批）</span></label>
+                <textarea class="form-input" id="reapplyReason" style="width: 100%; height: 80px; font-size: 13px; resize: vertical; padding: 8px 12px;">申请在物料商城使用电子合同功能，本人为该企业正式员工，需使用电子合同进行采购签约。</textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-default" onclick="closeReapplyModal()">取消</button>
+                <button class="btn btn-primary" onclick="submitReapply()">确认重新申请</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- e签宝认证弹窗 -->
+    <div class="modal-overlay" id="esignModal">
+        <div class="modal">
+            <div class="modal-icon">🔐</div>
+            <h3>企业实名认证</h3>
+            <p>企业信息核验通过，请完成e签宝实名认证<br>认证通过后，您可以使用电子合同签署功能</p>
+            <div class="modal-actions">
+                <button class="btn btn-default" onclick="closeModal()">稍后再说</button>
+                <button class="btn btn-primary" onclick="goToEsign()">立即认证</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 授权申请弹窗 -->
+    <!-- 
+        ============================================================
+        弹窗：授权申请弹窗（场景二专用）
+        ============================================================
+        【PRD对应】4.3 授权申请弹窗（v6.6说明：方案C+下此弹窗由e签宝H5内部触发，
+          商城侧通过回调接收授权状态后展示。原型保留此弹窗供开发参考场景二UI样式。）
+        【v5.4修复】补充以下缺失内容：
+          1. 补充信息（选填）区块：经营类型、公司电话、邮箱
+          2. 协议确认（必填）勾选框
+          3. 申请理由字段显示在申请人信息区块内
+        ============================================================
+    -->
+    <div class="modal-overlay" id="authzModal">
+        <div class="modal" style="width: 560px; max-height: 90vh; overflow-y: auto; text-align: left; padding: 24px 32px;">
+            <div style="text-align: right; margin-bottom: 4px;"><button onclick="closeAuthzModal()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#999;">✕</button></div>
+            <div style="text-align: center; margin-bottom: 16px;">
+                <div style="width: 56px; height: 56px; margin: 0 auto 12px; background: #fff7e6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;">📨</div>
+                <h3 style="font-size: 17px; margin-bottom: 8px;">企业授权申请</h3>
+                <p style="color: #666; font-size: 13px; margin: 0;">该企业已在e签宝完成实名认证（e签宝H5内部检测）<br>需申请管理员授权即可使用电子合同功能</p>
+            </div>
+            
+            <!-- 企业信息（自动填充，不可编辑） -->
+            <div style="background: #f5f5f5; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px;">
+                <div style="font-size: 13px; color: #666; margin-bottom: 8px; font-weight: 500;">━ 企业信息</div>
+                <div style="margin-bottom: 6px;">
+                    <span style="font-size: 13px; color: #666;">企业名称：</span>
+                    <span style="font-size: 13px; color: #333; font-weight: 500;" id="authzModalCompany">启泰智能装备有限公司</span>
+                    <span class="tag tag-success" style="margin-left: 6px; font-size: 11px;">已核验</span>
+                </div>
+                <div>
+                    <span style="font-size: 13px; color: #666;">信用代码：</span>
+                    <span style="font-size: 13px; color: #333;">91441900MA53K2XJ3X</span>
+                </div>
+            </div>
+            
+            <!-- 申请人信息（选填） -->
+            <div style="margin-bottom: 16px;">
+                <div style="font-size: 13px; color: #666; margin-bottom: 12px; font-weight: 500;">━ 申请人信息（选填）</div>
+                <div style="font-size: 12px; color: #999; margin-bottom: 10px;">以下信息为商城自身业务记录，e签宝不要求</div>
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">申请人姓名</label>
+                    <input type="text" class="form-input" id="authzApplicantName" placeholder="请输入您的姓名" style="width: 100%; height: 36px; font-size: 13px;">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">申请人手机号</label>
+                    <input type="text" class="form-input" id="authzApplicantMobile" placeholder="请输入11位手机号（用于接收授权结果通知）" maxlength="11" style="width: 100%; height: 36px; font-size: 13px;">
+                </div>
+                <div>
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">申请理由</label>
+                    <textarea class="form-input" id="authzApplyReason" style="width: 100%; height: 56px; font-size: 13px; resize: none; padding: 8px 12px;">申请在物料商城使用电子合同功能</textarea>
+                </div>
+            </div>
+            
+            <!-- 补充信息（选填）v5.4新增 -->
+            <div style="margin-bottom: 16px;">
+                <div style="font-size: 13px; color: #666; margin-bottom: 12px; font-weight: 500;">━ 补充信息（选填）</div>
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">经营类型</label>
+                    <select class="form-input" id="authzBusinessType" style="width: 100%; height: 36px; font-size: 13px;">
+                        <option value="">请选择经营类型</option>
+                        <option value="生产企业">生产企业</option>
+                        <option value="贸易企业">贸易企业</option>
+                        <option value="服务企业">服务企业</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">公司电话</label>
+                        <input type="text" class="form-input" id="authzCompanyPhone" placeholder="请输入公司电话" style="width: 100%; height: 36px; font-size: 13px;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">邮箱</label>
+                        <input type="email" class="form-input" id="authzEmail" placeholder="请输入邮箱地址" style="width: 100%; height: 36px; font-size: 13px;">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 协议确认（必填）v5.4新增 -->
+            <div style="margin-bottom: 20px; padding: 10px 12px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 4px;">
+                <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 13px; color: #666;">
+                    <input type="checkbox" id="authzAgreeProtocol" style="margin-top: 2px; flex-shrink: 0;">
+                    <span>我已阅读并同意
+                        <a href="javascript:void(0)" style="color:#1890ff;">《认证服务协议》</a>
+                        和
+                        <a href="javascript:void(0)" style="color:#1890ff;">《e签宝用户授权协议》</a>
+                    </span>
+                </label>
+            </div>
+            
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn btn-default" onclick="closeAuthzModal()">稍后再说</button>
+                <button class="btn btn-primary" onclick="submitAuthzApply()">提交申请</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function searchCompany() {
+            const dropdown = document.getElementById('searchDropdown');
+            dropdown.classList.add('show');
+        }
+        
+        // 页面2企业搜索
+        function searchCompany2() {
+            const dropdown = document.getElementById('searchDropdown2');
+            dropdown.classList.add('show');
+        }
+        
+        // 页面2选择企业
+        function selectCompany2(name, code, legalName, address) {
+            document.getElementById('companyName2').value = name;
+            document.getElementById('creditCode2').value = code;
+            document.getElementById('legalName2').value = legalName;
+            document.getElementById('regAddress2').value = address;
+            document.getElementById('searchDropdown2').classList.remove('show');
+            document.getElementById('qccTag2').style.display = 'inline-block';
+            // 核验完成，启用下一步按钮
+            var nextBtn = document.getElementById('page2NextBtn');
+            nextBtn.disabled = false;
+            nextBtn.style.background = '';
+            nextBtn.style.cursor = '';
+            // 同步到表单页（含企业信息区块的法定代表人只读字段）
+            document.getElementById('companyName').value = name;
+            document.getElementById('creditCode').value = code;
+            document.getElementById('legalNamePage4RO').value = legalName; // 企业信息区块-只读
+            document.getElementById('regAddress').value = address;
+            document.getElementById('legalName').value = legalName; // 法人信息区块-可编辑
+            document.getElementById('authzModalCompany').textContent = name;
+        }
+        
+        // 页面2点击下一步 → 跳转检测中页面
+        function submitPage2() {
+            showPage('checking');
+        }
+        
+        // 检测结果处理（方案C+：纯前端过渡1-2秒后，统一跳转到完整认证表单）
+        // e签宝H5内部自动检测企业是否已实名认证并自行适配
+        function checkingResult(type) {
+            // v6.6 方案C+：无论何种情况，统一进入完整认证表单（页面4）
+            showPage('form');
+        }
+        
+        // 重新申请次数计数器（演示用，实际由后端控制）
+        let reapplyCount = 1;
+        const MAX_REAPPLY_COUNT = 3;
+        
+        // 重新申请弹窗
+        function openReapplyModal() {
+            // v5.4：检查是否已达最大重申请次数
+            if (reapplyCount >= MAX_REAPPLY_COUNT) {
+                alert('授权申请已达上限（最多3次），请联系企业管理员处理');
+                return;
+            }
+            document.getElementById('reapplyModal').classList.add('show');
+        }
+        
+        function closeReapplyModal() {
+            document.getElementById('reapplyModal').classList.remove('show');
+        }
+        
+        function submitReapply() {
+            var reason = document.getElementById('reapplyReason').value.trim();
+            if (!reason) {
+                alert('请填写申请理由');
+                return;
+            }
+            
+            // v5.4：检查次数限制
+            if (reapplyCount >= MAX_REAPPLY_COUNT) {
+                alert('授权申请已达上限（最多3次），请联系企业管理员处理');
+                closeReapplyModal();
+                return;
+            }
+            
+            // 增加计数并更新页面显示
+            reapplyCount++;
+            document.getElementById('rejectCount').textContent = reapplyCount;
+            
+            closeReapplyModal();
+            // 重新申请成功 → 跳转到等待授权页
+            showPage('authzPending');
+        }
+        
+        // 选择企业
+        function selectCompany(name, code, legalName, address) {
+            document.getElementById('companyName').value = name;
+            document.getElementById('creditCode').value = code;
+            document.getElementById('legalName').value = legalName;
+            document.getElementById('regAddress').value = address;
+            document.getElementById('searchDropdown').classList.remove('show');
+            document.getElementById('qccTag').style.display = 'inline-block';
+            
+            // 更新步骤状态
+            document.getElementById('step1').classList.add('completed');
+            document.getElementById('step2').classList.add('active');
+        }
+        
+        // 点击外部关闭下拉
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-wrapper')) {
+                document.getElementById('searchDropdown').classList.remove('show');
+            }
+        });
+        
+        // 提交认证
+        function submitAuth() {
+            // ---- v5.4：协议勾选校验（必填）----
+            var agreeCheckbox = document.getElementById('agreeProtocol');
+            if (agreeCheckbox && !agreeCheckbox.checked) {
+                alert('请先阅读并勾选《认证服务协议》和《e签宝用户授权协议》');
+                agreeCheckbox.focus();
+                return;
+            }
+
+            // v6.6 方案C+：商城侧不做场景分流，统一走场景一（首次认证）路径
+            // e签宝H5内部自动检测企业是否已实名认证，自行适配展示内容
+            // 场景一：提交表单 → 弹出跳转e签宝弹窗 → e签宝H5认证
+            document.getElementById('esignModal').classList.add('show');
+            // 步骤：3/4 active（前两步已完成）
+            document.getElementById('step1').className = 'step completed';
+            document.getElementById('step2').className = 'step completed';
+            document.getElementById('step3').className = 'step active';
+            document.getElementById('step4').className = 'step';
+        }
+        
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('esignModal').classList.remove('show');
+        }
+        
+        // 前往e签宝认证（场景一：首次认证，认证+授权一体化）
+        function goToEsign() {
+            closeModal();
+            
+            // v5.0: 认证+授权一体化，e签宝H5内连续完成
+            // 模拟认证+授权成功
+            setTimeout(() => {
+                document.getElementById('step3').classList.add('completed');
+                document.getElementById('step4').classList.add('active');
+                
+                // 最佳情况：认证+授权一步到位
+                document.getElementById('statusIcon').className = 'status-icon verified';
+                document.getElementById('statusIcon').textContent = '✓';
+                document.getElementById('statusTitle').textContent = '企业认证授权已通过';
+                document.getElementById('statusDesc').textContent = '您已完成企业认证并获授权，可使用电子合同签署功能';
+                
+                // 隐藏表单，显示认证+授权通过状态
+                document.getElementById('formCard').style.display = 'none';
+                document.getElementById('tips').style.display = 'none';
+                document.getElementById('steps').style.display = 'none';
+                document.getElementById('successCard').style.display = 'block';
+                
+                // 填充认证信息
+                document.getElementById('successCompanyName').textContent = document.getElementById('companyName').value || '启泰智能装备有限公司';
+                document.getElementById('successTime').textContent = new Date().toLocaleString('zh-CN');
+            }, 500);
+        }
+        
+        // 保存草稿
+        function saveDraft() {
+            alert('草稿已保存');
+        }
+        
+        // 查看认证详情
+        function viewAuthDetail() {
+            alert('查看认证详情');
+        }
+        
+        // 重新认证（v5.4 Fix: 跳转到完整表单页预填数据，而非刷新整页）
+        function reAuth() {
+            showPage('form');
+        }
+        
+        // ==================== 原型页面切换函数 ====================
+        
+        function showPage(pageName) {
+            // ============================================================
+            // v5.4: 全量页面列表（含新增页面）
+            // ============================================================
+            const allPages = [
+                // 场景一核心流
+                'unverifiedCard',      // 页面1：未认证权益入口（v5.4新增）
+                'page2Card',           // 页面2：企业信息填写轻量表单（v5.4新增）
+                'checkingCard',        // 页面3.5：准备认证材料过渡态（v6.6修复为方案C+纯前端过渡）
+                'formCard',            // 页面4：完整认证表单（场景一）
+                'draftCard',           // 页面3：草稿恢复
+                'verifyingCard',       // 页面5：认证审核中
+                'successCard',         // 页面6：认证+授权已通过
+                'rejectedCard',        // 页面8B：认证失败
+                // 场景二核心流
+                'esignRedirectAuthzCard', // 场景二：跳转e签宝授权过渡页（v5.4新增）
+                'authzPendingCard',    // 页面8C：等待管理员授权
+                'authzApprovedCard',   // 页面7B-ok：授权通过
+                'authzRejectedCard',   // 页面7B-fail：授权拒绝
+                'authzTimeoutCard',    // 页面7C：授权超时（v5.4新增）
+                // 公共
+                'esignRedirectCard',   // 场景一：跳转e签宝认证过渡页
+                'flowOverviewCard'     // 流程总览
+            ];
+            allPages.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            
+            // 隐藏所有弹窗
+            document.getElementById('esignModal').classList.remove('show');
+            document.getElementById('authzModal').classList.remove('show');
+            document.getElementById('reapplyModal').classList.remove('show');
+            
+            // 隐藏辅助区域（步骤条/Tips/状态卡片）
+            hideMainContent();
+            
+            // 更新顶部导航按钮高亮
+            document.querySelectorAll('.proto-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.target && event.target.classList.contains('proto-btn')) {
+                event.target.classList.add('active');
+            }
+            
+            // ============================================================
+            // 显示对应页面
+            // ============================================================
+            switch(pageName) {
+
+                // ----------------------------------------------------------
+                // 【页面1】未认证权益入口（v5.4新增，独立路由）
+                // ----------------------------------------------------------
+                case 'unverified':
+                    document.getElementById('unverifiedCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon pending';
+                    document.getElementById('statusIcon').textContent = '⏳';
+                    document.getElementById('statusTitle').textContent = '企业未认证';
+                    document.getElementById('statusDesc').textContent = '完成企业认证后，可享受账期支付、企业专属价格等权益';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面2】企业信息填写轻量表单（v5.4新增）
+                // 步骤1/4 active
+                // ----------------------------------------------------------
+                case 'page2':
+                    document.getElementById('page2Card').style.display = 'block';
+                    document.getElementById('steps').style.display = 'flex';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon pending';
+                    document.getElementById('statusIcon').textContent = '⏳';
+                    document.getElementById('statusTitle').textContent = '填写企业基本信息';
+                    document.getElementById('statusDesc').textContent = '请输入企业名称，系统将自动检索企查查数据';
+                    document.getElementById('step1').className = 'step active';
+                    document.getElementById('step2').className = 'step';
+                    document.getElementById('step3').className = 'step';
+                    document.getElementById('step4').className = 'step';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面3.5】准备认证材料过渡态（v6.6修复：方案C+，纯前端过渡1-2s）
+                // 步骤2/4 active
+                // ----------------------------------------------------------
+                case 'checking':
+                    document.getElementById('checkingCard').style.display = 'block';
+                    document.getElementById('steps').style.display = 'flex';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon pending';
+                    document.getElementById('statusIcon').textContent = '🔍';
+                    document.getElementById('statusTitle').textContent = '正在准备认证材料';
+                    document.getElementById('statusDesc').textContent = '正在为您准备e签宝实名认证（纯前端过渡，1-2秒后自动跳转）';
+                    document.getElementById('step1').className = 'step completed';
+                    document.getElementById('step2').className = 'step active';
+                    document.getElementById('step3').className = 'step';
+                    document.getElementById('step4').className = 'step';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面3】草稿恢复
+                // ----------------------------------------------------------
+                case 'draft':
+                    document.getElementById('draftCard').style.display = 'block';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面4】完整认证表单（场景一，步骤3/4 active）
+                // ----------------------------------------------------------
+                case 'form':
+                    document.getElementById('formCard').style.display = 'block';
+                    document.getElementById('tips').style.display = 'block';
+                    document.getElementById('steps').style.display = 'flex';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon pending';
+                    document.getElementById('statusIcon').textContent = '⏳';
+                    document.getElementById('statusTitle').textContent = '填写企业认证信息';
+                    document.getElementById('statusDesc').textContent = '请完整填写以下信息，提交后将前往e签宝完成实名认证';
+                    document.getElementById('step1').className = 'step completed';
+                    document.getElementById('step2').className = 'step completed';
+                    document.getElementById('step3').className = 'step active';
+                    document.getElementById('step4').className = 'step';
+                    break;
+
+                // ----------------------------------------------------------
+                // e签宝认证 H5 跳转弹窗（场景一，在表单页上弹出）
+                // ----------------------------------------------------------
+                case 'esignModal':
+                    document.getElementById('formCard').style.display = 'block';
+                    document.getElementById('tips').style.display = 'block';
+                    document.getElementById('steps').style.display = 'flex';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('step1').className = 'step completed';
+                    document.getElementById('step2').className = 'step completed';
+                    document.getElementById('step3').className = 'step active';
+                    document.getElementById('step4').className = 'step';
+                    document.getElementById('esignModal').classList.add('show');
+                    break;
+
+                // ----------------------------------------------------------
+                // 授权申请弹窗（v6.6说明：方案C+下此弹窗由e签宝H5内部触发，
+                // 商城侧通过回调接收授权状态后展示。原型保留供参考场景二UI。）
+                // ----------------------------------------------------------
+                case 'authzModal':
+                    document.getElementById('checkingCard').style.display = 'block';
+                    document.getElementById('steps').style.display = 'flex';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('step1').className = 'step completed';
+                    document.getElementById('step2').className = 'step active';
+                    document.getElementById('step3').className = 'step';
+                    document.getElementById('step4').className = 'step';
+                    document.getElementById('authzModal').classList.add('show');
+                    break;
+
+                // ----------------------------------------------------------
+                // 【场景一】e签宝认证跳转过渡页（步骤3→4 之间）
+                // ----------------------------------------------------------
+                case 'esignRedirect':
+                    document.getElementById('esignRedirectCard').style.display = 'block';
+                    document.getElementById('steps').style.display = 'flex';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('step1').className = 'step completed';
+                    document.getElementById('step2').className = 'step completed';
+                    document.getElementById('step3').className = 'step active';
+                    document.getElementById('step4').className = 'step';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【场景二】e签宝授权跳转过渡页（v5.4新增）
+                // 3步指示器：步骤2/3 active
+                // ----------------------------------------------------------
+                case 'esignRedirectAuthz':
+                    document.getElementById('esignRedirectAuthzCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon pending';
+                    document.getElementById('statusIcon').textContent = '🔗';
+                    document.getElementById('statusTitle').textContent = '即将跳转e签宝管理员授权';
+                    document.getElementById('statusDesc').textContent = '已向企业管理员发起授权申请，请管理员登录e签宝完成审批';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面5】认证审核中（步骤4/4 active）
+                // ----------------------------------------------------------
+                case 'verifying':
+                    document.getElementById('verifyingCard').style.display = 'block';
+                    document.getElementById('steps').style.display = 'flex';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon pending';
+                    document.getElementById('statusIcon').textContent = '🔄';
+                    document.getElementById('statusTitle').textContent = '企业认证审核中';
+                    document.getElementById('statusDesc').textContent = '已提交至e签宝审核，通常5-10分钟完成，请耐心等待';
+                    document.getElementById('step1').className = 'step completed';
+                    document.getElementById('step2').className = 'step completed';
+                    document.getElementById('step3').className = 'step completed';
+                    document.getElementById('step4').className = 'step active';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面6】认证+授权已通过（AUTHZ_APPROVED 终态）
+                // ----------------------------------------------------------
+                case 'verified':
+                    document.getElementById('successCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon verified';
+                    document.getElementById('statusIcon').textContent = '✓';
+                    document.getElementById('statusTitle').textContent = '企业认证授权已通过';
+                    document.getElementById('statusDesc').textContent = '您已完成企业认证并获授权，可使用电子合同签署功能';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面8B】认证失败（REJECTED）
+                // ----------------------------------------------------------
+                case 'rejected':
+                    document.getElementById('rejectedCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon error';
+                    document.getElementById('statusIcon').textContent = '✕';
+                    document.getElementById('statusTitle').textContent = '企业认证失败';
+                    document.getElementById('statusDesc').textContent = '请根据失败原因修改后重新提交认证申请';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面8C】等待管理员授权（AUTHZ_PENDING）
+                // ----------------------------------------------------------
+                case 'authzPending':
+                    document.getElementById('authzPendingCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon pending';
+                    document.getElementById('statusIcon').textContent = '⏳';
+                    document.getElementById('statusTitle').textContent = '授权申请已提交';
+                    document.getElementById('statusDesc').textContent = '申请已发送至企业管理员，请耐心等待处理（24小时内有效）';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面7A-ok】授权通过（AUTHZ_APPROVED）
+                // ----------------------------------------------------------
+                case 'authzApproved':
+                    document.getElementById('authzApprovedCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon verified';
+                    document.getElementById('statusIcon').textContent = '✓';
+                    document.getElementById('statusTitle').textContent = '企业授权已通过';
+                    document.getElementById('statusDesc').textContent = '您已获得企业授权，可使用电子合同签署功能';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面7B-fail】授权拒绝（AUTHZ_REJECTED）
+                // ----------------------------------------------------------
+                case 'authzRejected':
+                    document.getElementById('authzRejectedCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon error';
+                    document.getElementById('statusIcon').textContent = '✕';
+                    document.getElementById('statusTitle').textContent = '授权申请被拒绝';
+                    document.getElementById('statusDesc').textContent = '管理员拒绝了本次授权申请，请修改理由后重新申请';
+                    break;
+
+                // ----------------------------------------------------------
+                // 【页面7C】授权超时（AUTHZ_TIMEOUT，v5.4新增）
+                // ----------------------------------------------------------
+                case 'authzTimeout':
+                    document.getElementById('authzTimeoutCard').style.display = 'block';
+                    document.getElementById('statusCard').style.display = 'flex';
+                    document.getElementById('statusIcon').className = 'status-icon error';
+                    document.getElementById('statusIcon').textContent = '⏰';
+                    document.getElementById('statusTitle').textContent = '授权申请已超时';
+                    document.getElementById('statusDesc').textContent = '超过24小时未获管理员处理，申请已自动失效，请重新申请';
+                    break;
+
+                // ----------------------------------------------------------
+                // 流程总览（Mermaid 图）
+                // ----------------------------------------------------------
+                case 'flowOverview':
+                    document.getElementById('flowOverviewCard').style.display = 'block';
+                    break;
+            }
+        }
+        
+        function hideMainContent() {
+            document.getElementById('formCard').style.display = 'none';
+            document.getElementById('tips').style.display = 'none';
+            document.getElementById('steps').style.display = 'none';
+            document.getElementById('statusCard').style.display = 'none';
+        }
+        
+        // ==================== 场景二：已认证授权相关函数 ====================
+        
+        // 关闭授权申请弹窗
+        function closeAuthzModal() {
+            document.getElementById('authzModal').classList.remove('show');
+        }
+        
+        // 提交授权申请
+        function submitAuthzApply() {
+            // ---- v5.4：协议勾选校验（必填）----
+            var authzAgreeCheckbox = document.getElementById('authzAgreeProtocol');
+            if (authzAgreeCheckbox && !authzAgreeCheckbox.checked) {
+                alert('请先阅读并勾选《认证服务协议》和《e签宝用户授权协议》');
+                authzAgreeCheckbox.focus();
+                return;
+            }
+
+            // 申请人信息（选填）
+            var applicantName = document.getElementById('authzApplicantName') ? document.getElementById('authzApplicantName').value.trim() : '';
+            var applicantMobile = document.getElementById('authzApplicantMobile') ? document.getElementById('authzApplicantMobile').value.trim() : '';
+            var applyReason = document.getElementById('authzApplyReason') ? document.getElementById('authzApplyReason').value.trim() : '';
+
+            // 补充信息（选填，v5.4新增字段）
+            var businessType = document.getElementById('authzBusinessType') ? document.getElementById('authzBusinessType').value.trim() : '';
+            var companyPhone = document.getElementById('authzCompanyPhone') ? document.getElementById('authzCompanyPhone').value.trim() : '';
+            var email = document.getElementById('authzEmail') ? document.getElementById('authzEmail').value.trim() : '';
+
+            // 手机号如果填写了则校验格式
+            if (applicantMobile && !/^1\d{10}$/.test(applicantMobile)) {
+                alert('请输入正确的11位手机号');
+                return;
+            }
+
+            // 邮箱如果填写了则校验格式
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('请输入正确的邮箱格式');
+                return;
+            }
+
+            closeAuthzModal();
+
+            // 跳转：场景二提交授权申请后 → 跳转e签宝授权过渡页（esignRedirectAuthz）
+            // 管理员在e签宝完成授权后，商城回调更新状态为 AUTHZ_PENDING
+            showPage('esignRedirectAuthz');
+        }
+        
+        // 刷新授权状态
+        function checkAuthzStatus() {
+            // v5.4: 演示用 — 模拟后端回调已将状态更新为 AUTHZ_APPROVED
+            // 实际：前端轮询 /api/company/authz/status，或监听 WebSocket 推送
+            const mockStatus = 'approved'; // 可改为 'pending' / 'rejected' / 'timeout' 演示不同结果
+
+            if (mockStatus === 'approved') {
+                // 授权通过 → 跳转授权通过页
+                showPage('authzApproved');
+                // 填充授权通过信息（authzApprovedCard 中的展示字段）
+                const nameEl = document.getElementById('authzApprovedCompanyName');
+                if (nameEl) nameEl.textContent = '启泰智能装备有限公司';
+                const timeEl = document.getElementById('authzApprovedTime');
+                if (timeEl) timeEl.textContent = new Date().toLocaleString('zh-CN');
+            } else if (mockStatus === 'rejected') {
+                showPage('authzRejected');
+            } else if (mockStatus === 'timeout') {
+                showPage('authzTimeout');
+            } else {
+                alert('授权申请仍在处理中，请稍后刷新');
+            }
+        }
+        
+        // ⚠️ v5.4 已删除撤销功能：cancelAuthz() 废弃，保留函数体防止旧调用报错
+        // PRD v5.4 Section 4.3 / 12.1.2 确认：【取消/撤销】按钮已从所有授权相关页面移除
+        function cancelAuthz() {
+            console.warn('[v5.4] cancelAuthz() 已废弃，撤销授权功能已从产品中移除');
+        }
+        
+        // 去签署合同
+        function goToContract() {
+            alert('跳转到合同签署页面');
+        }
+        
+        // 查看授权详情
+        function viewAuthzDetail() {
+            alert('查看授权详情');
+        }
+        
+    </script>
+
+    <!-- 流程图放大预览（原图全屏） -->
+    <div id="flowchartPreviewOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.92); z-index:9999; cursor:grab;" onclick="closeFlowchartPreview(event)">
+        <div style="position:absolute; top:20px; right:30px; z-index:10001; display:flex; gap:10px; align-items:center;">
+            <button onclick="event.stopPropagation(); zoomFlowchart(-0.15)" style="background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.3);">−</button>
+            <span id="zoomLevel" style="color:#fff; font-size:14px; min-width:50px; text-align:center;">100%</span>
+            <button onclick="event.stopPropagation(); zoomFlowchart(0.15)" style="background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.3);">+</button>
+            <button onclick="event.stopPropagation(); resetFlowchartZoom()" style="background:#1890ff; color:#fff; border:none; border-radius:4px; padding:8px 16px; font-size:13px; cursor:pointer; margin-left:10px;">重置</button>
+            <button onclick="event.stopPropagation(); closeFlowchartPreview(event)" style="background:#ff4d4f; color:#fff; border:none; border-radius:4px; padding:8px 16px; font-size:13px; cursor:pointer;">✕ 关闭</button>
+        </div>
+        <div id="flowchartPreviewContent" style="position:absolute; top:0; left:0; transform-origin:0 0; transition:none;">
+        </div>
+    </div>
+
+    <script>
+        let fcZoom = 1;
+        let fcPanX = 0;
+        let fcPanY = 0;
+        let fcDragging = false;
+        let fcLastX = 0;
+        let fcLastY = 0;
+
+        // v5.4：SVG 流程图放大预览
+        function openSvgPreview() {
+            const overlay = document.getElementById('flowchartPreviewOverlay');
+            const content = document.getElementById('flowchartPreviewContent');
+            // 获取 SVG 元素并序列化为字符串嵌入预览层
+            const svgEl = document.getElementById('flowchart-svg');
+            const svgStr = new XMLSerializer().serializeToString(svgEl);
+            const blob = new Blob([svgStr], {type:'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            fcNaturalW = 1100;
+            fcNaturalH = 1580;
+            fcZoom = Math.min(window.innerWidth / fcNaturalW, (window.innerHeight - 60) / fcNaturalH, 1);
+            fcPanX = (window.innerWidth - fcNaturalW * fcZoom) / 2;
+            fcPanY = Math.max(10, (window.innerHeight - fcNaturalH * fcZoom) / 2);
+            content.innerHTML = '<img src="' + url + '" width="' + fcNaturalW + '" height="' + fcNaturalH + '" style="display:block; transform-origin:0 0;" />';
+            updateFlowchartTransform();
+            overlay.style.display = 'block';
+            document.getElementById('zoomLevel').textContent = Math.round(fcZoom * 100) + '%';
+            const previewImg = content.querySelector('img');
+            overlay.onmousedown = function(e) {
+                if (e.target.tagName === 'BUTTON') return;
+                fcDragging = true; fcLastX = e.clientX; fcLastY = e.clientY;
+                overlay.style.cursor = 'grabbing';
+            };
+            overlay.onmousemove = function(e) {
+                if (!fcDragging) return;
+                fcPanX += e.clientX - fcLastX; fcPanY += e.clientY - fcLastY;
+                fcLastX = e.clientX; fcLastY = e.clientY;
+                updateFlowchartTransform();
+            };
+            overlay.onmouseup = function() { fcDragging = false; overlay.style.cursor = 'grab'; };
+            overlay.onwheel = function(e) {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.08 : 0.08;
+                const oldZoom = fcZoom;
+                fcZoom = Math.max(0.15, Math.min(4, fcZoom + delta));
+                const ratio = fcZoom / oldZoom;
+                fcPanX = e.clientX - (e.clientX - fcPanX) * ratio;
+                fcPanY = e.clientY - (e.clientY - fcPanY) * ratio;
+                updateFlowchartTransform();
+                document.getElementById('zoomLevel').textContent = Math.round(fcZoom * 100) + '%';
+            };
+        }
+
+        function openFlowchartPreview() {
+            // v5.4：兼容旧调用，重定向到 SVG 预览
+            openSvgPreview();
+        }
+
+        function initPreview(previewImg) {
+            fcNaturalW = previewImg.naturalWidth || 1361;
+            fcNaturalH = previewImg.naturalHeight || 941;
+            fcZoom = Math.min(window.innerWidth / fcNaturalW, window.innerHeight / fcNaturalH, 1);
+            fcPanX = (window.innerWidth - fcNaturalW * fcZoom) / 2;
+            fcPanY = (window.innerHeight - fcNaturalH * fcZoom) / 2;
+            updateFlowchartTransform();
+            document.getElementById('flowchartPreviewOverlay').style.display = 'block';
+            document.getElementById('zoomLevel').textContent = Math.round(fcZoom * 100) + '%';
+            const overlay = document.getElementById('flowchartPreviewOverlay');
+            overlay.onmousedown = function(e) {
+                if (e.target.tagName === 'BUTTON') return;
+                fcDragging = true;
+                fcLastX = e.clientX;
+                fcLastY = e.clientY;
+                overlay.style.cursor = 'grabbing';
+            };
+            overlay.onmousemove = function(e) {
+                if (!fcDragging) return;
+                fcPanX += e.clientX - fcLastX;
+                fcPanY += e.clientY - fcLastY;
+                fcLastX = e.clientX;
+                fcLastY = e.clientY;
+                updateFlowchartTransform();
+            };
+            overlay.onmouseup = function() {
+                fcDragging = false;
+                overlay.style.cursor = 'grab';
+            };
+            overlay.onwheel = function(e) {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.08 : 0.08;
+                const oldZoom = fcZoom;
+                fcZoom = Math.max(0.2, Math.min(3, fcZoom + delta));
+                const ratio = fcZoom / oldZoom;
+                fcPanX = e.clientX - (e.clientX - fcPanX) * ratio;
+                fcPanY = e.clientY - (e.clientY - fcPanY) * ratio;
+                updateFlowchartTransform();
+                document.getElementById('zoomLevel').textContent = Math.round(fcZoom * 100) + '%';
+            };
+        }
+
+        function closeFlowchartPreview(e) {
+            // 点击overlay空白区域关闭（排除按钮区域和图片内容区域）
+            if (e && e.target) {
+                var tag = e.target.tagName;
+                // 关闭按钮直接放行；其他按钮（+−重置）不关闭
+                if (tag === 'BUTTON') {
+                    // 检查是否是关闭按钮（文本含"关闭"）
+                    if (e.target.textContent.indexOf('关闭') === -1) return;
+                }
+                // 点击在内容图片上也不关闭（避免拖拽时误关）
+                if (e.target.id === 'flowchartPreviewContent' || e.target.tagName === 'IMG') return;
+            }
+            document.getElementById('flowchartPreviewOverlay').style.display = 'none';
+            const overlay = document.getElementById('flowchartPreviewOverlay');
+            overlay.onmousedown = null;
+            overlay.onmousemove = null;
+            overlay.onmouseup = null;
+            overlay.onwheel = null;
+        }
+
+        function zoomFlowchart(delta) {
+            const oldZoom = fcZoom;
+            fcZoom = Math.max(0.2, Math.min(3, fcZoom + delta));
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            const ratio = fcZoom / oldZoom;
+            fcPanX = cx - (cx - fcPanX) * ratio;
+            fcPanY = cy - (cy - fcPanY) * ratio;
+            updateFlowchartTransform();
+            document.getElementById('zoomLevel').textContent = Math.round(fcZoom * 100) + '%';
+        }
+
+        function resetFlowchartZoom() {
+            fcZoom = Math.min(window.innerWidth / fcNaturalW, window.innerHeight / fcNaturalH, 1);
+            fcPanX = (window.innerWidth - fcNaturalW * fcZoom) / 2;
+            fcPanY = (window.innerHeight - fcNaturalH * fcZoom) / 2;
+            updateFlowchartTransform();
+            document.getElementById('zoomLevel').textContent = Math.round(fcZoom * 100) + '%';
+        }
+
+        function updateFlowchartTransform() {
+            const content = document.getElementById('flowchartPreviewContent');
+            content.style.transform = 'translate(' + fcPanX + 'px,' + fcPanY + 'px) scale(' + fcZoom + ')';
+        }
+
+        // ESC关闭预览
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFlowchartPreview();
+            }
+        });
+    </script>
+</body>
+</html>
