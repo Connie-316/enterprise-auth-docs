@@ -713,7 +713,6 @@
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation blue" style="max-width:200px;">对应截图画面38<br>企业注册 → 跳转企业认证流程</div>
     </div>
 
     <div class="phone-wrap">
@@ -750,7 +749,6 @@
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation blue" style="max-width:200px;">H5端页面1对应<br>小程序认证入口状态页</div>
     </div>
   </div>
 </div>
@@ -829,12 +827,10 @@
               <div class="form-input" style="color:#888;background:#f5f5f5;">广东省东莞市长安镇</div>
             </div>
             <div class="btn-primary">下一步</div>
-            <div class="annotation" style="margin-top:8px;font-size:10px;color:#aaa;">⚠️ 「税号」= PC端「统一社会信用代码」，字段名在小程序端简化展示，后端字段名统一为 credit_code</div>
           </div>
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation" style="max-width:200px;">对应截图画面74<br>企查查搜索选择 → 自动填充4字段<br><span style="color:#cf1322;">⚠️ 营业执照上传在e签宝H5内完成，商城侧无需处理</span></div>
     </div>
   </div>
 </div>
@@ -916,12 +912,10 @@
             </div>
             <div class="btn-primary">下一步</div>
             <div class="btn-ghost">上一步</div>
-            <div class="annotation" style="margin-top:8px;font-size:10px;color:#aaa;">⚠️ 「接收订单消息电话」= PC端同名字段，对应数据库 order_phone。无短信验证码，直接填写。选填字段（经营类型/公司电话/邮箱）与PC端完全一致。</div>
           </div>
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation" style="max-width:200px;">对应截图画面75<br>步骤1/3 续：法人+经办人</div>
     </div>
   </div>
 </div>
@@ -945,7 +939,6 @@
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation blue" style="max-width:200px;">纯前端过渡态（1-2s），不调用后端API<br>商城侧不做场景分流，统一展示完整表单<br>e签宝H5内部自动检测并适配首次认证/已认证授权</div>
     </div>
   </div>
 </div>
@@ -968,7 +961,6 @@
           </div>
           <!-- 步骤说明：p-form属于场景一「完整认证表单」，对应小程序3步流程的第2步；H5端此处是步骤3/4。PRD 13.1有差异说明。 -->
           <div class="screen-body">
-            <div class="annotation" style="margin-bottom:10px;">ℹ️ 请完善以下信息，提交后将在e签宝完成实名认证与授权</div>
             <div class="form-section-title">企业信息（已填，不可修改）</div>
             <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
             <div class="info-row"><span class="label">统一社会信用代码</span><span class="value" style="font-size:10px;">91441900MA53K2XJ3X</span></div>
@@ -1046,8 +1038,6 @@
               </div>
               <div style="background:#1677ff;color:#fff;border-radius:6px;padding:10px;font-size:13px;">开始认证</div>
             </div>
-            <div class="annotation blue">小程序端通过 &lt;web-view&gt; 组件内嵌e签宝H5页面。e签宝认证完成后回调中间页，再用 wx.miniProgram.navigateTo 跳回小程序。</div>
-            <div class="annotation red">⚠️ clientType 必须传 MINI_APP（非 H5/ALL），否则e签宝页面在WebView内渲染异常</div>
           </div>
         </div>
         <div class="phone-home-bar"></div>
@@ -1174,7 +1164,6 @@
             </div>
             <div class="info-row"><span class="label">失败原因</span><span class="value" style="color:#e74c3c;">人脸识别失败</span></div>
             <div class="info-row"><span class="label">企业名称</span><span class="value">启泰智能装备有限公司</span></div>
-            <div class="annotation red">已填写的企业信息全部保留，只需修改错误字段后重新提交。状态自动回退至草稿(DRAFT)。</div>
             <div class="btn-primary">重新认证</div>
             <div class="btn-ghost">稍后再试</div>
           </div>
@@ -1269,7 +1258,6 @@
             </div>
             <div class="info-row"><span class="label">拒绝原因</span><span class="value" style="color:#e74c3c;">申请理由不充分</span></div>
             <div class="info-row"><span class="label">剩余申请次数</span><span class="value">2次（共3次）</span></div>
-            <div class="annotation">点击【重新申请】弹出"修改申请理由"弹窗，只需修改申请理由，无需重新填写其他字段。</div>
             <div class="btn-primary">重新申请</div>
           </div>
         </div>
@@ -1302,7 +1290,6 @@
             <div class="info-row"><span class="label">认证场景</span><span class="value">首次认证</span></div>
             <div class="btn-primary">继续认证</div>
             <div class="btn-ghost">重新填写</div>
-            <div class="annotation red" style="margin-top:8px;">点击【重新填写】将清空该草稿（物理删除），跳转至企业信息填写页重新开始。</div>
           </div>
         </div>
         <div class="phone-home-bar"></div>

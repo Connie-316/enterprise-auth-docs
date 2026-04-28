@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>企业认证功能 PRD v7.1</title>
+<title>企业认证功能 PRD v7.2</title>
 <style>
   :root {
     --primary: #1a6ef5;
@@ -26,7 +26,7 @@
 
   .container { max-width: 1060px; margin: 0 auto; padding: 0 32px 60px; }
 
-  /* ========== v7.2：固定侧边栏树状目录导航 ========== */
+  /* ========== 固定侧边栏目录导航 ========== */
   .toc-sidebar {
     position: fixed; top: 0; left: 0;
     width: 280px; height: 100vh;
@@ -58,7 +58,6 @@
   }
   .toc-toggle-btn:hover { background: #155cd9; }
 
-  /* 目录树 */
   .toc-body { flex: 1; overflow-y: auto; padding: 8px 0; }
   .toc-body::-webkit-scrollbar { width: 3px; }
   .toc-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
@@ -86,7 +85,6 @@
   .toc-sub li a:hover { color: var(--primary); background: #f5f7fa; }
   .toc-sub li a.active { color: var(--primary); background: #eef5ff; border-left-color: #40a9ff; font-weight: 500; }
 
-  /* 底部返回顶部 */
   .toc-footer { padding: 10px 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
   .back-top-btn {
     display:block; width:100%; padding:8px 0; text-align:center;
@@ -96,7 +94,6 @@
   }
   .back-top-btn:hover { background:var(--primary); color:#fff; }
 
-  /* 主内容区偏移 */
   body { padding-left: 280px; transition: padding-left .25s ease; }
   body.sidebar-collapsed { padding-left: 40px; }
 
@@ -132,12 +129,6 @@
 
   .flow-box { background: var(--bg-code); border: 1px solid #d0dce8; border-radius: 6px; padding: 14px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; line-height: 1.7; overflow-x: auto; }
 
-  .link-card { background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; padding: 13px 18px; margin: 7px 0; }
-  .link-card .lc-title { font-weight: 600; font-size: 13.5px; color: var(--text); margin-bottom: 5px; }
-  .link-card a { color: var(--primary); font-size: 13px; word-break: break-all; }
-  .link-card .lc-desc { color: var(--muted); font-size: 12px; margin-top: 2px; }
-  .link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-
   .status { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 12px; font-weight: 600; }
   .s-unverified { background: #f0f0f0; color: #555; }
   .s-draft { background: #fff4e0; color: #9a6200; }
@@ -152,6 +143,33 @@
   p { margin: 7px 0; font-size: 14px; }
   ul, ol { padding-left: 20px; font-size: 14px; }
   li { margin: 3px 0; }
+
+  /* 快速上手卡片 */
+  .quick-start { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .quick-card {
+    background: linear-gradient(135deg, #f8f9ff, #f0f4ff);
+    border: 1px solid #d0dce8;
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .quick-card .qc-title { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+  .quick-card .qc-desc { font-size: 11.5px; color: #666; line-height: 1.5; }
+  .quick-card .qc-link { color: var(--primary); font-weight: 600; }
+
+  /* 页面路径标签 */
+  .page-tag {
+    display: inline-block;
+    background: #e8f4fd;
+    color: #0958d9;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: monospace;
+  }
+
+  /* 流程图样式 */
+  .mermaid { background: #fafafa; border-radius: 8px; padding: 16px; margin: 12px 0; }
 </style>
 </head>
 <body>
@@ -164,6 +182,12 @@
   </div>
   <div class="toc-body" id="tocBody">
     <ul class="toc-tree" id="tocTree">
+      <li class="toc-node open" data-target="s0">
+        <div class="toc-label" onclick="tocJump('s0')"><span class="toc-arrow">▶</span> 快速上手指南</div>
+      </li>
+      <li class="toc-node open" data-target="s00">
+        <div class="toc-label" onclick="tocJump('s00')"><span class="toc-arrow">▶</span> 页面流程总览</div>
+      </li>
       <li class="toc-node open" data-target="s1">
         <div class="toc-label" onclick="tocJump('s1')"><span class="toc-arrow">▶</span> 1 功能概览</div>
       </li>
@@ -174,20 +198,26 @@
         <div class="toc-label" onclick="tocToggle('s3')"><span class="toc-arrow">▶</span> 3 业务流程</div>
         <ul class="toc-sub">
           <li><a href="#s3-1" onclick="tocJumpSub(event,'s3-1')">3.1 整体流程图</a></li>
-          <li><a href="#s3-2" onclick="tocJumpSub(event,'s3-2')">3.2 场景一：首次认证</a></li>
-          <li><a href="#s3-3" onclick="tocJumpSub(event,'s3-3')">3.3 场景二：已认证授权</a></li>
+          <li><a href="#s3-2" onclick="tocJumpSub(event,'s3-2')">3.2 首次认证流程</a></li>
+          <li><a href="#s3-3" onclick="tocJumpSub(event,'s3-3')">3.3 已认证授权流程</a></li>
           <li><a href="#s3-4" onclick="tocJumpSub(event,'s3-4')">3.4 草稿机制</a></li>
           <li><a href="#s3-5" onclick="tocJumpSub(event,'s3-5')">3.5 认证状态机</a></li>
         </ul>
       </li>
       <li class="toc-node open" data-target="s4">
-        <div class="toc-label" onclick="tocJump('s4')"><span class="toc-arrow">▶</span> 4 页面说明（PC/H5端）</div>
+        <div class="toc-label" onclick="tocToggle('s4')"><span class="toc-arrow">▶</span> 4 页面说明（PC/H5）</div>
+        <ul class="toc-sub">
+          <li><a href="#s4-1" onclick="tocJumpSub(event,'s4-1')">4.1 页面总览</a></li>
+          <li><a href="#s4-2" onclick="tocJumpSub(event,'s4-2')">4.2 认证流程页面</a></li>
+          <li><a href="#s4-3" onclick="tocJumpSub(event,'s4-3')">4.3 授权流程页面</a></li>
+          <li><a href="#s4-4" onclick="tocJumpSub(event,'s4-4')">4.4 表单字段验证</a></li>
+        </ul>
       </li>
       <li class="toc-node open" data-target="s5">
         <div class="toc-label" onclick="tocJump('s5')"><span class="toc-arrow">▶</span> 5 小程序端适配</div>
       </li>
       <li class="toc-node open" data-target="s6">
-        <div class="toc-label" onclick="tocJump('s6')"><span class="toc-arrow">▶</span> 6 数据表字段说明</div>
+        <div class="toc-label" onclick="tocJump('s6')"><span class="toc-arrow">▶</span> 6 数据表字段</div>
       </li>
       <li class="toc-node open" data-target="s7">
         <div class="toc-label" onclick="tocJump('s7')"><span class="toc-arrow">▶</span> 7 接口清单</div>
@@ -204,16 +234,86 @@
 </nav>
 
 <div class="page-header" id="pageHeader">
-  <h1>企业认证功能 PRD v7.1</h1>
+  <h1>企业认证功能 PRD v7.2</h1>
   <div class="meta">
-    <span class="badge">版本：v7.1 开发精简版</span>
+    <span class="badge">版本：v7.2</span>
     <span class="badge">更新：2026-04-28</span>
-    <span class="badge">作者：产品部</span>
-    <span class="badge">关联原型：原型_企业认证_PC端_v6.8.html（PC/H5）&nbsp;&nbsp;原型_企业认证_小程序端_v6.8.html（小程序）</span>
+    <span class="badge">关联原型：PC端 v6.8 · 小程序端 v6.8</span>
   </div>
 </div>
 
 <div class="container">
+
+<!-- ===== 快速上手指南 ===== -->
+<div class="section" id="s0">
+  <h2 class="sec-title"><span class="num">📖</span>快速上手指南</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:12px;">本文档描述企业认证功能，涉及 e 签宝实名认证和授权流程。首次阅读建议按以下顺序快速了解：</p>
+
+  <div class="quick-start">
+    <div class="quick-card">
+      <div class="qc-title">1️⃣ 想快速了解整体流程？</div>
+      <div class="qc-desc">看「<a class="qc-link" href="#s00">页面流程总览</a>」，用流程图展示核心路径和分支</div>
+    </div>
+    <div class="quick-card">
+      <div class="qc-title">2️⃣ 想了解功能有哪些？</div>
+      <div class="qc-desc">看「<a class="qc-link" href="#s1">功能概览</a>」，表格化展示各模块功能</div>
+    </div>
+    <div class="quick-card">
+      <div class="qc-title">3️⃣ 开发要注意什么？</div>
+      <div class="qc-desc">看「<a class="qc-link" href="#s2">开发注意事项</a>」，包含 D1-D14 个关键注意点</div>
+    </div>
+    <div class="quick-card">
+      <div class="qc-title">4️⃣ 想了解详细页面？</div>
+      <div class="qc-desc">看「<a class="qc-link" href="#s4">页面说明</a>」，每个页面的路由和交互</div>
+    </div>
+    <div class="quick-card">
+      <div class="qc-title">5️⃣ 小程序和H5差异？</div>
+      <div class="qc-desc">看「<a class="qc-link" href="#s5">小程序端适配</a>」，包含3步流程和WebView说明</div>
+    </div>
+    <div class="quick-card">
+      <div class="qc-title">6️⃣ 想直接开始开发？</div>
+      <div class="qc-desc">看「<a class="qc-link" href="#s7">接口清单</a>」和「<a class="qc-link" href="#s6">数据表字段</a>」</div>
+    </div>
+  </div>
+
+  <div class="alert alert-info" style="margin-top:16px;">
+    <strong>核心概念：</strong>本功能基于 e 签宝实现企业实名认证。商城侧<strong>不区分场景</strong>，统一展示表单，由 e 签宝 H5 内部自动识别企业是否已认证并切换流程。
+  </div>
+</div>
+
+<!-- ===== 页面流程总览 ===== -->
+<div class="section" id="s00">
+  <h2 class="sec-title"><span class="num">🗺️</span>页面流程总览</h2>
+  <p style="font-size:13px;color:#666;margin-bottom:12px;">以下展示企业认证的完整页面路径，帮助开发快速定位目标页面：</p>
+
+  <h3 class="sub-title">认证流程（场景一：首次认证）</h3>
+  <pre class="flow-box">
+认证入口 <span class="page-tag">页面1</span> → 企业信息填写 <span class="page-tag">页面2</span> → 过渡加载 <span class="page-tag">页面3.5</span> → 完整表单 <span class="page-tag">页面4</span> → 跳转e签宝 <span class="page-tag">页面5</span> → e签宝H5认证 → 回调处理 → 结果页 <span class="page-tag">页面8A/8B/8C</span>
+  </pre>
+
+  <h3 class="sub-title">授权流程（场景二：已认证授权）</h3>
+  <pre class="flow-box">
+认证入口 <span class="page-tag">页面1</span> → 企业信息填写 <span class="page-tag">页面2</span> → 过渡加载 <span class="page-tag">页面3.5</span> → 授权弹窗 <span class="page-tag">页面4弹窗</span> → 跳转e签宝授权 <span class="page-tag">页面5</span> → e签宝H5授权 → 回调处理 → 结果页 <span class="page-tag">页面7A/7B/7C</span>
+  </pre>
+
+  <h3 class="sub-title">结果页说明</h3>
+  <table>
+    <tr><th>页面</th><th>路由</th><th>含义</th></tr>
+    <tr><td><span class="page-tag">8A</span></td><td><code>/company/auth/success</code></td><td>认证+授权全部通过</td></tr>
+    <tr><td><span class="page-tag">8B</span></td><td><code>/company/auth/failed</code></td><td>认证失败，可重新认证</td></tr>
+    <tr><td><span class="page-tag">8C</span></td><td><code>/company/auth/authz-pending</code></td><td>认证通过，等待管理员授权</td></tr>
+    <tr><td><span class="page-tag">7A</span></td><td><code>/company/auth/authz-success</code></td><td>授权通过（场景二）</td></tr>
+    <tr><td><span class="page-tag">7B</span></td><td><code>/company/auth/authz-rejected</code></td><td>授权拒绝，可重新申请（最多3次）</td></tr>
+    <tr><td><span class="page-tag">7C</span></td><td><code>/company/auth/authz-timeout</code></td><td>授权超时（超24小时未回调）</td></tr>
+  </table>
+
+  <h3 class="sub-title">其他页面</h3>
+  <table>
+    <tr><th>页面</th><th>路由</th><th>含义</th></tr>
+    <tr><td><span class="page-tag">7.5</span></td><td><code>/company/auth/processing</code></td><td>认证/授权审核中，等待回调</td></tr>
+    <tr><td>草稿恢复</td><td><code>/company/auth/draft</code></td><td>检测到历史草稿，可继续或重新填写</td></tr>
+  </table>
+</div>
 
 <!-- ===== 一、功能概览 ===== -->
 <div class="section" id="s1">
@@ -223,46 +323,46 @@
     <tr><td>企查查企业搜索</td><td>输入≥2字触发模糊搜索，选中后自动填充：企业名称、统一社会信用代码、法定代表人姓名、注册地址</td></tr>
     <tr><td>认证表单</td><td>用户填写：法人身份证号 + 经办人（姓名/身份证/接收订单消息电话，均必填）。经营类型/公司电话/邮箱选填。协议必勾</td></tr>
     <tr><td>草稿保存</td><td>永久保存，不限时间。下次进入自动恢复；点【重新填写】物理删除草稿</td></tr>
-    <tr><td>场景一：首次认证</td><td>企业未在e签宝认证 → 调e签宝接口1（完整参数）→ H5内完成人脸+营业执照+管理员授权</td></tr>
-    <tr><td>场景二：已认证授权</td><td>企业已在e签宝认证 → 调e签宝接口1（仅传企业标识）→ H5内仅走管理员授权</td></tr>
-    <tr><td>统一表单架构</td><td>商城侧<strong>统一展示完整表单</strong>（不区分场景一/二）。e签宝H5内部自动识别企业是否已认证并自行适配流程；页面3.5是纯前端过渡动画（setTimeout 1-2秒），<strong>不调任何接口</strong></td></tr>
-    <tr><td>回调处理</td><td>e签宝认证/授权完成 → notifyUrl回调 → 验签 → 加锁 → 更新状态 → 调接口2同步企业信息</td></tr>
+    <tr><td>首次认证（场景一）</td><td>企业未在e签宝认证 → 调e签宝接口 → H5内完成人脸+营业执照+管理员授权</td></tr>
+    <tr><td>已认证授权（场景二）</td><td>企业已在e签宝认证 → 调e签宝接口 → H5内仅走管理员授权</td></tr>
+    <tr><td>统一表单架构</td><td>商城侧<strong>统一展示完整表单</strong>，不区分场景。e签宝H5内部自动识别并适配</td></tr>
+    <tr><td>回调处理</td><td>e签宝认证/授权完成 → notifyUrl回调 → 验签 → 加锁 → 更新状态 → 调接口同步企业信息</td></tr>
     <tr><td>结果页</td><td>认证+授权通过 / 认证失败 / 认证通过等待授权 / 授权拒绝（最多重申请3次）/ 授权超时</td></tr>
-    <tr><td>小程序端</td><td>共用同一套后端接口，e签宝H5通过 &lt;web-view&gt; 内嵌；认证完成通过中间H5回调页跳回小程序；clientType传 MINI_APP</td></tr>
+    <tr><td>小程序端</td><td>共用同一套后端接口，e签宝H5通过 &lt;web-view&gt; 内嵌；clientType传 MINI_APP</td></tr>
   </table>
 </div>
 
 <!-- ===== 二、开发注意事项 ===== -->
 <div class="section" id="s2">
-  <h2 class="sec-title"><span class="num">2</span>开发注意事项 &amp; 外部接口链接</h2>
+  <h2 class="sec-title"><span class="num">2</span>开发注意事项</h2>
 
-  <h3 class="sub-title">⚠️ 关键注意事项</h3>
+  <h3 class="sub-title">⚠️ 关键注意点（D1-D14）</h3>
   <table>
     <tr><th>#</th><th>注意点</th><th>说明</th></tr>
     <tr>
       <td>D1</td>
       <td><strong>商城不做场景判断</strong></td>
-      <td>场景一/二由e签宝H5内部自动识别并切换。商城只需统一走完整表单→调接口1→跳转H5→等回调。页面3.5只是前端过渡动画，不调任何接口</td>
+      <td>场景由e签宝H5内部自动识别并切换。商城统一走完整表单→调接口→跳转H5→等回调</td>
     </tr>
     <tr>
       <td>D2</td>
       <td><strong>clientType 必须动态传值</strong></td>
-      <td>PC/H5端传 <code>H5</code>；小程序端传 <code>MINI_APP</code>（后端从Header <code>X-Platform</code> 识别）。传错导致e签宝H5在小程序内渲染异常。<strong>禁止生产环境使用 ALL</strong></td>
+      <td>PC/H5端传 <code>H5</code>；小程序端传 <code>MINI_APP</code>。传错导致e签宝H5渲染异常</td>
     </tr>
     <tr>
       <td>D3</td>
-      <td><strong>页面1/2/3.5/4 必须独立路由</strong></td>
-      <td>不得合并。完整路径：页面1 → 2 → 3.5 → 4 → 5 → e签宝H5 → 7.5 → 结果页</td>
+      <td><strong>页面必须独立路由</strong></td>
+      <td>完整路径：页面1 → 2 → 3.5 → 4 → 5 → e签宝H5 → 7.5 → 结果页</td>
     </tr>
     <tr>
       <td>D4</td>
       <td><strong>认证失败跳转页面4</strong></td>
-      <td>点【重新认证】→ 跳页面4（携带已填数据回填），不是草稿恢复页</td>
+      <td>点【重新认证】→ 跳页面4（携带已填数据回填）</td>
     </tr>
     <tr>
       <td>D5</td>
       <td><strong>授权拒绝无撤销功能</strong></td>
-      <td>页面7B只有【重新申请】，点击弹出修改申请理由弹窗，无取消/撤销</td>
+      <td>页面7B只有【重新申请】，点击弹出修改申请理由弹窗</td>
     </tr>
     <tr>
       <td>D6</td>
@@ -272,7 +372,7 @@
     <tr>
       <td>D7</td>
       <td><strong>草稿永久保存</strong></td>
-      <td>不设时效。90天未更新由后台定时清理，用户不感知</td>
+      <td>不设时效。90天未更新由后台定时清理</td>
     </tr>
     <tr>
       <td>D8</td>
@@ -282,22 +382,22 @@
     <tr>
       <td>D9</td>
       <td><strong>回调必须验签</strong></td>
-      <td>HMAC-SHA256验签，失败返回HTTP 400；验签通过再加分布式锁处理，防重放</td>
+      <td>HMAC-SHA256验签，失败返回HTTP 400；验签通过再加分布式锁处理</td>
     </tr>
     <tr>
       <td>D10</td>
       <td><strong>场景二双写数据</strong></td>
-      <td>提交授权申请时同时写 company_auth（AUTHZ_PENDING）和 company_authz_apply 表</td>
+      <td>提交授权申请时同时写 company_auth 和 company_authz_apply 表</td>
     </tr>
     <tr>
       <td>D11</td>
       <td><strong>小程序回跳：中间H5页</strong></td>
-      <td>redirectUrl 配置为中间H5页（miniapp-callback.html），内部用 <code>wx.miniProgram.navigateTo</code> 跳回小程序，不可直接配置小程序路径</td>
+      <td>redirectUrl 配置为中间H5页，内部用 wx.miniProgram.navigateTo 跳回小程序</td>
     </tr>
     <tr>
       <td>D12</td>
       <td><strong>小程序「税号」= 统一社会信用代码</strong></td>
-      <td>小程序端标签显示"税号"，后端字段统一为 <code>credit_code</code>，数据完全一致</td>
+      <td>小程序端标签显示"税号"，后端字段统一为 credit_code</td>
     </tr>
     <tr>
       <td>D13</td>
@@ -311,59 +411,18 @@
     </tr>
   </table>
 
-  <h3 class="sub-title">🔗 外部接口与参考文档</h3>
-  <div class="link-grid">
-    <div class="link-card">
-      <div class="lc-title">🔴 必读 — 获取机构认证&amp;授权页面链接（接口1）</div>
-      <a href="https://open.esign.cn/doc/opendoc/auth3/kcbdu7" target="_blank">https://open.esign.cn/doc/opendoc/auth3/kcbdu7</a>
-      <div class="lc-desc">POST /v3/org-auth/create，获取e签宝H5认证/授权链接</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🔴 必读 — 查询机构认证信息（接口2）</div>
-      <a href="https://open.esign.cn/doc/opendoc/auth3/xxz4tc" target="_blank">https://open.esign.cn/doc/opendoc/auth3/xxz4tc</a>
-      <div class="lc-desc">GET /v3/org-auth/{authFlowId}，回调后同步企业信息必须调用</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🔴 必读 — 回调通知服务</div>
-      <a href="https://open.esign.cn/doc/opendoc/auth3/uozx98z5qom8ce5d" target="_blank">https://open.esign.cn/doc/opendoc/auth3/uozx98z5qom8ce5d</a>
-      <div class="lc-desc">回调字段定义与验签机制</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🔴 必读 — 集成流程总览</div>
-      <a href="https://t.esign.cn/saOlurg" target="_blank">https://t.esign.cn/saOlurg</a>
-      <div class="lc-desc">沙箱→开发测试→切换生产完整流程，开发前必读</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🔴 必读 — 上线转生产环境</div>
-      <a href="https://open.esign.cn/doc/opendoc/dev-guide3/mezw5n" target="_blank">https://open.esign.cn/doc/opendoc/dev-guide3/mezw5n</a>
-      <div class="lc-desc">上线前必读，沙箱切换生产操作步骤</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🔴 必读 — 小程序内嵌H5认证页技术规范</div>
-      <a href="https://open.esign.cn/doc/opendoc/case3/hpop58" target="_blank">https://open.esign.cn/doc/opendoc/case3/hpop58</a>
-      <div class="lc-desc">小程序WebView接入认证页核心文档</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🟡 备查 — 错误码查询工具</div>
-      <a href="https://open.esign.cn/tools/error-code" target="_blank">https://open.esign.cn/tools/error-code</a>
-      <div class="lc-desc">联调时快速查错误码解决方案</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🟡 备查 — 查询机构授权信息（兜底轮询）</div>
-      <a href="https://open.esign.cn/doc/opendoc/auth3/ytn2tt" target="_blank">https://open.esign.cn/doc/opendoc/auth3/ytn2tt</a>
-      <div class="lc-desc">GET /v3/org-authorize/{flowId}，回调丢失时补偿用</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🟡 备查 — 小程序配置H5业务域名</div>
-      <a href="https://open.esign.cn/doc/opendoc/case3/tthc3yo027d2fsde" target="_blank">https://open.esign.cn/doc/opendoc/case3/tthc3yo027d2fsde</a>
-      <div class="lc-desc">域名白名单+txt验证文件配置步骤</div>
-    </div>
-    <div class="link-card">
-      <div class="lc-title">🟡 备查 — 企查查开放平台</div>
-      <a href="https://openapi.qcc.com/" target="_blank">https://openapi.qcc.com/</a>
-      <div class="lc-desc">企业模糊搜索API，GET /ECIV4/Search</div>
-    </div>
-  </div>
+  <h3 class="sub-title">🔗 外部接口链接</h3>
+  <table>
+    <tr><th>接口</th><th>链接</th></tr>
+    <tr><td>获取机构认证&amp;授权页面链接（接口1）</td><td><a href="https://open.esign.cn/doc/opendoc/auth3/kcbdu7" target="_blank">https://open.esign.cn/doc/opendoc/auth3/kcbdu7</a></td></tr>
+    <tr><td>查询机构认证信息（接口2）</td><td><a href="https://open.esign.cn/doc/opendoc/auth3/xxz4tc" target="_blank">https://open.esign.cn/doc/opendoc/auth3/xxz4tc</a></td></tr>
+    <tr><td>回调通知服务</td><td><a href="https://open.esign.cn/doc/opendoc/auth3/uozx98z5qom8ce5d" target="_blank">https://open.esign.cn/doc/opendoc/auth3/uozx98z5qom8ce5d</a></td></tr>
+    <tr><td>集成流程总览</td><td><a href="https://t.esign.cn/saOlurg" target="_blank">https://t.esign.cn/saOlurg</a></td></tr>
+    <tr><td>上线转生产环境</td><td><a href="https://open.esign.cn/doc/opendoc/dev-guide3/mezw5n" target="_blank">https://open.esign.cn/doc/opendoc/dev-guide3/mezw5n</a></td></tr>
+    <tr><td>小程序内嵌H5认证页技术规范</td><td><a href="https://open.esign.cn/doc/opendoc/case3/hpop58" target="_blank">https://open.esign.cn/doc/opendoc/case3/hpop58</a></td></tr>
+    <tr><td>错误码查询工具</td><td><a href="https://open.esign.cn/tools/error-code" target="_blank">https://open.esign.cn/tools/error-code</a></td></tr>
+    <tr><td>企查查开放平台</td><td><a href="https://openapi.qcc.com/" target="_blank">https://openapi.qcc.com/</a></td></tr>
+  </table>
 </div>
 
 <!-- ===== 三、业务流程 ===== -->
@@ -371,7 +430,7 @@
   <h2 class="sec-title"><span class="num">3</span>业务流程</h2>
 
   <h3 class="sub-title" id="s3-1">3.1 整体流程图</h3>
-  <pre>
+  <pre class="flow-box">
 开始认证
     │
     ▼
@@ -388,63 +447,38 @@
 提交 → 后端调e签宝接口1 → 返回 authUrl
     ▼
 页面5：跳转e签宝H5
-    e签宝H5内部自动判断：
-    ├─ 未认证企业 → 人脸识别 + 营业执照上传 + 管理员授权（场景一）
-    └─ 已认证企业 → 直接展示管理员授权（场景二）
+  │场景一（首次）：人脸识别 + 营业执照上传 + 管理员授权
+  │场景二（已认证）：仅管理员授权
     ▼
-e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同步企业信息
+e签宝回调 → 验签→加锁→更新状态→调接口2同步企业信息
     ▼
-    ├─ 认证+授权通过 → AUTHZ_APPROVED → 页面8A
-    ├─ 认证失败     → REJECTED → DRAFT（保留已填数据）→ 页面8B
-    ├─ 认证通过等待授权 → AUTHZ_PENDING → 页面8C（等待管理员）
-    ├─ 授权通过     → AUTHZ_APPROVED → 页面7A
-    ├─ 授权拒绝     → AUTHZ_REJECTED → 页面7B（最多重申请3次）
-    └─ 超24小时未回调 → 低频轮询 → 页面7C</pre>
+    ├─ 认证+授权通过 → AUTHZ_APPROVED → 页面8A/7A
+    ├─ 认证失败 → REJECTED → 页面8B
+    ├─ 认证通过等待授权 → AUTHZ_PENDING → 页面8C/7C
+    ├─ 授权拒绝 → AUTHZ_REJECTED → 页面7B（最多重申请3次）
+    └─ 超24小时未回调 → 页面7C</pre>
 
-  <div class="alert alert-success">
-    <strong>核心架构说明：</strong>商城统一走完整表单，不区分场景一/二。e签宝H5内部自动识别企业认证状态并切换对应流程（首次认证→人脸+营业执照+授权；已认证→仅管理员授权）。页面3.5为纯前端过渡动画，不调任何后端接口。
-  </div>
-
-  <!-- 3.2 场景一 -->
-  <h3 class="sub-title" id="s3-2">3.2 场景一：首次认证（企业未在e签宝认证）</h3>
+  <!-- 3.2 首次认证流程 -->
+  <h3 class="sub-title" id="s3-2">3.2 首次认证流程（场景一）</h3>
   <table>
     <tr><th>步骤</th><th>操作</th><th>说明</th></tr>
     <tr><td>1</td><td>企查查搜索企业，选中后自动填充4字段</td><td>企业名称/信用代码/法定代表人/注册地址</td></tr>
     <tr><td>2</td><td>页面3.5过渡（1-2秒）→ 完整认证表单（页面4）</td><td>纯前端，无接口</td></tr>
     <tr><td>3</td><td>填写：法人身份证号 + 经办人（姓名/身份证/接收订单电话）+ 勾选协议</td><td>接收订单电话无验证码</td></tr>
-    <tr><td>4</td><td>提交 → 后端调接口1（传完整 orgAuthConfig + transactorInfo + authorizeConfig）</td><td>返回 authUrl + authFlowId</td></tr>
+    <tr><td>4</td><td>提交 → 后端调接口1（传完整参数）</td><td>返回 authUrl + authFlowId</td></tr>
     <tr><td>5</td><td>跳转e签宝H5 → 人脸识别 + 营业执照上传 + 管理员授权</td><td>认证+授权一体化</td></tr>
     <tr><td>6</td><td>e签宝回调 → 验签 → 加锁 → 更新状态 → 调接口2同步企业信息</td><td>含 organAuthResult + authorizeResult</td></tr>
-    <tr><td>7</td><td>根据回调结果跳转结果页</td><td>通过→AUTHZ_APPROVED；失败→DRAFT可重试；等待授权→AUTHZ_PENDING</td></tr>
+    <tr><td>7</td><td>根据回调结果跳转结果页</td><td>通过→AUTHZ_APPROVED；失败→页面8B</td></tr>
   </table>
 
-  <p><strong>接口1传参要点（场景一 vs 场景二对比）：</strong></p>
-  <table>
-    <tr><th>参数组</th><th>场景一（首次认证）</th><th>场景二（已认证授权）</th></tr>
-    <tr><td>orgAuthConfig → orgName + orgInfo（企业标识）</td><td>✅ 必传</td><td>✅ 必传</td></tr>
-    <tr><td>orgInfo → legalRepName / legalRepIDCardNum（法人信息）</td><td>✅ 必传</td><td>❌ 不传</td></tr>
-    <tr><td>orgAuthPageConfig（认证方式配置）</td><td>✅ 传（orgDefaultAuthMode=ORG_LEGALREP_INVOLVED）</td><td>❌ 不传</td></tr>
-    <tr><td>transactorInfo（经办人信息）</td><td>✅ 必传（psnAccount=经办人手机号，须与psnMobile一致）</td><td>❌ 不传</td></tr>
-    <tr><td>authorizeConfig（授权范围）</td><td>✅ 必传</td><td>✅ 必传</td></tr>
-    <tr><td>clientType</td><td>H5端传 H5；小程序端传 MINI_APP</td><td>同左</td></tr>
-    <tr><td>notifyUrl</td><td>✅ 强烈建议传（不传则无回调，需轮询兜底）</td><td>同左</td></tr>
-  </table>
-
-  <!-- 3.3 场景二 -->
-  <h3 class="sub-title" id="s3-3">3.3 场景二：已认证授权（企业已在e签宝完成实名认证）</h3>
-  <div class="alert alert-info">
-    <strong>场景二运作说明：</strong>商城不判断企业是否已认证，统一展示完整表单。e签宝H5识别为已认证企业后，自动跳过认证步骤，仅展示管理员授权页面。
-  </div>
+  <h3 class="sub-title" id="s3-3">3.3 已认证授权流程（场景二）</h3>
   <table>
     <tr><th>步骤</th><th>操作</th><th>说明</th></tr>
     <tr><td>1</td><td>前端流程同场景一（企查查→过渡页→表单页）</td><td>场景二表单中法人身份证号无需填写</td></tr>
-    <tr><td>2</td><td>提交 → 后端调接口1（仅传 orgName + orgInfo 企业标识，不传 transactorInfo/orgAuthPageConfig）</td><td>e签宝识别已认证企业，返回授权页链接</td></tr>
+    <tr><td>2</td><td>提交 → 后端调接口1（仅传企业标识）</td><td>e签宝识别已认证企业，返回授权页链接</td></tr>
     <tr><td>3</td><td>跳转e签宝H5 → 仅走管理员授权流程</td><td>无人脸/营业执照步骤</td></tr>
-    <tr><td>4</td><td>e签宝回调 → 更新状态</td><td>授权通过→AUTHZ_APPROVED；拒绝→AUTHZ_REJECTED（最多重申请3次）</td></tr>
+    <tr><td>4</td><td>e签宝回调 → 更新状态</td><td>授权通过→AUTHZ_APPROVED；拒绝→AUTHZ_REJECTED</td></tr>
   </table>
-  <div class="alert alert-warning">
-    <strong>场景二数据写入：</strong>提交授权申请时同时写 company_auth（状态AUTHZ_PENDING）和 company_authz_apply 表；法人/经办人字段提交时为 null，e签宝回调后通过接口2同步填充。
-  </div>
 
   <!-- 3.4 草稿 -->
   <h3 class="sub-title" id="s3-4">3.4 草稿机制</h3>
@@ -452,9 +486,9 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
     <tr><th>时机/操作</th><th>说明</th></tr>
     <tr><td>自动保存</td><td>每30秒 + 页面失焦/关闭时</td></tr>
     <tr><td>手动保存</td><td>点击【保存草稿】/ 稍后再说弹窗中的【稍后再说】</td></tr>
-    <tr><td>草稿有效期</td><td><strong>永久保存</strong>，90天未更新由后台定时清理（用户不感知）</td></tr>
+    <tr><td>草稿有效期</td><td><strong>永久保存</strong>，90天未更新由后台定时清理</td></tr>
     <tr><td>重新填写</td><td>物理删除草稿 → 回页面1空白表单</td></tr>
-    <tr><td>继续认证入口</td><td>认证入口页 / 个人中心 / 签合同时拦截弹窗</td></tr>
+    <tr><td>认证入口</td><td>认证入口页 / 个人中心 / 签合同时拦截弹窗</td></tr>
     <tr><td>认证完成后</td><td>认证成功回调后自动物理删除草稿</td></tr>
   </table>
   <p>敏感字段（身份证号）只存后端（AES加密），不存本地；非敏感字段同时存本地和后端，以后端为准。</p>
@@ -466,11 +500,10 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
     <tr><td><span class="status s-unverified">UNVERIFIED (0)</span></td><td>未认证</td><td>初始状态</td><td>点【去认证】进入流程</td></tr>
     <tr><td><span class="status s-draft">DRAFT (1)</span></td><td>草稿</td><td>有未完成的认证草稿</td><td>【继续认证】回填 / 【重新填写】清空</td></tr>
     <tr><td><span class="status s-verifying">VERIFYING (2)</span></td><td>认证中</td><td>已提交，等待e签宝回调</td><td>等待，可点【刷新状态】</td></tr>
-    <tr><td><span class="status s-verified">VERIFIED (3)</span></td><td>已认证（瞬态）</td><td>数据库内部态，用户不感知</td><td>根据授权结果自动跳转</td></tr>
-    <tr><td><span class="status s-rejected">REJECTED (4)</span></td><td>认证失败（瞬态）</td><td>展示失败原因</td><td>点【重新认证】→ DRAFT → 跳页面4回填</td></tr>
-    <tr><td><span class="status s-authz-pending">AUTHZ_PENDING (5)</span></td><td>授权待处理</td><td>等待管理员审批</td><td>等待（无撤销）/ 点【刷新状态】</td></tr>
+    <tr><td><span class="status s-rejected">REJECTED (4)</span></td><td>认证失败</td><td>展示失败原因</td><td>点【重新认证】→ 跳页面4回填</td></tr>
+    <tr><td><span class="status s-authz-pending">AUTHZ_PENDING (5)</span></td><td>授权待处理</td><td>等待管理员审批</td><td>等待 / 点【刷新状态】</td></tr>
     <tr><td><span class="status s-authz-approved">AUTHZ_APPROVED (6)</span></td><td>授权通过</td><td>认证完成，可签合同</td><td>【去签合同】</td></tr>
-    <tr><td><span class="status s-authz-rejected">AUTHZ_REJECTED (7)</span></td><td>授权拒绝</td><td>管理员拒绝</td><td>点【重新申请】→ 弹窗改理由 → AUTHZ_PENDING（最多3次）</td></tr>
+    <tr><td><span class="status s-authz-rejected">AUTHZ_REJECTED (7)</span></td><td>授权拒绝</td><td>管理员拒绝</td><td>点【重新申请】→ 弹窗改理由（最多3次）</td></tr>
   </table>
 </div>
 
@@ -478,100 +511,117 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
 <div class="section" id="s4">
   <h2 class="sec-title"><span class="num">4</span>页面说明（PC/H5端）</h2>
 
-  <div class="alert alert-info">
-    <strong>PC端步骤指示器（4步）：</strong>① 填写企业信息 → ② 企业核验 → ③ e签宝实名认证 → ④ 认证完成
-    <br><span style="font-size:12px;color:#888;margin-top:4px;display:inline-block;">📌 页面编号说明：页面1/2/3.5/4 为核心流程页（3.5为纯前端过渡态）；5=e签宝跳转页；7.5=审核等待；8A~8C=场景一结果；7A~7C=场景二授权结果。编号跳跃是历史遗留命名，开发时以路由路径为准。</span>
-  </div>
-
+  <h3 class="sub-title" id="s4-1">4.1 页面总览</h3>
   <table>
-    <tr><th>页面</th><th>路由</th><th>核心内容</th><th>关键交互</th></tr>
-    <tr>
-      <td><strong>页面1：认证入口</strong></td>
-      <td><code>/company/auth</code></td>
-      <td>展示未认证状态 + 认证权益（账期支付/专属价格/合同签署/子账号管理）</td>
-      <td>【去认证】→ 页面2；有草稿时展示草稿恢复页</td>
-    </tr>
-    <tr>
-      <td><strong>页面2：企业信息填写</strong></td>
-      <td><code>/company/auth/form</code></td>
-      <td>企业名称搜索框（≥2字触发）+ 统一社会信用代码 + 法定代表人 + 注册地址（后三项自动填充只读）</td>
-      <td>选中企业后自动填充4字段；【下一步】→ 页面3.5</td>
-    </tr>
-    <tr>
-      <td><strong>页面3.5：过渡加载</strong></td>
-      <td><code>/company/auth/checking</code></td>
-      <td>"正在准备认证材料…"加载动画</td>
-      <td><strong>不调任何接口</strong>，setTimeout 1-2秒后自动跳页面4</td>
-    </tr>
-    <tr>
-      <td><strong>页面4：完整认证表单</strong></td>
-      <td><code>/company/auth/first-time</code></td>
-      <td>企业信息（只读回填）+ 法人身份证号（必填）+ 经办人区（姓名/身份证/接收订单电话，均必填）+ 补充信息（经营类型/公司电话/邮箱，选填）+ 协议勾选（必填）</td>
-      <td>【提交认证】校验通过后禁用+loading；【保存草稿】</td>
-    </tr>
-    <tr>
-      <td><strong>页面4弹窗：授权申请（场景二）</strong></td>
-      <td>弹窗</td>
-      <td>企业信息（只读）+ 申请人信息（姓名/手机/申请理由，选填）+ 补充信息（选填）+ 协议（必填）</td>
-      <td>【提交申请】/ 【稍后再说】→ 保存草稿</td>
-    </tr>
-    <tr>
-      <td><strong>页面5：跳转e签宝（场景一）</strong></td>
-      <td><code>/company/auth/redirect</code></td>
-      <td>说明认证步骤（人脸/营业执照/管理员授权）</td>
-      <td>点【前往e签宝认证】→ 打开authUrl；后台轮询回调</td>
-    </tr>
-    <tr>
-      <td><strong>页面5：跳转e签宝（场景二）</strong></td>
-      <td><code>/company/auth/redirect-authz</code></td>
-      <td>说明授权步骤</td>
-      <td>点【前往e签宝授权】→ 打开authUrl</td>
-    </tr>
-    <tr>
-      <td><strong>页面7.5：审核中</strong></td>
-      <td><code>/company/auth/processing</code></td>
-      <td>企业名称 + 提交时间 + 预计5-10分钟 + 动态进度条</td>
-      <td>每5秒轮询；点【刷新状态】手动查；完成后自动跳结果页</td>
-    </tr>
-    <tr>
-      <td><strong>页面8A：认证+授权通过</strong></td>
-      <td><code>/company/auth/success</code></td>
-      <td>✅ 认证信息 + 已开通权益</td>
-      <td>【去签合同】</td>
-    </tr>
-    <tr>
-      <td><strong>页面8B：认证失败</strong></td>
-      <td><code>/company/auth/failed</code></td>
-      <td>❌ 失败原因 + 处理建议</td>
-      <td>【重新认证】→ 状态变DRAFT → 跳页面4（含回填，不经草稿恢复页）</td>
-    </tr>
-    <tr>
-      <td><strong>页面8C：等待授权</strong></td>
-      <td><code>/company/auth/authz-pending</code></td>
-      <td>⏳ 认证企业信息 + 等待管理员授权说明</td>
-      <td>【刷新状态】；<strong>无撤销功能</strong></td>
-    </tr>
-    <tr>
-      <td><strong>页面7A：授权通过</strong></td>
-      <td><code>/company/auth/authz-success</code></td>
-      <td>✅ 企业名称/管理员/审批时间 + 权益说明</td>
-      <td>【去签合同】</td>
-    </tr>
-    <tr>
-      <td><strong>页面7B：授权拒绝</strong></td>
-      <td><code>/company/auth/authz-rejected</code></td>
-      <td>❌ 拒绝原因 + 处理建议</td>
-      <td>仅有【重新申请】→ 弹出修改申请理由弹窗 → AUTHZ_PENDING；最多3次</td>
-    </tr>
-    <tr>
-      <td><strong>页面7C：授权超时</strong></td>
-      <td><code>/company/auth/authz-timeout</code></td>
-      <td>等待时长 + 联系管理员提示</td>
-      <td>【刷新状态】；触发条件：授权申请超24小时未回调</td>
-    </tr>
+    <tr><th>页面</th><th>路由</th><th>说明</th></tr>
+    <tr><td>页面1：认证入口</td><td><code>/company/auth</code></td><td>展示认证状态和权益引导</td></tr>
+    <tr><td>页面2：企业信息填写</td><td><code>/company/auth/form</code></td><td>企查查搜索+自动填充</td></tr>
+    <tr><td>页面3.5：过渡加载</td><td><code>/company/auth/checking</code></td><td>纯前端动画，不调接口</td></tr>
+    <tr><td>页面4：完整认证表单</td><td><code>/company/auth/first-time</code></td><td>主表单页（场景一）</td></tr>
+    <tr><td>页面4弹窗：授权申请</td><td>弹窗</td><td>场景二授权表单</td></tr>
+    <tr><td>页面5：跳转e签宝</td><td><code>/company/auth/redirect</code></td><td>跳转e签宝H5</td></tr>
+    <tr><td>页面7.5：审核中</td><td><code>/company/auth/processing</code></td><td>等待回调</td></tr>
+    <tr><td>页面8A：认证+授权通过</td><td><code>/company/auth/success</code></td><td>成功结果页</td></tr>
+    <tr><td>页面8B：认证失败</td><td><code>/company/auth/failed</code></td><td>失败结果页</td></tr>
+    <tr><td>页面8C：等待授权</td><td><code>/company/auth/authz-pending</code></td><td>等待授权结果</td></tr>
+    <tr><td>页面7A：授权通过</td><td><code>/company/auth/authz-success</code></td><td>场景二授权通过</td></tr>
+    <tr><td>页面7B：授权拒绝</td><td><code>/company/auth/authz-rejected</code></td><td>可重新申请（最多3次）</td></tr>
+    <tr><td>页面7C：授权超时</td><td><code>/company/auth/authz-timeout</code></td><td>超24小时未回调</td></tr>
   </table>
 
-  <h3 class="sub-title">表单字段验证</h3>
+  <h3 class="sub-title" id="s4-2">4.2 认证流程页面</h3>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面1：认证入口</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth</code></td></tr>
+    <tr><td>功能</td><td>展示未认证状态 + 认证权益引导</td></tr>
+    <tr><td>交互</td><td>【去认证】→ 页面2；有草稿时展示草稿恢复页</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面2：企业信息填写</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/form</code></td></tr>
+    <tr><td>功能</td><td>企业名称搜索框（≥2字触发）+ 自动填充：统一社会信用代码 + 法定代表人 + 注册地址</td></tr>
+    <tr><td>交互</td><td>选中企业后自动填充4字段；【下一步】→ 页面3.5</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面3.5：过渡加载</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/checking</code></td></tr>
+    <tr><td>功能</td><td>"正在准备认证材料…"加载动画</td></tr>
+    <tr><td>交互</td><td><strong>不调任何接口</strong>，setTimeout 1-2秒后自动跳页面4</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面4：完整认证表单</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/first-time</code></td></tr>
+    <tr><td>功能</td><td>企业信息（只读）+ 法人身份证号（必填）+ 经办人（姓名/身份证/接收订单电话，均必填）+ 选填项 + 协议勾选</td></tr>
+    <tr><td>交互</td><td>【提交认证】校验通过后禁用+loading；【保存草稿】</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面5：跳转e签宝</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/redirect</code></td></tr>
+    <tr><td>功能</td><td>说明认证步骤，展示【前往e签宝认证】按钮</td></tr>
+    <tr><td>交互</td><td>点【前往e签宝认证】→ 打开authUrl；后台轮询回调</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面7.5：审核中</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/processing</code></td></tr>
+    <tr><td>功能</td><td>企业名称 + 提交时间 + 预计5-10分钟 + 动态进度条</td></tr>
+    <tr><td>交互</td><td>每5秒轮询；点【刷新状态】手动查；完成后自动跳结果页</td></tr>
+  </table>
+
+  <h3 class="sub-title" id="s4-3">4.3 授权流程页面</h3>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面4弹窗：授权申请（场景二）</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>入口</td><td>页面4内弹窗</td></tr>
+    <tr><td>功能</td><td>企业信息（只读）+ 申请人信息（姓名/手机/申请理由，选填）+ 补充信息（选填）+ 协议（必填）</td></tr>
+    <tr><td>交互</td><td>【提交申请】/ 【稍后再说】→ 保存草稿</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面8A/7A：认证/授权通过</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/success</code>（场景一）<br><code>/company/auth/authz-success</code>（场景二）</td></tr>
+    <tr><td>功能</td><td>展示认证信息 + 已开通权益</td></tr>
+    <tr><td>交互</td><td>【去签合同】</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面8B：认证失败</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/failed</code></td></tr>
+    <tr><td>功能</td><td>展示失败原因 + 处理建议</td></tr>
+    <tr><td>交互</td><td>【重新认证】→ 跳页面4（含回填）；【稍后再试】</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面8C/7C：等待授权/授权超时</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/authz-pending</code>（等待）<br><code>/company/auth/authz-timeout</code>（超时）</td></tr>
+    <tr><td>功能</td><td>展示认证企业信息 + 等待状态/超时说明</td></tr>
+    <tr><td>交互</td><td>【刷新状态】；无撤销功能</td></tr>
+  </table>
+
+  <h4 style="font-size:14px;color:#333;margin:12px 0 8px;">页面7B：授权拒绝</h4>
+  <table>
+    <tr><th>字段</th><th>说明</th></tr>
+    <tr><td>路由</td><td><code>/company/auth/authz-rejected</code></td></tr>
+    <tr><td>功能</td><td>展示拒绝原因 + 处理建议</td></tr>
+    <tr><td>交互</td><td>【重新申请】→ 弹出修改申请理由弹窗；最多3次</td></tr>
+  </table>
+
+  <h3 class="sub-title" id="s4-4">4.4 表单字段验证</h3>
   <table>
     <tr><th>字段</th><th>必填</th><th>规则</th></tr>
     <tr><td>法定代表人身份证号</td><td><span class="tag tag-req">必填</span></td><td>18位有效身份证号</td></tr>
@@ -591,57 +641,47 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
   <table>
     <tr><th>差异项</th><th>PC/H5端</th><th>微信小程序端</th></tr>
     <tr><td>步骤指示器</td><td>4步</td><td><strong>3步</strong>（企业信息 → 法人经办人 → e签宝认证）</td></tr>
-    <tr><td>表单分页</td><td>单页滚动</td><td><strong>2个页面</strong>：页面74（企业信息）→ 页面75（法人+经办人+选填）</td></tr>
+    <tr><td>表单分页</td><td>单页滚动</td><td><strong>2个页面</strong>：企业信息 → 法人+经办人</td></tr>
     <tr><td>「统一社会信用代码」标签</td><td>统一社会信用代码</td><td><strong>税号</strong>（字段名 credit_code 不变）</td></tr>
     <tr><td>e签宝跳转方式</td><td>window.location.href</td><td><strong>&lt;web-view src="authUrl"&gt;</strong></td></tr>
     <tr><td>clientType</td><td>H5</td><td><strong>MINI_APP</strong></td></tr>
-    <tr><td>认证完成回跳</td><td>redirectUrl = 商城页面</td><td>redirectUrl = <strong>中间H5页（miniapp-callback.html）</strong>，内部调wx.miniProgram.navigateTo跳回小程序</td></tr>
-    <tr><td>后端接口</td><td colspan="2" style="text-align:center">完全复用，同一套 /api/company/*</td></tr>
+    <tr><td>认证完成回跳</td><td>redirectUrl = 商城页面</td><td>redirectUrl = <strong>中间H5页</strong>，内部调wx.miniProgram.navigateTo</td></tr>
   </table>
 
-  <h3 class="sub-title">5.2 后端必改动点</h3>
+  <h3 class="sub-title">5.2 小程序端页面路由</h3>
   <table>
-    <tr><th>改动点</th><th>说明</th></tr>
-    <tr><td>clientType 动态识别</td><td>前端所有请求Header携带 <code>X-Platform: miniapp</code> 或 <code>h5</code>；后端读取后传给e签宝接口1对应的clientType</td></tr>
-    <tr><td>redirectUrl 中间页</td><td>小程序端 redirectUrl 配置为 <code>https://mall.xxx.com/auth/miniapp-callback.html?authFlowId={id}</code>，该页面部署在已配置的业务域名下</td></tr>
-  </table>
-
-  <h3 class="sub-title">5.3 小程序端页面路由</h3>
-  <table>
-    <tr><th>对应PC端页面</th><th>小程序路径</th></tr>
-    <tr><td>页面1：认证入口</td><td>/pages/auth/index</td></tr>
-    <tr><td>页面74：企业信息填写</td><td>/pages/auth/company-info</td></tr>
-    <tr><td>页面3.5：过渡加载</td><td>/pages/auth/checking</td></tr>
-    <tr><td>页面75：法人+经办人表单</td><td>/pages/auth/form</td></tr>
+    <tr><th>对应PC端</th><th>小程序路径</th></tr>
+    <tr><td>认证入口</td><td>/pages/auth/index</td></tr>
+    <tr><td>企业信息填写</td><td>/pages/auth/company-info</td></tr>
+    <tr><td>过渡加载</td><td>/pages/auth/checking</td></tr>
+    <tr><td>法人+经办人表单</td><td>/pages/auth/form</td></tr>
     <tr><td>e签宝H5 WebView</td><td>/pages/auth/webview</td></tr>
-    <tr><td>页面7.5：等待处理</td><td>/pages/auth/processing</td></tr>
-    <tr><td>结果页（成功/失败/等待/拒绝）</td><td>/pages/auth/success 等</td></tr>
-    <tr><td>草稿恢复页</td><td>/pages/auth/draft-restore</td></tr>
+    <tr><td>等待处理</td><td>/pages/auth/processing</td></tr>
+    <tr><td>结果页</td><td>/pages/auth/success 等</td></tr>
   </table>
+
   <div class="alert alert-warning">
-    <strong>页面栈提示：</strong>全流程约6层（74→75→过渡→表单→WebView→结果），在小程序10层限制内。过渡页建议用 wx.redirectTo 而非 wx.navigateTo，避免栈溢出。
-    <br><span style="font-size:12px;color:#888;margin-top:4px;display:inline-block;">📌 小程序端页面编号：页面74=企业信息填写、页面75=法人+经办人表单（对应PC端页面2+4的拆分），其余编号与PC端路由一一对应。</span>
+    <strong>页面栈提示：</strong>全流程约6层，在小程序10层限制内。过渡页建议用 wx.redirectTo 而非 wx.navigateTo。
   </div>
 </div>
 
 <!-- ===== 六、数据表字段说明 ===== -->
 <div class="section" id="s6">
   <h2 class="sec-title"><span class="num">6</span>数据表字段说明</h2>
-  <p style="color:var(--muted);font-size:13px;">以下仅列出业务关键字段及其用途，字段类型、索引、加密方式由开发自行设计。</p>
 
   <h3 class="sub-title">6.1 企业认证表（company_auth）</h3>
   <table>
-    <tr><th>字段名</th><th>必填场景</th><th>说明</th></tr>
-    <tr><td>user_id</td><td>所有</td><td>用户ID</td></tr>
-    <tr><td>company_name / credit_code</td><td>所有</td><td>企业名称 / 统一社会信用代码</td></tr>
-    <tr><td>reg_address / legal_name</td><td>场景一</td><td>注册地址 / 法定代表人姓名（场景二通过接口2回填）</td></tr>
-    <tr><td>legal_id_no</td><td>场景一</td><td>法人身份证号（AES加密；场景二接口2回填）</td></tr>
-    <tr><td>operator_name / operator_id_no / order_phone</td><td>场景一必填</td><td>经办人姓名/身份证（加密）/ 接收订单消息电话（场景二为null）</td></tr>
-    <tr><td>business_type / company_phone / email</td><td>选填</td><td>经营类型/公司电话/邮箱</td></tr>
-    <tr><td>esign_auth_flow_id</td><td>提交后</td><td>e签宝认证授权流程ID（唯一索引）</td></tr>
-    <tr><td>esign_account_id</td><td>回调后</td><td>e签宝企业账号ID</td></tr>
-    <tr><td>auth_status</td><td>所有</td><td>0=UNVERIFIED 1=DRAFT 2=VERIFYING 3=VERIFIED 4=REJECTED 5=AUTHZ_PENDING 6=AUTHZ_APPROVED 7=AUTHZ_REJECTED</td></tr>
-    <tr><td>auth_time / auth_expire_time</td><td>回调后</td><td>认证时间 / 当前版本设null，不做过期判断</td></tr>
+    <tr><th>字段名</th><th>说明</th></tr>
+    <tr><td>user_id</td><td>用户ID</td></tr>
+    <tr><td>company_name / credit_code</td><td>企业名称 / 统一社会信用代码</td></tr>
+    <tr><td>reg_address / legal_name</td><td>注册地址 / 法定代表人姓名</td></tr>
+    <tr><td>legal_id_no</td><td>法人身份证号（AES加密）</td></tr>
+    <tr><td>operator_name / operator_id_no / order_phone</td><td>经办人姓名/身份证（加密）/ 接收订单消息电话</td></tr>
+    <tr><td>business_type / company_phone / email</td><td>经营类型/公司电话/邮箱</td></tr>
+    <tr><td>esign_auth_flow_id</td><td>e签宝认证授权流程ID（唯一索引）</td></tr>
+    <tr><td>esign_account_id</td><td>e签宝企业账号ID</td></tr>
+    <tr><td>auth_status</td><td>0=UNVERIFIED 1=DRAFT 2=VERIFYING 4=REJECTED 5=AUTHZ_PENDING 6=AUTHZ_APPROVED 7=AUTHZ_REJECTED</td></tr>
+    <tr><td>auth_time / auth_expire_time</td><td>认证时间 / 当前版本设null</td></tr>
   </table>
 
   <h3 class="sub-title">6.2 认证草稿表（company_auth_draft）</h3>
@@ -652,7 +692,7 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
     <tr><td>legal_person_id_encrypted / operator_name_encrypted / operator_id_encrypted</td><td>法人/经办人身份证号（AES加密）</td></tr>
     <tr><td>operator_phone</td><td>接收订单消息电话</td></tr>
     <tr><td>business_type / company_phone / email</td><td>选填字段</td></tr>
-    <tr><td>applicant_name / applicant_mobile / apply_reason</td><td>场景二专用（场景一为null）</td></tr>
+    <tr><td>applicant_name / applicant_mobile / apply_reason</td><td>场景二专用</td></tr>
     <tr><td>auth_scene</td><td>FIRST_TIME / ALREADY_AUTH</td></tr>
     <tr><td>draft_status</td><td>1=有效 0=已提交/已删除</td></tr>
   </table>
@@ -664,7 +704,7 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
     <tr><td>user_id / company_auth_id</td><td>用户ID / 关联认证表</td></tr>
     <tr><td>applicant_name / applicant_mobile / apply_reason</td><td>申请人信息（选填）/ 申请理由</td></tr>
     <tr><td>apply_status</td><td>1=待处理 2=通过 3=拒绝</td></tr>
-    <tr><td>apply_count</td><td>第几次申请（最多3次，第4次拒绝提交）</td></tr>
+    <tr><td>apply_count</td><td>第几次申请（最多3次）</td></tr>
     <tr><td>approver_name / reject_reason</td><td>审批管理员 / 拒绝原因</td></tr>
   </table>
 </div>
@@ -676,64 +716,37 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
   <h3 class="sub-title">7.1 e签宝侧接口（后端调用）</h3>
   <table>
     <tr><th>接口</th><th>方法+URL</th><th>必要性</th><th>调用时机</th></tr>
-    <tr>
-      <td><strong>接口0：获取AccessToken</strong></td>
-      <td>POST /v3/oauth2/access_token</td>
-      <td>✅ 必需</td>
-      <td>调e签宝任何接口前。Redis缓存，过期前5分钟刷新</td>
-    </tr>
-    <tr>
-      <td><strong>接口1：获取认证&amp;授权页面链接</strong></td>
-      <td>POST /v3/org-auth/create</td>
-      <td>✅ 必需</td>
-      <td>用户提交表单后，获取 authUrl 跳转e签宝H5。<strong>场景一传完整参数；场景二仅传企业标识</strong></td>
-    </tr>
-    <tr>
-      <td><strong>接口2：查询机构认证信息</strong></td>
-      <td>GET /v3/org-auth/{authFlowId}</td>
-      <td>✅ 必需</td>
-      <td>e签宝回调后，同步企业信息到商城数据库</td>
-    </tr>
-    <tr>
-      <td>接口3：查询机构授权信息</td>
-      <td>GET /v3/org-authorize/{flowId}</td>
-      <td>⚠️ 兜底</td>
-      <td>回调丢失时定时轮询补偿</td>
-    </tr>
+    <tr><td>获取AccessToken</td><td>POST /v3/oauth2/access_token</td><td>✅ 必需</td><td>调e签宝任何接口前。Redis缓存</td></tr>
+    <tr><td>获取认证&amp;授权页面链接（接口1）</td><td>POST /v3/org-auth/create</td><td>✅ 必需</td><td>用户提交表单后，获取 authUrl 跳转e签宝H5</td></tr>
+    <tr><td>查询机构认证信息（接口2）</td><td>GET /v3/org-auth/{authFlowId}</td><td>✅ 必需</td><td>e签宝回调后，同步企业信息</td></tr>
+    <tr><td>查询机构授权信息</td><td>GET /v3/org-authorize/{flowId}</td><td>⚠️ 兜底</td><td>回调丢失时定时轮询补偿</td></tr>
   </table>
 
-  <h3 class="sub-title">7.2 回调处理流程（按序执行）</h3>
+  <h3 class="sub-title">7.2 回调处理流程</h3>
   <table>
     <tr><th>步骤</th><th>操作</th><th>失败处理</th></tr>
     <tr><td>1</td><td>HMAC-SHA256 验签</td><td>失败返回 HTTP 400</td></tr>
     <tr><td>2</td><td>获取分布式锁（lock:callback:{authFlowId}）</td><td>获取失败返回 429</td></tr>
     <tr><td>3</td><td>幂等检查（同一 authFlowId 只处理一次）</td><td>已处理返回 200</td></tr>
-    <tr><td>4</td><td>调接口2查询并同步企业信息</td><td>失败记录日志，定时补偿（最多3次，间隔5分钟）</td></tr>
+    <tr><td>4</td><td>调接口2查询并同步企业信息</td><td>失败记录日志，定时补偿</td></tr>
     <tr><td>5</td><td>更新 company_auth 状态</td><td>—</td></tr>
     <tr><td>6</td><td>删除草稿（如有）；返回 200</td><td>—</td></tr>
   </table>
-  <table>
-    <tr><th>回调状态</th><th>商城状态更新</th></tr>
-    <tr><td>认证成功 + 授权通过</td><td>→ AUTHZ_APPROVED</td></tr>
-    <tr><td>认证成功 + 授权待审批</td><td>→ AUTHZ_PENDING</td></tr>
-    <tr><td>认证成功 + 授权拒绝</td><td>→ AUTHZ_REJECTED</td></tr>
-    <tr><td>认证失败</td><td>→ REJECTED（瞬态）→ DRAFT（保留已填数据）</td></tr>
-  </table>
 
   <h3 class="sub-title">7.3 商城侧接口（前端调用）</h3>
-  <p>所有接口 Header 需携带 <code>Authorization: Bearer {token}</code>，后端从Token解析 user_id，前端无需显式传。</p>
+  <p>所有接口 Header 需携带 <code>Authorization: Bearer {token}</code></p>
   <table>
     <tr><th>接口路径</th><th>方法</th><th>说明</th></tr>
-    <tr><td>/api/company/search</td><td>GET</td><td>企查查企业模糊搜索（企查查异常时降级为手动输入）</td></tr>
+    <tr><td>/api/company/search</td><td>GET</td><td>企查查企业模糊搜索</td></tr>
     <tr><td>/api/company/auth/submit</td><td>POST</td><td>提交认证，后端调e签宝接口1，返回 authUrl</td></tr>
     <tr><td>/api/company/auth/status</td><td>GET</td><td>查询认证状态</td></tr>
     <tr><td>/api/company/auth/callback</td><td>POST</td><td>e签宝统一回调（仅e签宝调用）</td></tr>
     <tr><td>/api/company/auth/info</td><td>GET</td><td>获取认证详情</td></tr>
-    <tr><td>/api/company/auth/draft</td><td>GET / POST / DELETE</td><td>获取/保存/删除草稿（DELETE 为物理删除）</td></tr>
-    <tr><td>/api/company/auth/draft/check</td><td>GET</td><td>检查是否有草稿，返回 {hasDraft, draftInfo}</td></tr>
-    <tr><td>/api/company/authz/apply</td><td>POST</td><td>提交授权申请（有待处理申请时不可重复提交）</td></tr>
+    <tr><td>/api/company/auth/draft</td><td>GET / POST / DELETE</td><td>获取/保存/删除草稿</td></tr>
+    <tr><td>/api/company/auth/draft/check</td><td>GET</td><td>检查是否有草稿</td></tr>
+    <tr><td>/api/company/authz/apply</td><td>POST</td><td>提交授权申请</td></tr>
     <tr><td>/api/company/authz/status</td><td>GET</td><td>查询授权申请状态</td></tr>
-    <tr><td>/api/company/authz/reapply</td><td>POST</td><td>重新申请授权，body: {applyReason}（最多3次，超限返回400）</td></tr>
+    <tr><td>/api/company/authz/reapply</td><td>POST</td><td>重新申请授权（最多3次）</td></tr>
   </table>
 </div>
 
@@ -746,42 +759,35 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
     <tr><th>验收项</th><th>通过标准</th></tr>
     <tr><td>企查查搜索</td><td>输入≥2字，2秒内返回结果，选中后4字段自动填充</td></tr>
     <tr><td>页面3.5</td><td>纯前端过渡动画，不调任何后端接口</td></tr>
-    <tr><td>表单必填验证</td><td>法人身份证/经办人三项/协议均必填；未勾选协议时提交被拦截</td></tr>
+    <tr><td>表单必填验证</td><td>法人身份证/经办人三项/协议均必填</td></tr>
     <tr><td>接收订单电话</td><td>无短信验证码流程，直接填写提交</td></tr>
     <tr><td>e签宝跳转</td><td>提交后正确调接口1，获取authUrl并跳转e签宝H5</td></tr>
-    <tr><td>回调处理</td><td>回调正确验签→加锁→幂等检查→更新状态→调接口2同步企业信息</td></tr>
-    <tr><td>认证失败回线</td><td>展示8B页面 → 点【重新认证】跳页面4并回填，状态变DRAFT，不经草稿恢复页</td></tr>
+    <tr><td>回调处理</td><td>回调正确验签→加锁→幂等检查→更新状态→同步企业信息</td></tr>
+    <tr><td>认证失败回线</td><td>展示8B页面 → 点【重新认证】跳页面4并回填</td></tr>
     <tr><td>授权拒绝</td><td>页面7B只有【重新申请】；点击弹修改理由弹窗；第4次提交返回400</td></tr>
-    <tr><td>草稿功能</td><td>永久保存；入口页有继续认证提示；重新填写物理删除草稿；认证成功后自动删除</td></tr>
-    <tr><td>统一表单架构</td><td>商城侧不做场景判断；e签宝H5内自动适配场景；场景二接口1不传transactorInfo和orgAuthPageConfig</td></tr>
-    <tr><td>异常降级</td><td>e签宝宕机时展示"稍后重试"；企查查宕机时改为手动输入模式</td></tr>
+    <tr><td>草稿功能</td><td>永久保存；重新填写物理删除草稿；认证成功后自动删除</td></tr>
+    <tr><td>统一表单架构</td><td>商城侧不做场景判断；场景二接口1不传transactorInfo</td></tr>
   </table>
 
   <h3 class="sub-title">8.2 小程序端额外验收</h3>
   <table>
     <tr><th>验收项</th><th>通过标准</th></tr>
-    <tr><td>clientType</td><td>小程序端请求Header含 X-Platform: miniapp，后端传e签宝的clientType为MINI_APP</td></tr>
-    <tr><td>认证完成回跳</td><td>通过中间H5页（miniapp-callback.html）正确跳回小程序结果页，不停留在WebView</td></tr>
-    <tr><td>字段标签</td><td>「税号」对应 credit_code，数据与PC端完全一致</td></tr>
-    <tr><td>步骤指示器</td><td>全程3步，不出现4步版本</td></tr>
-    <tr><td>表单一致性</td><td>页面74+75合并字段集合与PC端页面4字段完全一致</td></tr>
-    <tr><td>WebView加载</td><td>正确加载authUrl，无白屏/跨域报错</td></tr>
-    <tr><td>页面层级</td><td>全流程不超过10层页面栈；过渡页使用wx.redirectTo</td></tr>
-    <tr><td>草稿跨端</td><td>PC端草稿在小程序端可正确读取（以后端接口数据为准）</td></tr>
+    <tr><td>clientType</td><td>小程序端传 MINI_APP</td></tr>
+    <tr><td>认证完成回跳</td><td>通过中间H5页正确跳回小程序</td></tr>
+    <tr><td>字段标签</td><td>「税号」对应 credit_code</td></tr>
+    <tr><td>步骤指示器</td><td>全程3步</td></tr>
   </table>
 </div>
 
 <hr>
 <p style="color:var(--muted);font-size:12px;text-align:center;padding:14px 0;">
-  PRD v7.1 开发精简版 · 2026-04-28 · 产品部 <br>
-  关联原型：原型_企业认证_PC端_v6.8.html（PC/H5端）&nbsp;&nbsp;原型_企业认证_小程序端_v6.8.html（小程序端）
+  PRD v7.2 · 2026-04-28 · 产品部
 </p>
 
 </div>
 
 <!-- ====== 侧边栏导航 JS ====== -->
 <script>
-// 侧边栏展开/折叠
 function toggleTocSidebar() {
   var sb = document.getElementById('tocSidebar');
   var btn = document.getElementById('tocToggle');
@@ -790,35 +796,29 @@ function toggleTocSidebar() {
   btn.textContent = sb.classList.contains('collapsed') ? '▶' : '◀';
 }
 
-// 目录节点展开/折叠
 function tocToggle(id) {
   var node = document.querySelector('.toc-node[data-target="'+id+'"]');
   if (node) node.classList.toggle('open');
 }
 
-// 目录主节点点击跳转
 function tocJump(id) {
   var el = document.getElementById(id);
   if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-// 子节点点击跳转
 function tocJumpSub(e, id) {
   e.preventDefault();
   var el = document.getElementById(id);
   if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-  // 同时展开父节点
   var parent = document.querySelector('.toc-node[data-target="s3"]');
   if (parent && !parent.classList.contains('open')) parent.classList.add('open');
 }
 
-// 返回顶部
 function scrollToTop() {
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// 滚动高亮当前章节
-var scrollSections = ['s1','s2','s3','s3-1','s3-2','s3-3','s3-4','s3-5','s4','s5','s6','s7','s8'];
+var scrollSections = ['s0','s00','s1','s2','s3','s3-1','s3-2','s3-3','s3-4','s3-5','s4','s4-1','s4-2','s4-3','s4-4','s5','s6','s7','s8'];
 var scrollRafId = null;
 function onScroll() {
   if (scrollRafId) return;
@@ -833,25 +833,20 @@ function onScroll() {
         break;
       }
     }
-    // 清除所有高亮
     document.querySelectorAll('.toc-label.active').forEach(function(el){ el.classList.remove('active'); });
     document.querySelectorAll('.toc-sub a.active').forEach(function(el){ el.classList.remove('active'); });
     if (activeId) {
-      // 主节点高亮
-      var mainId = activeId.split('-')[0]; // s3-2 -> s3
+      var mainId = activeId.split('-')[0];
       var mainNode = document.querySelector('.toc-node[data-target="'+mainId+'"] > .toc-label');
       if (mainNode) mainNode.classList.add('active');
-      // 子节点高亮
       var subLink = document.querySelector('.toc-sub a[href="#'+activeId+'"]');
       if (subLink) subLink.classList.add('active');
-      // 展开包含子节点的父级
       var parentNode = document.querySelector('.toc-node[data-target="'+mainId+'"]');
       if (parentNode && !parentNode.classList.contains('open')) parentNode.classList.add('open');
     }
   });
 }
 window.addEventListener('scroll', onScroll, {passive:true});
-// 初始触发
 onScroll();
 </script>
 </body>

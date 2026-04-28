@@ -781,7 +781,6 @@
             
             <!-- ==================== 页面1：认证入口页（未认证状态，UNVERIFIED） ==================== -->
             
-<div class="dev-note">页面1 · 认证入口 ｜ 路径：/company/auth ｜ 无草稿首次进入时展示权益引导+【去认证】按钮</div>
             <div class="form-card proto-page" id="unverifiedCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
@@ -823,7 +822,6 @@
             
             <!-- ==================== 页面2：企业信息填写（轻量表单） ==================== -->
             
-<div class="dev-note">页面2 · 企业信息 ｜ 路径：/company/auth/form ｜ 4字段轻量表单（企查查自动填充）→ 下一步到页面3.5</div>
             <div class="form-card proto-page" id="page2Card" style="display:none">
                 <div class="steps" style="display:flex; margin-bottom: 24px;">
                     <div class="step active"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
@@ -894,7 +892,6 @@
             
             <!-- ==================== 页面3.5：过渡加载 ==================== -->
             
-<div class="dev-note">页面3.5 · 过渡加载 ｜ 路径：/company/auth/checking ｜ 纯前端过渡1-2秒，不调API，自动跳转页面4</div>
             <div class="form-card proto-page" id="checkingCard" style="display:none">
                 <div class="steps" style="display:flex; margin-bottom: 24px;">
                     <div class="step completed"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
@@ -989,7 +986,6 @@
             </div>
             
             
-<div class="dev-note">页面4 · 完整认证表单 ｜ 路径：/company/auth/first-time ｜ 法人+经办人信息，企查查数据回填只读，支持保存草稿</div>
             <!-- 表单区域 -->
             <div class="form-card" id="formCard" style="display:none;">
                 <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 4px; padding: 10px 16px; margin-bottom: 20px; font-size: 13px; color: #d46b08;">
@@ -1179,7 +1175,6 @@
             
             <!-- 授权申请中展示（默认隐藏） -->
             
-<div class="dev-note">等待授权 ｜ 路径：/company/auth/authz-pending ｜ 场景二专用，等管理员审批，24h有效，可手动刷新</div>
             <div class="form-card" id="authzPendingCard" style="display:none">
                 <div style="text-align: center; padding-top: 32px; padding-bottom: 16px;">
                     <div style="font-size: 48px; margin-bottom: 12px;">⏳</div>
@@ -1858,7 +1853,6 @@
             <!-- ==================== 缺失页面补充 ==================== -->
             
             
-<div class="dev-note">草稿恢复 ｜ 有未提交草稿时自动弹出，草稿永久保存，可继续填写或放弃</div>
             <div class="form-card proto-page" id="draftCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
@@ -1886,7 +1880,6 @@
             </div>
             
             
-<div class="dev-note">审核中 ｜ 提交认证后自动进入，轮询5秒/次，实际审核5-10分钟</div>
             <div class="form-card proto-page" id="verifyingCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
@@ -1923,7 +1916,6 @@
             </div>
             
             
-<div class="dev-note">认证失败 ｜ 显示失败原因，【重新认证】回到页面4（数据回填）</div>
             <div class="form-card proto-page" id="rejectedCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
@@ -1955,7 +1947,6 @@
             </div>
             
             
-<div class="dev-note">e签宝跳转过渡 ｜ 场景一：人脸识别+营业执照OCR；场景二：仅授权审批（无人脸）</div>
             <div class="form-card proto-page" id="esignRedirectCard" style="display:none">
                 <!-- 场景说明标注 -->
                 <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #d46b08;">
@@ -2015,7 +2006,6 @@
             </div>
             
             
-<div class="dev-note">授权拒绝 ｜ 路径：/company/auth/authz-rejected ｜ 弹出修改理由弹窗后重新申请，最多3次</div>
             <div class="form-card proto-page" id="authzRejectedCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
