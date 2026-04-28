@@ -566,47 +566,23 @@
     
 /* ========== v6.9：注释/开发提示专用样式 ========== */
 .dev-note {
-    background: linear-gradient(135deg, #fffbe6, #fff1b8);
-    border-left: 4px solid #faad14;
-    border-radius: 0 6px 6px 0;
-    padding: 10px 16px;
-    margin: 12px 0;
-    font-size: 12px;
-    color: #8c6d00;
-    line-height: 1.7;
+    background: #f0f5ff;
+    border-left: 3px solid #1890ff;
+    border-radius: 0 4px 4px 0;
+    padding: 8px 14px;
+    margin: 8px 0;
+    font-size: 11.5px;
+    color: #096dd9;
+    line-height: 1.6;
 }
 .dev-note::before {
-    content: "💻 开发备注";
-    font-weight: 700;
-    display: block;
-    margin-bottom: 4px;
-    font-size: 11.5px;
-    color: #d48806;
+    content: "ℹ️ ";
+    font-weight: 600;
 }
 
 /* 注释代码块样式 */
-.proto-comment {
-    background: #f6f8fa;
-    border: 1px solid #d0d7de;
-    border-radius: 6px;
-    padding: 12px 16px;
-    margin: 10px 0;
-    font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
-    font-size: 11.5px;
-    color: #57606a;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    overflow-x: auto;
-}
-.proto-comment::before {
-    content: "📝 原型注释";
-    display: block;
-    font-weight: 700;
-    font-size: 11px;
-    color: #8b949e;
-    margin-bottom: 6px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
+
+
 
 </style>
 </head>
@@ -648,200 +624,101 @@
 
 <!-- ====== v6.8 新增：可折叠交互式导航面板 ====== -->
 <!-- ====== v6.9：固定左侧页面导航侧边栏（含业务流程速览） ====== -->
-<div id="nav-sidebar" style="position:fixed;top:0;left:0;width:300px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:9998;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;box-shadow:2px 0 12px rgba(0,0,0,.08);">
+<div id="nav-sidebar" style="position:fixed;top:0;left:0;width:260px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:9998;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;box-shadow:2px 0 12px rgba(0,0,0,.08);">
 
     <!-- 侧栏头部 -->
     <div style="position:sticky;top:0;background:linear-gradient(135deg,#1890ff,#096dd9);padding:14px 16px;z-index:10;display:flex;align-items:center;gap:10px;">
         <span style="font-size:20px;">🗺️</span>
         <div style="flex:1;">
-            <div style="font-weight:700;font-size:15px;color:#fff;">企业认证 · 页面导航</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;">点击跳转页面 · 当前页自动高亮</div>
+            <div style="font-weight:700;font-size:14px;color:#fff;">页面目录</div>
         </div>
         <button onclick="toggleSidebar()" style="background:none;border:none;font-size:16px;cursor:pointer;color:rgba(255,255,255,.85);line-height:1;padding:4px;border-radius:4px;" title="收起侧栏" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='none'">◀</button>
-    </div>
-
-    <!-- 图例 -->
-    <div style="padding:8px 14px;background:#f0f5ff;border-bottom:1px solid #dce8ff;display:flex;flex-wrap:wrap;gap:8px;font-size:10.5px;flex-shrink:0;">
-        <span><b style="color:#1890ff;">●</b> 页面</span>
-        <span><b style="color:#722ed1;">◆</b> 弹窗</span>
-        <span><b style="color:#08979c;">◉</b> 外部H5</span>
-        <span><b style="color:#fa8c16;">◇</b> 判断</span>
-        <span style="color:#52c41a;"><b>✅</b> 成功</span>
-        <span style="color:#ff4d4f;"><b>❌</b> 失败</span>
-    </div>
-
-    <!-- 📌 业务流程速览——让开发一眼看懂大致逻辑 -->
-    <div style="padding:12px 14px;background:linear-gradient(180deg,#fafafa,#f5f5f5);border-bottom:1px solid #eee;flex-shrink:0;">
-        <div style="font-size:11.5px;color:#888;margin-bottom:8px;font-weight:700;">📌 业务流程速览</div>
-        <div style="font-size:11.5px;color:#444;line-height:2;">
-            <div style="margin-bottom:2px;"><span style="display:inline-block;width:18px;text-align:center;background:#1890ff;color:#fff;border-radius:50%;font-size:10px;line-height:18px;margin-right:4px;">1</span><b>入口判断</b> → 有草稿？恢复/放弃</div>
-            <div style="margin-bottom:2px;"><span style="display:inline-block;width:18px;text-align:center;background:#1890ff;color:#fff;border-radius:50%;font-size:10px;line-height:18px;margin-right:4px;">2</span><b>表单填写</b> → 企业信息→完整表单</div>
-            <div style="margin-bottom:2px;"><span style="display:inline-block;width:18px;text-align:center;background:#08979c;color:#fff;border-radius:50%;font-size:10px;line-height:18px;margin-right:4px;">3</span><b>e签宝认证</b> → 跳转外部H5实名</div>
-            <div style="margin-bottom:2px;"><span style="display:inline-block;width:18px;text-align:center;background:#52c41a;color:#fff;border-radius:50%;font-size:10px;line-height:18px;margin-right:4px;">✓</span><b style="color:#52c41a;">成功</b> → 完成 / 授权审批</div>
-            <div><span style="display:inline-block;width:18px;text-align:center;background:#ff4d4f;color:#fff;border-radius:50%;font-size:10px;line-height:18px;margin-right:4px;">✗</span><b style="color:#ff4d4f;">失败</b> → 重试或返回修改</div>
-        </div>
     </div>
 
     <!-- 树形导航（从v6.8保留） -->
 <div class="nav-tree">
             <!-- 阶段0：入口判断 -->
             <div class="nav-group open" id="ng-entry">
-                <div class="nav-group-title" onclick="toggleGroup('ng-entry')"><span class="nav-group-arrow">▶</span> 🚀 阶段0：入口与草稿判断</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-entry')"><span class="nav-group-arrow">▶</span> 🚀 阶段0 · 入口与草稿</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('flowOverview')">
                         <div class="nav-leaf-icon">📊</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">流程总览图</div>
-                            <div class="nav-leaf-desc">完整业务流程 SVG 图，含所有页面、弹窗、状态流转</div>
-                            <span class="nav-leaf-trigger page">📄 总览页</span>
+                        <div class="nav-leaf-body">流程总览图
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- 草稿判断决策卡片 -->
-            <div class="decision-card">
-                <div class="decision-card-title">🔀 决策 A：是否有历史草稿？</div>
-                <div class="decision-card-body">
-                    <b>有 →</b> 草稿恢复页 → 继续 / 放弃<br/>
-                    <b>无 →</b> 直接进入页面1（认证入口）
                 </div>
             </div>
 
             <div class="nav-group open" id="ng-start">
-                <div class="nav-group-title" onclick="toggleGroup('ng-start')"><span class="nav-group-arrow">▶</span> 📋 阶段1：表单填写（步骤 1~2）</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-start')"><span class="nav-group-arrow">▶</span> 📋 阶段1 · 表单填写</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('unverified')">
                         <div class="nav-leaf-icon">①</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">页面1：认证入口（权益引导页）</div>
-                            <div class="nav-leaf-desc">展示账期/专属价/合同权益说明 + 【去认证】按钮</div>
-                            <span class="nav-leaf-trigger page">📍 入口 | 触发：无草稿首次进入 / 无草稿放弃后重进</span>
+                        <div class="nav-leaf-body">页面1：认证入口（权益引导页）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('page2')">
                         <div class="nav-leaf-icon">②</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">页面2：填写企业信息（轻量表单）</div>
-                            <div class="nav-leaf-desc">企查查搜索自动填充：企业名称、统一社会信用代码、法人、地址（4字段）</div>
-                            <span class="nav-leaf-trigger page">📍 表单 | 触发：【去认证】或【继续填写】点击后</span>
+                        <div class="nav-leaf-body">页面2：填写企业信息（轻量表单）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('checking')">
                         <div class="nav-leaf-icon">②.₅</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">页面3.5：过渡加载态</div>
-                            <div class="nav-leaf-desc">纯前端过渡（1-2秒），不调后端API。<b style="color:#722ed1;">统一表单架构核心：</b>商城侧不做场景分流</div>
-                            <span class="nav-leaf-trigger decision">◇ 过渡态 | 触发：页面2【下一步】自动跳转</span>
+                        <div class="nav-leaf-body">页面3.5：过渡加载态
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- 统一表单架构 核心决策 -->
-            <div class="decision-card">
-                <div class="decision-card-title">💎 核心架构：商城统一表单</div>
-                <div class="decision-card-body">
-                    页面3.5后<b>统一进入完整表单（页面4）</b>，不区分场景一/二<br/>
-                    <b>场景一/二判断由e签宝H5内部完成</b>，商城侧无需实现<br/>
-                    <br/>⚠️ <b>不要在商城侧写 isExisted 检测！不要做 if/else 分流！</b><br/>
-                    商城只需：填表单 → 调接口1 → 跳e签宝H5 → 等回调
                 </div>
             </div>
 
             <div class="nav-group open" id="ng-form">
-                <div class="nav-group-title" onclick="toggleGroup('ng-form')"><span class="nav-group-arrow">▶</span> 📄 阶段2：完整表单 & 提交认证（步骤 3~4）</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-form')"><span class="nav-group-arrow">▶</span> 📄 场景一 · 提交认证</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('form')">
                         <div class="nav-leaf-icon">④</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">页面4：完整认证表单</div>
-                            <div class="nav-leaf-desc">法人信息 + 经办人信息 + 协议勾选。企查查预填数据回显。支持保存草稿。</div>
-                            <span class="nav-leaf-trigger page">📍 主表单 | 上一步：页面3.5 自动跳转</span>
+                        <div class="nav-leaf-body">页面4：完整认证表单
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignModal')">
                         <div class="nav-leaf-icon">◆</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">弹窗：确认跳转 e签宝 认证</div>
-                            <div class="nav-leaf-desc">协议勾选 + 【立即认证】按钮。点击后打开 e签宝 WebView。</div>
-                            <span class="nav-leaf-trigger modal">◆ 弹窗 | 触发：【提交认证】点击后弹出</span>
+                        <div class="nav-leaf-body">弹窗：确认跳转 e签宝 认证
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignRedirect')">
                         <div class="nav-leaf-icon">◉</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">e签宝 H5 页（外部系统）— 场景一</div>
-                            <div class="nav-leaf-desc">首次认证：人脸识别 + 营业执照上传。H5 内部自动判断走哪条路。</div>
-                            <span class="nav-leaf-trigger external">◉ 外部系统 | 场景一：企业首次在 e签宝 认证</span>
+                        <div class="nav-leaf-body">e签宝 H5 页（外部系统）— 场景一
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzModal')">
                         <div class="nav-leaf-icon">◆</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">弹窗：授权申请（场景二专用）</div>
-                            <div class="nav-leaf-desc">填写申请人/补充信息 + 协议勾选。<b>由 e签宝 H5 内部触发</b>，非商城侧。</div>
-                            <span class="nav-leaf-trigger modal">◆ 弹窗 | 触发：e签宝H5检测到企业已实名时内部弹出</span>
+                        <div class="nav-leaf-body">弹窗：授权申请（场景二专用）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignRedirectAuthz')">
                         <div class="nav-leaf-icon">◉</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">e签宝 授权页（外部系统）— 场景二</div>
-                            <div class="nav-leaf-desc">管理员审批授权申请。企业在 e签宝 已有实名认证。</div>
-                            <span class="nav-leaf-trigger external">◉ 外部系统 | 场景二：企业已在 e签宝 实名认证</span>
+                        <div class="nav-leaf-body">e签宝 授权页（外部系统）— 场景二
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- e签宝结果判断 -->
-            <div class="decision-card">
-                <div class="decision-card-title">🔀 决策 B：e签宝认证结果</div>
-                <div class="decision-card-body">
-                    <b>场景一成功 →</b> 审核中 → 认证+授权通过 ✅<br/>
-                    <b>场景二成功 →</b> 等待管理员授权 → 见决策C<br/>
-                    <b>认证失败 →</b> 认证失败 ❌ → 【重新认证】回填表单
                 </div>
             </div>
 
             <div class="nav-group open" id="ng-result">
-                <div class="nav-group-title" onclick="toggleGroup('ng-result')"><span class="nav-group-arrow">▶</span> ✅❌ 阶段3：结果状态页</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-result')"><span class="nav-group-arrow">▶</span> ✅❌ 场景一 · 结果状态</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('verifying')">
                         <div class="nav-leaf-icon">⏳</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">审核中（VERIFYING）</div>
-                            <div class="nav-leaf-desc">轮询检查认证状态，每5秒一次。<b>实际审核时间：5-10分钟</b></div>
-                            <span class="nav-leaf-trigger decision">⏳ 中间态 | 触发：提交认证后自动进入</span>
+                        <div class="nav-leaf-body">审核中（VERIFYING）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('verified')">
                         <div class="nav-leaf-icon">✅</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">认证 + 授权 通过（VERIFIED）</div>
-                            <div class="nav-leaf-desc">最终成功页。【去签署合同】按钮跳转合同签署流程。</div>
-                            <span class="nav-leaf-trigger success">✅ 成功终态 | 条件：回调 status=success 且无待授权</span>
+                        <div class="nav-leaf-body">认证 + 授权 通过（VERIFIED）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('rejected')">
                         <div class="nav-leaf-icon">❌</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">认证失败（REJECTED）</div>
-                            <div class="nav-leaf-desc">展示失败原因 + 处理建议。【重新认证】回到页面4（数据已回填）</div>
-                            <span class="nav-leaf-trigger error">❌ 失败态 | 条件：回调 status=failed 或超时</span>
+                        <div class="nav-leaf-body">认证失败（REJECTED）
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- 授权分支决策 -->
-            <div class="decision-card">
-                <div class="decision-card-title">🔀 决策 C：场景二 — 管理员授权结果</div>
-                <div class="decision-card-body">
-                    <b>同意 →</b> 授权通过 ✅<br/>
-                    <b>拒绝 →</b> 授权拒绝 ❌ → 【重新申请】（最多3次，24h有效）<br/>
-                    <b>超时24h →</b> 授权超时 ❌ → 重新发起
                 </div>
             </div>
 
@@ -850,34 +727,22 @@
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('authzPending')">
                         <div class="nav-leaf-icon">⏳</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">等待授权（AUTHZ_PENDING）</div>
-                            <div class="nav-leaf-desc">通知管理员审批中。【刷新状态】手动刷新。授权有效期24小时。</div>
-                            <span class="nav-leaf-trigger decision">⏳ 等待态 | 有效期24h，超时自动失效</span>
+                        <div class="nav-leaf-body">等待授权（AUTHZ_PENDING）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzApproved')">
                         <div class="nav-leaf-icon">✅</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">授权通过（AUTHZ_APPROVED）</div>
-                            <div class="nav-leaf-desc">管理员审批通过。【去签署合同】跳转签署流程。</div>
-                            <span class="nav-leaf-trigger success">✅ 成功 | 条件：管理员同意授权</span>
+                        <div class="nav-leaf-body">授权通过（AUTHZ_APPROVED）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzRejected')">
                         <div class="nav-leaf-icon">❌</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">授权拒绝（AUTHZ_REJECTED）</div>
-                            <div class="nav-leaf-desc">拒绝原因 + 处理建议。只有【重新申请】，无取消/撤销按钮。最多3次。</div>
-                            <span class="nav-leaf-trigger error">❌ 拒绝 | 弹出"修改申请理由"弹窗后重新申请</span>
+                        <div class="nav-leaf-body">授权拒绝（AUTHZ_REJECTED）
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzTimeout')">
                         <div class="nav-leaf-icon">⏰</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">授权超时（AUTHZ_TIMEOUT）</div>
-                            <div class="nav-leaf-desc">24小时内管理员未操作。需用户重新发起授权申请。</div>
-                            <span class="nav-leaf-trigger error">❌ 超时 | 24h无响应，自动失效</span>
+                        <div class="nav-leaf-body">授权超时（AUTHZ_TIMEOUT）
                         </div>
                     </div>
                 </div>
@@ -889,26 +754,9 @@
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('draft')">
                         <div class="nav-leaf-icon">💾</div>
-                        <div class="nav-leaf-body">
-                            <div class="nav-leaf-name">草稿恢复页</div>
-                            <div class="nav-leaf-desc">展示已填写的草稿数据（永久有效）。【继续填写】→ 页面2 / 【放弃】→ 返回首页</div>
-                            <span class="nav-leaf-trigger decision">◇ 分支 | 条件：决策A = Y（有历史草稿）</span>
+                        <div class="nav-leaf-body">草稿恢复页
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- 开发速查 -->
-            <div class="decision-card" style="border-color:#adc6ff;background:#f0f5ff;">
-                <div class="decision-card-title" style="color:#1890ff;">⚡ 开发速查</div>
-                <div class="decision-card-body" style="color:#444;">
-                    1️⃣ <b>统一表单</b>：商城不区分场景，统一完整表单<br/>
-                    2️⃣ <b>clientType</b>：PC=H5，小程序=MINI_APP<br/>
-                    3️⃣ <b>页面3.5</b>：纯前端过渡1-2s，不调接口<br/>
-                    4️⃣ <b>回调</b>：POST → 验签 → 加锁 → 幂等<br/>
-                    5️⃣ <b>草稿</b>：永久保存，不过期<br/>
-                    6️⃣ <b>重新认证</b>：回页面4回填（不经草稿页）<br/>
-                    7️⃣ <b>重新申请</b>：仅改理由，最多3次，24h有效
                 </div>
             </div>
         </div>
@@ -922,60 +770,8 @@
 <!-- 展开按钮（侧栏收起时显示） -->
 <button id="sidebar-expand" onclick="toggleSidebar()" style="display:none;position:fixed;top:10px;left:8px;z-index:9999;background:#1890ff;color:#fff;border:none;width:30px;height:30px;border-radius:0 6px 6px 0;cursor:pointer;font-size:14px;box-shadow:2px 0 8px rgba(0,0,0,.2);line-height:1;">▶</button>
 
-<style>
-    .proto-btn { background: #1890ff; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; white-space: nowrap; }
-    .proto-btn:hover { background: #40a9ff; }
-    .proto-btn.active { background: #52c41a; }
-    .proto-btn.modal-btn { background: #722ed1; }
-    .proto-btn.modal-btn:hover { background: #9254de; }
 
-/* ========== v6.9：注释/开发提示专用样式 ========== */
-.dev-note {
-    background: linear-gradient(135deg, #fffbe6, #fff1b8);
-    border-left: 4px solid #faad14;
-    border-radius: 0 6px 6px 0;
-    padding: 10px 16px;
-    margin: 12px 0;
-    font-size: 12px;
-    color: #8c6d00;
-    line-height: 1.7;
-}
-.dev-note::before {
-    content: "💻 开发备注";
-    font-weight: 700;
-    display: block;
-    margin-bottom: 4px;
-    font-size: 11.5px;
-    color: #d48806;
-}
-
-/* 注释代码块样式 */
-.proto-comment {
-    background: #f6f8fa;
-    border: 1px solid #d0d7de;
-    border-radius: 6px;
-    padding: 12px 16px;
-    margin: 10px 0;
-    font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
-    font-size: 11.5px;
-    color: #57606a;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    overflow-x: auto;
-}
-.proto-comment::before {
-    content: "📝 原型注释";
-    display: block;
-    font-weight: 700;
-    font-size: 11px;
-    color: #8b949e;
-    margin-bottom: 6px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-</style>
-
-<body style="padding-top: 44px; padding-left: 300px; transition: padding-left .25s ease;">
+<body style="padding-top: 44px; padding-left: 260px; transition: padding-left .25s ease;">
     <div class="container">
         <!-- 左侧导航 -->
         <main class="main-content">
@@ -985,7 +781,7 @@
             
             <!-- ==================== 页面1：认证入口页（未认证状态，UNVERIFIED） ==================== -->
             
-<div class="dev-note">认证入口页（UNVERIFIED）<br>【PRD对应】3.3 页面1（路径：/company/auth）<br>【触发条件】用户首次进入企业认证，无历史草稿，无认证记录<br>【v5.4修复】原型v5.3中「未认证」状态直接展示完整表单，与PRD不符。<br>正确逻辑：页面1是轻量引导页（权益说明+【去认证】按钮），用户点击后<br>才跳转到页面2（企业信息填写），不直接展示表单。</div>
+<div class="dev-note">页面1 · 认证入口 ｜ 路径：/company/auth ｜ 无草稿首次进入时展示权益引导+【去认证】按钮</div>
             <div class="form-card proto-page" id="unverifiedCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
@@ -1027,7 +823,7 @@
             
             <!-- ==================== 页面2：企业信息填写（轻量表单） ==================== -->
             
-<div class="dev-note">企业信息填写（页面2）<br>【PRD对应】3.3 页面2（路径：/company/auth/form）<br>【步骤指示器】步骤1/4 active<br>【v5.4修复】页面2只包含企业基本信息（4个字段）+【下一步】按钮，<br>不包含法人身份证号/经办人信息（这些在页面4）。<br>点击【下一步】后跳转页面3.5（过渡加载），而非直接进入完整表单。</div>
+<div class="dev-note">页面2 · 企业信息 ｜ 路径：/company/auth/form ｜ 4字段轻量表单（企查查自动填充）→ 下一步到页面3.5</div>
             <div class="form-card proto-page" id="page2Card" style="display:none">
                 <div class="steps" style="display:flex; margin-bottom: 24px;">
                     <div class="step active"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
@@ -1098,7 +894,7 @@
             
             <!-- ==================== 页面3.5：过渡加载 ==================== -->
             
-<div class="dev-note">过渡加载（3.5）<br>【PRD对应】3.3 页面3.5（路径：/company/auth/checking）<br>【步骤指示器】步骤2/4 active<br>【v6.6修复】页面2点击【下一步】后，此页面作为纯前端过渡状态显示约1-2秒，<br>用于"准备认证材料"的UX体验优化（统一表单架构）。<br>不再调用后端API判断企业认证状态——这是e签宝H5的职责。<br>...（更多详见PRD）</div>
+<div class="dev-note">页面3.5 · 过渡加载 ｜ 路径：/company/auth/checking ｜ 纯前端过渡1-2秒，不调API，自动跳转页面4</div>
             <div class="form-card proto-page" id="checkingCard" style="display:none">
                 <div class="steps" style="display:flex; margin-bottom: 24px;">
                     <div class="step completed"><div class="step-number">1</div><div class="step-text">填写企业信息</div></div>
@@ -1114,47 +910,23 @@
                     <style>@keyframes spin { 0%{ transform: rotate(0deg); } 100%{ transform: rotate(360deg); } }
 /* ========== v6.9：注释/开发提示专用样式 ========== */
 .dev-note {
-    background: linear-gradient(135deg, #fffbe6, #fff1b8);
-    border-left: 4px solid #faad14;
-    border-radius: 0 6px 6px 0;
-    padding: 10px 16px;
-    margin: 12px 0;
-    font-size: 12px;
-    color: #8c6d00;
-    line-height: 1.7;
+    background: #f0f5ff;
+    border-left: 3px solid #1890ff;
+    border-radius: 0 4px 4px 0;
+    padding: 8px 14px;
+    margin: 8px 0;
+    font-size: 11.5px;
+    color: #096dd9;
+    line-height: 1.6;
 }
 .dev-note::before {
-    content: "💻 开发备注";
-    font-weight: 700;
-    display: block;
-    margin-bottom: 4px;
-    font-size: 11.5px;
-    color: #d48806;
+    content: "ℹ️ ";
+    font-weight: 600;
 }
 
 /* 注释代码块样式 */
-.proto-comment {
-    background: #f6f8fa;
-    border: 1px solid #d0d7de;
-    border-radius: 6px;
-    padding: 12px 16px;
-    margin: 10px 0;
-    font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
-    font-size: 11.5px;
-    color: #57606a;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    overflow-x: auto;
-}
-.proto-comment::before {
-    content: "📝 原型注释";
-    display: block;
-    font-weight: 700;
-    font-size: 11px;
-    color: #8b949e;
-    margin-bottom: 6px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
+
+
 
 </style>
                     <h3 style="font-size: 18px; margin-bottom: 8px;">正在准备认证材料</h3>
@@ -1217,7 +989,7 @@
             </div>
             
             
-<div class="dev-note">完整认证表单（页面4，首次认证）<br>【PRD对应】3.3 页面4（路径：/company/auth/first-time）<br>【步骤指示器】步骤3/4 active（由外层steps统一控制，避免重复）<br>【v5.5修复】删除内部重复steps，统一使用外层id="steps"的步骤指示器<br>【v6.6修复】企业信息字段（名称/信用代码/地址）改为只读，从页面2自动填充<br>【v5.4说明】此表单用于场景一（首次认证），包含：<br>...（更多详见PRD）</div>
+<div class="dev-note">页面4 · 完整认证表单 ｜ 路径：/company/auth/first-time ｜ 法人+经办人信息，企查查数据回填只读，支持保存草稿</div>
             <!-- 表单区域 -->
             <div class="form-card" id="formCard" style="display:none;">
                 <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 4px; padding: 10px 16px; margin-bottom: 20px; font-size: 13px; color: #d46b08;">
@@ -1407,7 +1179,7 @@
             
             <!-- 授权申请中展示（默认隐藏） -->
             
-<div class="dev-note">授权待处理（AUTHZ_PENDING）<br>【PRD对应】3.3 页面8C（路径：/company/auth/authz-pending）<br>【v5.4修复】补充认证企业信息展示区块（名称/信用代码/法人/认证时间）；<br>删除原来的"授权说明"Tips（与PRD不符）；保留【刷新状态】按钮；<br>无撤销/取消功能。</div>
+<div class="dev-note">等待授权 ｜ 路径：/company/auth/authz-pending ｜ 场景二专用，等管理员审批，24h有效，可手动刷新</div>
             <div class="form-card" id="authzPendingCard" style="display:none">
                 <div style="text-align: center; padding-top: 32px; padding-bottom: 16px;">
                     <div style="font-size: 48px; margin-bottom: 12px;">⏳</div>
@@ -1496,7 +1268,7 @@
             <!-- ==================== 业务流程图综述页面 ==================== -->
             
             
-<div class="dev-note">业务流程图综述（FLOW_OVERVIEW）<br>【功能说明】<br>本页面用于展示企业认证完整的业务流程图，包括：<br>1. 整体流程图：从入口到完成的完整路径<br>2. 页面关系图：主页面、子页面、弹窗的层级关系<br>3. 状态流转图：各状态之间的转换条件<br>...（更多详见PRD）</div>
+
             <div class="form-card proto-page" id="flowOverviewCard" style="display:block; padding: 32px;">
                 <div class="section-title">📊 企业认证业务流程总览</div>
 
@@ -1574,11 +1346,7 @@
                         </div>
                     </div>
                     
-                    <!-- 关键交互要点 -->
-                    <div style="margin-top:14px;padding:12px 16px;background:rgba(255,255,255,.7);border-radius:6px;font-size:12px;color:#555;line-height:1.8;">
-                        <b style="color:#003a8c;">💡 开发关键点：</b>
-                        草稿永久保存 · 过渡页纯前端不调API · e签宝H5内部自适应两种场景 · 授权超时24h可重新发起
-                    </div>
+                    
                 </div>
 
                 <!-- 1. 整体流程图 -->
@@ -1588,18 +1356,7 @@
                         <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">物料商城API同步接入"e签宝"企业认证业务流程图 v6.9</span>
                     </div>
 
-                    <!-- v5.4 优化说明 -->
-                    <div style="background: #fffbe6; border: 1px solid #ffe58f; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; color: #614700;">
-                        <strong>📌 v6.7 流程图要点（统一表单架构核心变更）：</strong>
-                        <ol style="margin: 6px 0 0 18px; line-height: 1.9;">
-                            <li><strong>统一表单架构落地</strong>：页面3.5从"后端API阻塞检测"改为"纯前端过渡态(1-2s)"</li>
-                            <li><strong>移除商城侧分流</strong>：删除"企业是否已在e签宝认证"判断菱形，统一走完整表单页</li>
-                            <li><strong>e签宝H5自适应</strong>：H5内部自动检测企业认证状态，自行适配首次认证/授权两种场景</li>
-                            <li>新增「页面1权益入口 → 页面2企业信息轻量表单」两个节点（与原型对齐）</li>
-                            <li>「授权超时（7C）」分支及循环——超过24h未处理 → 超时页 → 重新授权（最多3次）</li>
-                            <li>「草稿永久保存」：有效期从7天改为永久，删除过期逻辑</li>
-                        </ol>
-                    </div>
+                    
 
                     <div style="background: #fafafa; border-radius: 8px; padding: 16px; overflow-x: auto; text-align: center;">
                         <svg id="flowchart-svg" viewBox="0 0 1100 1580" xmlns="http://www.w3.org/2000/svg"
@@ -2101,7 +1858,7 @@
             <!-- ==================== 缺失页面补充 ==================== -->
             
             
-<div class="dev-note">草稿恢复（DRAFT）<br>【触发条件】<br>- 用户有未提交的认证草稿（draft_status=1）<br>- 用户进入企业认证页面时自动检查<br>- 或用户从个人中心点击【继续认证】<br>【业务逻辑】<br>...（更多详见PRD）</div>
+<div class="dev-note">草稿恢复 ｜ 有未提交草稿时自动弹出，草稿永久保存，可继续填写或放弃</div>
             <div class="form-card proto-page" id="draftCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
@@ -2129,7 +1886,7 @@
             </div>
             
             
-<div class="dev-note">审核中（VERIFYING）<br>【触发条件】<br>- 用户完成e签宝H5认证后返回<br>- e签宝回调通知认证已提交，正在审核<br>【业务逻辑】<br>1. 页面自动轮询查询审核状态（每5秒）<br>...（更多详见PRD）</div>
+<div class="dev-note">审核中 ｜ 提交认证后自动进入，轮询5秒/次，实际审核5-10分钟</div>
             <div class="form-card proto-page" id="verifyingCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
@@ -2166,7 +1923,7 @@
             </div>
             
             
-<div class="dev-note">认证失败（REJECTED）<br>【触发条件】<br>- e签宝回调通知认证失败<br>- 用户主动查询审核状态返回失败<br>【业务逻辑】<br>1. 显示e签宝返回的具体失败原因<br>...（更多详见PRD）</div>
+<div class="dev-note">认证失败 ｜ 显示失败原因，【重新认证】回到页面4（数据回填）</div>
             <div class="form-card proto-page" id="rejectedCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
@@ -2198,7 +1955,7 @@
             </div>
             
             
-<div class="dev-note">e签宝跳转过渡页（ESIGN_REDIRECT）<br>【触发条件】<br>- 用户在e签宝实名认证弹窗中点击【立即认证】后<br>- 跳转e签宝H5认证页面前的过渡说明页<br>【业务逻辑】<br>1. 展示e签宝认证+授权一体化流程说明<br>...（更多详见PRD）</div>
+<div class="dev-note">e签宝跳转过渡 ｜ 场景一：人脸识别+营业执照OCR；场景二：仅授权审批（无人脸）</div>
             <div class="form-card proto-page" id="esignRedirectCard" style="display:none">
                 <!-- 场景说明标注 -->
                 <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #d46b08;">
@@ -2258,7 +2015,7 @@
             </div>
             
             
-<div class="dev-note">授权拒绝（AUTHZ_REJECTED）<br>【PRD对应】4.3 页面7B（路径：/company/auth/authz-rejected）<br>【v5.4修复】<br>1. 移除【取消】按钮（v5.3已删除撤销功能，v5.4再次确认无取消入口）<br>2. 【重新申请】按钮点击弹出"修改申请理由"弹窗（reapplyModal），<br>而非直接跳转到 authzPending 页面<br>...（更多详见PRD）</div>
+<div class="dev-note">授权拒绝 ｜ 路径：/company/auth/authz-rejected ｜ 弹出修改理由弹窗后重新申请，最多3次</div>
             <div class="form-card proto-page" id="authzRejectedCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
