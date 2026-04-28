@@ -516,8 +516,8 @@
     .group-header .text { font-size: 12px; color: #aaa; white-space: nowrap; }
 
     /* 页面可见控制 */
-    .screen-page { display: none; }
-    .screen-page.visible { display: block !important; overflow: visible; min-height: 100px; }
+    .screen-page { display: none; height: 0; overflow: hidden; }
+    .screen-page.visible { display: block !important; height: auto; overflow: visible; }
   
 /* ========== v7.0：注释/开发提示专用样式 ========== */
 .dev-note {
@@ -595,8 +595,8 @@
 .nav-section { padding:8px 16px 4px;font-size:11px;color:#999;font-weight:600;letter-spacing:.5px; }
 </style>
 
-<!-- ========== 流程总览（开发者视角） ========== -->
-<div class="screen-page visible" id="p-overview">
+<!-- ========== 流程总览（开发者视角）- 固定显示在顶部，非页面切换内容 ========== -->
+<div id="p-overview">
   <div class="group-header"><div class="line"></div><div class="text">📊 开发者视角 · 快速入门</div><div class="line"></div></div>
   <div style="padding:0 16px 24px;">
     <!-- 开发者必读 -->
@@ -1471,21 +1471,7 @@
 </div>
 
 
-// ====== v7.0：侧栏导航树 JS ======
-function toggleNavGroup(groupId) {
-    var children = document.getElementById(groupId + '-children');
-    var arrow = document.getElementById(groupId + '-arrow');
-    if (children) {
-        if (children.style.display === 'none') {
-            children.style.display = 'block';
-            if (arrow) arrow.style.transform = 'rotate(90deg)';
-        } else {
-            children.style.display = 'none';
-            if (arrow) arrow.style.transform = 'rotate(0deg)';
-        }
-    }
-}
-
+<script>
 function jumpToMiniPage(pageId) {
     showPage(pageId);
     // 更新侧边栏选中状态
@@ -1494,7 +1480,6 @@ function jumpToMiniPage(pageId) {
     if (target) target.classList.add('active');
 }
 
-<script>
 // v6.8 新增：导航面板
 // v7.0：侧边栏展开/折叠
 function toggleMiniSidebar() {
@@ -1511,7 +1496,7 @@ function toggleMiniSidebar() {
 }
 // v6.8：页面名映射（面包屑）
 var MINI_PAGE_NAMES = {
-  'p-overview':'📊 流程总览','p-entry':'① 认证入口','p-company':'② 企业信息',
+  'p-entry':'① 认证入口','p-company':'② 企业信息',
   'p-phone':'② 法人+经办人','p-checking':'②.₅ 过渡加载','p-form':'④ 完整表单',
   'p-webview':'◆ WebView','p-processing':'7.5 审核中','p-success':'8A 认证通过',
   'p-failed':'8B 认证失败','p-authz-wait':'8C 等待授权','p-authz-ok':'7A 授权通过',

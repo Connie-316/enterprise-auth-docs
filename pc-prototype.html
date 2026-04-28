@@ -1229,7 +1229,7 @@
                 <div style="margin-bottom: 40px;">
                     <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
                         二、详细业务流程图（Mermaid自动布局版）
-                        <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">v7.2 - 线条自动布局，无交叉重叠</span>
+                        <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">v7.3 - 线条自动布局，无交叉重叠</span>
                     </div>
 
                     <div style="background: #fafafa; border-radius: 8px; padding: 16px; text-align: left;">
@@ -1248,24 +1248,17 @@ flowchart TB
     end
 
     subgraph 场景一["🔵 场景一:首次认证(企业未认证)"]
-        I --> J[/提交认证/]
-        J --> K[e签宝H5<br/>人脸识别+营业执照OCR]
-        K --> L{认证结果}
-        L -->|通过| M[页面8A:认证+授权通过✅]
-        L -->|失败| N[页面8B:认证失败<br/>可重新发起]
+        K -->|企业未认证| L1[人脸识别+营业执照OCR]
+        L1 --> L2[页面8A:认证+授权通过✅]
     end
 
-    subgraph 场景二["🔴 场景二:已认证授权(企业已实名)"]
-        I --> O[/提交认证/]
-        O --> P[e签宝H5<br/>仅授权审批]
-        P --> Q{授权结果}
-        Q -->|通过| R[页面7A:授权通过✅]
-        Q -->|拒绝| S[页面7B:授权拒绝<br/>可重新申请]
-        Q -->|超时| T[页面7C:授权超时<br/>24h自动失效]
+    subgraph 场景二["🔴 场景二:已认证授权(企业已认证)"]
+        K -->|企业已认证| M1[管理员扫码授权]
+        M1 --> M2{授权结果}
+        M2 -->|通过| M3[页面7A:授权通过✅]
+        M2 -->|拒绝| M4[页面7B:授权拒绝]
+        M2 -->|超时| M5[页面7C:授权超时]
     end
-
-    I -->|e签宝判断| J
-    I -->|e签宝判断| O
 
     classDef startEnd fill:#1890ff,stroke:#0050b3,color:#fff
     classDef decision fill:#fffbe6,stroke:#fa8c16
@@ -1274,13 +1267,12 @@ flowchart TB
     classDef success fill:#f6ffed,stroke:#52c41a,color:#52c41a
     classDef fail fill:#fff1f0,stroke:#ff4d4f,color:#ff4d4f
 
-    class A startEnd
-    class F startEnd
-    class B,E,L,Q decision
+    class A,F startEnd
+    class B,E,K,M2 decision
     class C,D,G,H,I page
-    class J,K,O,P esign
-    class M,R success
-    class N,S,T fail
+    class J,L1,M1 esign
+    class L2,M3 success
+    class M4,M5 fail
                         </div>
                     </div>
                     <div style="margin-top:12px;font-size:12px;color:#888;">
