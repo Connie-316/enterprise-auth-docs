@@ -594,86 +594,37 @@
 -->
 
 <!-- 原型页面切换导航（v6.8升级：交互式树形导航+决策卡片） -->
-<div class="proto-nav" style="position: fixed; top: 0; left: 0; right: 0; background: #001529; color: #fff; z-index: 9999; padding: 6px 16px;">
+<div class="proto-nav" style="position: fixed; top: 0; left: 300px; right: 0; background: #001529; color: #fff; z-index: 9999; padding: 6px 16px;">
     <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-weight: 600; white-space: nowrap; font-size: 13px;">🎨 企业认证原型 v6.8</span>
+        <button onclick="goBack()" id="backBtn" style="background:#595959;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;display:none;">← 返回</button>
+        <span style="font-weight: 600; white-space: nowrap; font-size: 13px;">🎨 企业认证原型 v6.9</span>
         <span style="color: #4a90d9; font-size: 11px;">|</span>
         <span id="nav-breadcrumb" style="font-size: 11px; color: #8c9bb3;">当前：<b>流程总览</b></span>
-        <div style="flex:1;"></div>
-        <button onclick="toggleNavPanel()" style="background:#1890ff;color:#fff;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:11px;">📂 导航面板</button>
     </div>
 </div>
 
 <!-- ====== v6.8 新增：可折叠交互式导航面板 ====== -->
-<div id="nav-panel" style="display:none; position:fixed; top:38px; left:0; right:0; bottom:0; z-index:9998; background:rgba(0,0,0,0.45); backdrop-filter:blur(2px);" onclick="if(event.target===this)toggleNavPanel()">
-    <div style="position:absolute;top:0;left:0;width:380px;height:100%;background:#fafafa;overflow-y:auto;box-shadow:4px 0 24px rgba(0,0,0,0.15);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;">
-        <!-- 面板头部 -->
-        <div style="position:sticky;top:0;background:#fff;padding:16px 20px;border-bottom:1px solid #e8e8e8;z-index:10;display:flex;align-items:center;gap:8px;">
-            <span style="font-size:18px;">🗺</span>
-            <div><div style="font-weight:600;font-size:15px;color:#1a1a1a;">页面导航 & 决策地图</div><div style="font-size:11px;color:#888;margin-top:2px;">点击跳转 · 查看触发条件与跳转关系</div></div>
-            <div style="flex:1;"></div>
-            <button onclick="toggleNavPanel()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#999;line-height:1;">&times;</button>
-        </div>
+<!-- ====== v6.9：固定左侧导航侧边栏 ====== -->
+<div id="nav-sidebar" style="position:fixed; top:0; left:0; width:300px; height:100vh; background:#fafafa; border-right:1px solid #e8e8e8; z-index:9998; display:flex; flex-direction:column; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif; font-size:13px; box-shadow:2px 0 8px rgba(0,0,0,.06);">
+    <!-- 头部 -->
+    <div style="position:sticky;top:0;background:#001529;padding:12px 16px;z-index:10;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px;">🗺</span>
+        <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#fff;">页面导航 & 决策地图</div><div style="font-size:10px;color:#8c9bb3;margin-top:2px;">点击跳转 · 返回上一页 · 当前页高亮</div></div>
+        <button onclick="toggleSidebar()" style="background:none;border:none;font-size:14px;cursor:pointer;color:#8c9bb3;" title="收起侧栏">◀</button>
+    </div>
 
-        <!-- 图例 -->
-        <div style="padding:12px 20px;background:#f0f5ff;border-bottom:1px solid #dce8ff;display:flex;flex-wrap:wrap;gap:8px;font-size:11px;">
-            <span style="color:#1890ff;">● 页面</span>
-            <span style="color:#722ed1;">◆ 弹窗</span>
-            <span style="color:#08979c;">◉ 外部系统</span>
-            <span style="color:#fa8c16;">◇ 判断分支</span>
-            <span style="color:#52c41a;">▣ 成功终态</span>
-            <span style="color:#f5222d;">▣ 失败/异常</span>
-        </div>
+    <!-- 图例 -->
+    <div style="padding:8px 16px;background:#f0f5ff;border-bottom:1px solid #dce8ff;display:flex;flex-wrap:wrap;gap:6px;font-size:10px;flex-shrink:0;">
+        <span style="color:#1890ff;">● 页面</span>
+        <span style="color:#722ed1;">◆ 弹窗</span>
+        <span style="color:#08979c;">◉ 外部</span>
+        <span style="color:#fa8c16;">◇ 判断</span>
+        <span style="color:#52c41a;">▣ 成功</span>
+        <span style="color:#f5222d;">▣ 失败</span>
+    </div>
 
-        <!-- 树形导航内容 -->
-        <style>
-        .nav-tree { padding: 8px 0; }
-        .nav-group { margin-bottom: 2px; }
-        .nav-group-title { 
-            display:flex;align-items:center;gap:6px;padding:10px 20px;cursor:pointer;
-            font-weight:600;font-size:13px;color:#333;background:#fff;
-            border-left:3px solid transparent;transition:all 0.15s;
-        }
-        .nav-group-title:hover { background:#f5f5f5; }
-        .nav-group-title.active { border-left-color:#1890ff; background:#e6f7ff; color:#1890ff; }
-        .nav-group-arrow { transition:transform 0.2s; font-size:10px; color:#aaa; }
-        .nav-group.open > .nav-group-arrow { transform: rotate(90deg); }
-        .nav-children { display:none; padding-left: 14px; background:#fff; }
-        .nav-group.open > .nav-children { display:block; }
-
-        .nav-leaf {
-            display:flex;align-items:flex-start;gap:8px;padding:7px 20px 7px 28px;
-            cursor:pointer;border-left:3px solid transparent;
-            transition:all 0.12s; position:relative;
-        }
-        .nav-leaf:hover { background:#f0f0f0; }
-        .nav-leaf.current { background:#e6f7ff; border-left-color:#40a9ff; }
-        .nav-leaf-icon { flex-shrink:0;width:18px;text-align:center;font-size:12px;margin-top:1px;}
-        .nav-leaf-body { flex:1; min-width:0; }
-        .nav-leaf-name { font-weight:500;font-size:12.5px;color:#262626;line-height:1.35; }
-        .nav-leaf-desc { font-size:11px;color:#888;margin-top:2px;line-height:1.3;white-space:normal;word-break:break-all; }
-        .nav-leaf-trigger {
-            display:inline-block;margin-top:3px;padding:1px 7px;border-radius:8px;
-            font-size:10px;white-space:nowrap;
-        }
-        .nav-leaf-trigger.page { background:#e6f7ff;color:#1890ff; }
-        .nav-leaf-trigger.modal { background:#f9f0ff;color:#722ed1; }
-        .nav-leaf-trigger.external { background:#e6fffb;color:#08979c; }
-        .nav-leaf-trigger.decision { background:#fffbe6;color:#d48806; }
-        .nav-leaf-trigger.success { background:#f6ffed;color:#52c41a; }
-        .nav-leaf-trigger.error { background:#fff1f0;color:#f5222d; }
-        
-        /* 决策卡片 */
-        .decision-card {
-            margin:4px 16px 8px;padding:10px 14px;border-radius:8px;
-            border:1px dashed #ffd591;background:#fffbe6;font-size:11.5px;
-        }
-        .decision-card-title { font-weight:600;color:#d48806;margin-bottom:4px; }
-        .decision-card-body { color:#666;line-height:1.55; }
-        .decision-card-body b { color:#ad6800; }
-        </style>
-
-        <div class="nav-tree">
+    <!-- 树形导航（从v6.8保留） -->
+<div class="nav-tree">
             <!-- 阶段0：入口判断 -->
             <div class="nav-group open" id="ng-entry">
                 <div class="nav-group-title" onclick="toggleGroup('ng-entry')"><span class="nav-group-arrow">▶</span> 🚀 阶段0：入口与草稿判断</div>
@@ -904,6 +855,14 @@
         </div>
     </div>
 </div>
+    
+    <!-- 底部收起提示 -->
+    <div style="padding:8px 16px;text-align:center;font-size:10px;color:#bbb;border-top:1px solid #eee;flex-shrink:0;">
+        点击 ◀ 收起侧栏
+    </div>
+</div>
+<!-- 展开按钮（侧栏收起时显示） -->
+<button id="sidebar-expand" onclick="toggleSidebar()" style="display:none;position:fixed;top:12px;left:8px;z-index:9999;background:#001529;color:#fff;border:none;width:28px;height:28px;border-radius:0 6px 6px 0;cursor:pointer;font-size:13px;box-shadow:2px 0 8px rgba(0,0,0,.2);">▶</button>
 
 <style>
     .proto-btn { background: #1890ff; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; white-space: nowrap; }
@@ -913,7 +872,7 @@
     .proto-btn.modal-btn:hover { background: #9254de; }
 </style>
 
-<body style="padding-top: 40px;">
+<body style="padding-top: 44px; padding-left: 300px; transition: padding-left .25s ease;">
     <div class="container">
         <!-- 左侧导航 -->
         <aside class="sidebar">
@@ -2655,17 +2614,48 @@
         // ==================== 原型页面切换函数 ====================
         
         // v6.8 新增：导航面板控制
-        function toggleNavPanel() {
-            const panel = document.getElementById('nav-panel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        // v6.9：侧边栏展开/折叠
+        function toggleSidebar() {
+            var sb = document.getElementById('nav-sidebar');
+            var eb = document.getElementById('sidebar-expand');
+            var topnav = document.querySelector('.proto-nav');
+            if (sb.style.display === 'none') {
+                sb.style.display = 'flex';
+                eb.style.display = 'none';
+                document.body.style.paddingLeft = '300px';
+                if (topnav) topnav.style.left = '300px';
+            } else {
+                sb.style.display = 'none';
+                eb.style.display = 'block';
+                document.body.style.paddingLeft = '0';
+                if (topnav) topnav.style.left = '0';
+            }
         }
         function toggleGroup(id) {
             document.getElementById(id).classList.toggle('open');
         }
         // v6.8 新增：从导航面板跳转页面（自动关闭面板）
+        // v6.9：页面浏览历史 + 跳转
+        var pageHistory = ['flowOverview'];
         function jumpToPage(pageName) {
-            toggleNavPanel();
+            if (pageHistory[pageHistory.length-1] !== pageName) {
+                pageHistory.push(pageName);
+            }
             showPage(pageName);
+            updateBackBtn();
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+        function goBack() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop();
+                showPage(pageHistory[pageHistory.length-1]);
+                updateBackBtn();
+                window.scrollTo({top:0, behavior:'smooth'});
+            }
+        }
+        function updateBackBtn() {
+            var btn = document.getElementById('backBtn');
+            if (btn) btn.style.display = pageHistory.length > 1 ? 'inline-block' : 'none';
         }
         // v6.8 新增：更新面包屑
         const PAGE_NAMES = {
@@ -2722,8 +2712,9 @@
             // v6.8：更新面包屑
             var bc = document.getElementById('nav-breadcrumb');
             if (bc) bc.innerHTML = '当前：<b>' + (PAGE_NAMES[pageName] || pageName) + '</b>';
-            // v6.8：更新导航面板当前项高亮
+            // v6.9：更新侧边栏当前项高亮
             document.querySelectorAll('.nav-leaf.current').forEach(function(el){ el.classList.remove('current'); });
+            document.querySelectorAll('.nav-group-title.active').forEach(function(el){ el.classList.remove('active'); });
             
             // ============================================================
             // 显示对应页面

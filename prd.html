@@ -26,14 +26,85 @@
 
   .container { max-width: 1060px; margin: 0 auto; padding: 0 32px 60px; }
 
-  .toc { background: var(--bg-light); border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 20px 28px; margin: 28px 0; }
-  .toc h2 { font-size: 14px; color: var(--primary); margin-bottom: 12px; }
-  .toc ol { padding-left: 18px; }
-  .toc li { margin: 4px 0; }
-  .toc a { color: var(--primary); text-decoration: none; font-size: 14px; }
-  .toc a:hover { text-decoration: underline; }
-  .toc .sub { list-style: none; padding-left: 14px; }
-  .toc .sub li::before { content: "– "; color: var(--muted); }
+  /* ========== v7.2：固定侧边栏树状目录导航 ========== */
+  .toc-sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 280px; height: 100vh;
+    background: #fff;
+    border-right: 1px solid var(--border);
+    z-index: 1000;
+    display: flex; flex-direction: column;
+    font-size: 13px;
+    box-shadow: 2px 0 8px rgba(0,0,0,.06);
+    transition: transform .25s ease;
+  }
+  .toc-sidebar.collapsed { transform: translateX(-240px); }
+  .toc-sidebar-header {
+    padding: 16px 18px 10px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--primary), #0b4bcc);
+    color: #fff; flex-shrink: 0;
+  }
+  .toc-sidebar-header h2 { font-size: 14px; margin-bottom: 4px; font-weight:700; }
+  .toc-sidebar-header p { font-size: 11px; opacity: .75; margin: 0; }
+  .toc-toggle-btn {
+    position: absolute; top: 12px; right: -32px;
+    width: 30px; height: 30px;
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 0 6px 6px 0; cursor: pointer;
+    font-size: 14px; display:flex; align-items:center; justify-content:center;
+    z-index: 1001; box-shadow: 2px 0 8px rgba(0,0,0,.15);
+    line-height: 1;
+  }
+  .toc-toggle-btn:hover { background: #155cd9; }
+
+  /* 目录树 */
+  .toc-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .toc-body::-webkit-scrollbar { width: 3px; }
+  .toc-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+  .toc-tree { list-style: none; padding: 0; margin: 0; }
+  .toc-node > .toc-label {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 16px 9px 18px;
+    cursor: pointer; color: #333;
+    transition: all .15s; position:relative;
+    border-left: 3px solid transparent;
+  }
+  .toc-node > .toc-label:hover { background: #f5f7fa; }
+  .toc-node > .toc-label.active { color: var(--primary); background: #eef5ff; border-left-color: var(--primary); font-weight: 600; }
+  .toc-arrow { font-size: 10px; color: #aaa; transition: transform .2s; flex-shrink: 0; width:12px;text-align:center; }
+  .toc-node.open > .toc-label > .toc-arrow { transform: rotate(90deg); }
+
+  .toc-sub { list-style: none; padding: 0; display: none; }
+  .toc-node.open > .toc-sub { display: block; }
+  .toc-sub li a {
+    display: block; padding: 6px 14px 6px 42px;
+    color: #666; text-decoration: none; font-size: 12.5px;
+    border-left: 3px solid transparent; transition: all .12s;
+  }
+  .toc-sub li a:hover { color: var(--primary); background: #f5f7fa; }
+  .toc-sub li a.active { color: var(--primary); background: #eef5ff; border-left-color: #40a9ff; font-weight: 500; }
+
+  /* 底部返回顶部 */
+  .toc-footer { padding: 10px 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .back-top-btn {
+    display:block; width:100%; padding:8px 0; text-align:center;
+    background:#f7f9fc; border:1px solid var(--border);
+    border-radius:6px; color:var(--primary); font-size:12.5px; font-weight:600;
+    cursor:pointer; transition:all .15s;
+  }
+  .back-top-btn:hover { background:var(--primary); color:#fff; }
+
+  /* 主内容区偏移 */
+  body { padding-left: 280px; transition: padding-left .25s ease; }
+  body.sidebar-collapsed { padding-left: 40px; }
+
+  @media (max-width: 900px) {
+    body { padding-left: 0 !important; }
+    .toc-sidebar { transform: translateX(-280px); box-shadow: none; }
+    .toc-sidebar.show-mobile { transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,.25); }
+  }
 
   .section { margin: 36px 0; }
   h2.sec-title { font-size: 19px; color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 7px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
@@ -85,40 +156,64 @@
 </head>
 <body>
 
-<div class="page-header">
+<!-- ====== 固定侧边栏目录导航 ====== -->
+<nav class="toc-sidebar" id="tocSidebar">
+  <div class="toc-sidebar-header">
+    <h2>📋 PRD 目录导航</h2>
+    <p>点击跳转 · 滚动自动高亮</p>
+  </div>
+  <div class="toc-body" id="tocBody">
+    <ul class="toc-tree" id="tocTree">
+      <li class="toc-node open" data-target="s1">
+        <div class="toc-label" onclick="tocJump('s1')"><span class="toc-arrow">▶</span> 1 功能概览</div>
+      </li>
+      <li class="toc-node open" data-target="s2">
+        <div class="toc-label" onclick="tocJump('s2')"><span class="toc-arrow">▶</span> 2 开发注意事项</div>
+      </li>
+      <li class="toc-node open" data-target="s3">
+        <div class="toc-label" onclick="tocToggle('s3')"><span class="toc-arrow">▶</span> 3 业务流程</div>
+        <ul class="toc-sub">
+          <li><a href="#s3-1" onclick="tocJumpSub(event,'s3-1')">3.1 整体流程图</a></li>
+          <li><a href="#s3-2" onclick="tocJumpSub(event,'s3-2')">3.2 场景一：首次认证</a></li>
+          <li><a href="#s3-3" onclick="tocJumpSub(event,'s3-3')">3.3 场景二：已认证授权</a></li>
+          <li><a href="#s3-4" onclick="tocJumpSub(event,'s3-4')">3.4 草稿机制</a></li>
+          <li><a href="#s3-5" onclick="tocJumpSub(event,'s3-5')">3.5 认证状态机</a></li>
+        </ul>
+      </li>
+      <li class="toc-node open" data-target="s4">
+        <div class="toc-label" onclick="tocJump('s4')"><span class="toc-arrow">▶</span> 4 页面说明（PC/H5端）</div>
+      </li>
+      <li class="toc-node open" data-target="s5">
+        <div class="toc-label" onclick="tocJump('s5')"><span class="toc-arrow">▶</span> 5 小程序端适配</div>
+      </li>
+      <li class="toc-node open" data-target="s6">
+        <div class="toc-label" onclick="tocJump('s6')"><span class="toc-arrow">▶</span> 6 数据表字段说明</div>
+      </li>
+      <li class="toc-node open" data-target="s7">
+        <div class="toc-label" onclick="tocJump('s7')"><span class="toc-arrow">▶</span> 7 接口清单</div>
+      </li>
+      <li class="toc-node open" data-target="s8">
+        <div class="toc-label" onclick="tocJump('s8')"><span class="toc-arrow">▶</span> 8 验收要点</div>
+      </li>
+    </ul>
+  </div>
+  <div class="toc-footer">
+    <button class="back-top-btn" onclick="scrollToTop()">↑ 返回顶部</button>
+  </div>
+  <button class="toc-toggle-btn" id="tocToggle" onclick="toggleTocSidebar()" title="展开/收起目录">◀</button>
+</nav>
+
+<div class="page-header" id="pageHeader">
   <h1>企业认证功能 PRD v7.1</h1>
   <div class="meta">
     <span class="badge">版本：v7.1 开发精简版</span>
     <span class="badge">更新：2026-04-28</span>
     <span class="badge">作者：产品部</span>
-    <span class="badge">关联原型：原型_企业认证_完整版_v6.7.html（PC/H5）&nbsp;&nbsp;原型_企业认证_小程序端_v6.7.html（小程序）</span>
+    <span class="badge">关联原型：原型_企业认证_PC端_v6.8.html（PC/H5）&nbsp;&nbsp;原型_企业认证_小程序端_v6.8.html（小程序）</span>
   </div>
 </div>
 
 <div class="container">
-
-<!-- 目录 -->
-<div class="toc" id="top">
-  <h2>📋 目录</h2>
-  <ol>
-    <li><a href="#s1">功能概览</a></li>
-    <li><a href="#s2">开发注意事项 &amp; 外部接口链接</a></li>
-    <li><a href="#s3">业务流程</a>
-      <ul class="sub">
-        <li><a href="#s3-1">整体流程图</a></li>
-        <li><a href="#s3-2">场景一：首次认证</a></li>
-        <li><a href="#s3-3">场景二：已认证授权</a></li>
-        <li><a href="#s3-4">草稿机制</a></li>
-        <li><a href="#s3-5">认证状态机</a></li>
-      </ul>
-    </li>
-    <li><a href="#s4">页面说明（PC/H5端）</a></li>
-    <li><a href="#s5">小程序端适配</a></li>
-    <li><a href="#s6">数据表字段说明</a></li>
-    <li><a href="#s7">接口清单</a></li>
-    <li><a href="#s8">验收要点</a></li>
-  </ol>
-</div>
 
 <!-- ===== 一、功能概览 ===== -->
 <div class="section" id="s1">
@@ -385,6 +480,7 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
 
   <div class="alert alert-info">
     <strong>PC端步骤指示器（4步）：</strong>① 填写企业信息 → ② 企业核验 → ③ e签宝实名认证 → ④ 认证完成
+    <br><span style="font-size:12px;color:#888;margin-top:4px;display:inline-block;">📌 页面编号说明：页面1/2/3.5/4 为核心流程页（3.5为纯前端过渡态）；5=e签宝跳转页；7.5=审核等待；8A~8C=场景一结果；7A~7C=场景二授权结果。编号跳跃是历史遗留命名，开发时以路由路径为准。</span>
   </div>
 
   <table>
@@ -524,6 +620,7 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
   </table>
   <div class="alert alert-warning">
     <strong>页面栈提示：</strong>全流程约6层（74→75→过渡→表单→WebView→结果），在小程序10层限制内。过渡页建议用 wx.redirectTo 而非 wx.navigateTo，避免栈溢出。
+    <br><span style="font-size:12px;color:#888;margin-top:4px;display:inline-block;">📌 小程序端页面编号：页面74=企业信息填写、页面75=法人+经办人表单（对应PC端页面2+4的拆分），其余编号与PC端路由一一对应。</span>
   </div>
 </div>
 
@@ -677,9 +774,85 @@ e签宝回调 notifyUrl → 商城验签→加锁→更新状态→调接口2同
 <hr>
 <p style="color:var(--muted);font-size:12px;text-align:center;padding:14px 0;">
   PRD v7.1 开发精简版 · 2026-04-28 · 产品部 <br>
-  关联原型：原型_企业认证_完整版_v6.7.html（PC/H5端）&nbsp;&nbsp;原型_企业认证_小程序端_v6.7.html（小程序端）
+  关联原型：原型_企业认证_PC端_v6.8.html（PC/H5端）&nbsp;&nbsp;原型_企业认证_小程序端_v6.8.html（小程序端）
 </p>
 
 </div>
+
+<!-- ====== 侧边栏导航 JS ====== -->
+<script>
+// 侧边栏展开/折叠
+function toggleTocSidebar() {
+  var sb = document.getElementById('tocSidebar');
+  var btn = document.getElementById('tocToggle');
+  sb.classList.toggle('collapsed');
+  document.body.classList.toggle('sidebar-collapsed');
+  btn.textContent = sb.classList.contains('collapsed') ? '▶' : '◀';
+}
+
+// 目录节点展开/折叠
+function tocToggle(id) {
+  var node = document.querySelector('.toc-node[data-target="'+id+'"]');
+  if (node) node.classList.toggle('open');
+}
+
+// 目录主节点点击跳转
+function tocJump(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// 子节点点击跳转
+function tocJumpSub(e, id) {
+  e.preventDefault();
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  // 同时展开父节点
+  var parent = document.querySelector('.toc-node[data-target="s3"]');
+  if (parent && !parent.classList.contains('open')) parent.classList.add('open');
+}
+
+// 返回顶部
+function scrollToTop() {
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// 滚动高亮当前章节
+var scrollSections = ['s1','s2','s3','s3-1','s3-2','s3-3','s3-4','s3-5','s4','s5','s6','s7','s8'];
+var scrollRafId = null;
+function onScroll() {
+  if (scrollRafId) return;
+  scrollRafId = requestAnimationFrame(function() {
+    scrollRafId = null;
+    var scrollY = window.scrollY + 100;
+    var activeId = null;
+    for (var i = scrollSections.length - 1; i >= 0; i--) {
+      var el = document.getElementById(scrollSections[i]);
+      if (el && el.offsetTop <= scrollY) {
+        activeId = scrollSections[i];
+        break;
+      }
+    }
+    // 清除所有高亮
+    document.querySelectorAll('.toc-label.active').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.toc-sub a.active').forEach(function(el){ el.classList.remove('active'); });
+    if (activeId) {
+      // 主节点高亮
+      var mainId = activeId.split('-')[0]; // s3-2 -> s3
+      var mainNode = document.querySelector('.toc-node[data-target="'+mainId+'"] > .toc-label');
+      if (mainNode) mainNode.classList.add('active');
+      // 子节点高亮
+      var subLink = document.querySelector('.toc-sub a[href="#'+activeId+'"]');
+      if (subLink) subLink.classList.add('active');
+      // 展开包含子节点的父级
+      var parentNode = document.querySelector('.toc-node[data-target="'+mainId+'"]');
+      if (parentNode && !parentNode.classList.contains('open')) parentNode.classList.add('open');
+    }
+  });
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+// 初始触发
+onScroll();
+</script>
 </body>
 </html>
