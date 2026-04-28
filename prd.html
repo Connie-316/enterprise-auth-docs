@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>企业认证功能 PRD v7.2</title>
+<title>企业认证功能 PRD v7.3</title>
 <style>
   :root {
     --primary: #1a6ef5;
@@ -234,9 +234,9 @@
 </nav>
 
 <div class="page-header" id="pageHeader">
-  <h1>企业认证功能 PRD v7.2</h1>
+  <h1>企业认证功能 PRD v7.3</h1>
   <div class="meta">
-    <span class="badge">版本：v7.2</span>
+    <span class="badge">版本：v7.3</span>
     <span class="badge">更新：2026-04-28</span>
     <span class="badge">关联原型：PC端 v6.8 · 小程序端 v6.8</span>
   </div>
@@ -637,18 +637,41 @@ e签宝回调 → 验签→加锁→更新状态→调接口2同步企业信息
 <div class="section" id="s5">
   <h2 class="sec-title"><span class="num">5</span>小程序端适配</h2>
 
-  <h3 class="sub-title">5.1 与PC/H5端差异</h3>
+  <h3 class="sub-title">5.1 与PC/H5端核心差异</h3>
   <table>
-    <tr><th>差异项</th><th>PC/H5端</th><th>微信小程序端</th></tr>
-    <tr><td>步骤指示器</td><td>4步</td><td><strong>3步</strong>（企业信息 → 法人经办人 → e签宝认证）</td></tr>
-    <tr><td>表单分页</td><td>单页滚动</td><td><strong>2个页面</strong>：企业信息 → 法人+经办人</td></tr>
-    <tr><td>「统一社会信用代码」标签</td><td>统一社会信用代码</td><td><strong>税号</strong>（字段名 credit_code 不变）</td></tr>
-    <tr><td>e签宝跳转方式</td><td>window.location.href</td><td><strong>&lt;web-view src="authUrl"&gt;</strong></td></tr>
-    <tr><td>clientType</td><td>H5</td><td><strong>MINI_APP</strong></td></tr>
-    <tr><td>认证完成回跳</td><td>redirectUrl = 商城页面</td><td>redirectUrl = <strong>中间H5页</strong>，内部调wx.miniProgram.navigateTo</td></tr>
+    <tr><th>差异项</th><th>PC/H5端</th><th>微信小程序端</th><th>优先级</th></tr>
+    <tr><td>跳转e签宝H5</td><td>window.location.href = authUrl</td><td>&lt;web-view src="authUrl"&gt;</td><td><span style="background:#fdedec;color:#c0392b;padding:2px 6px;border-radius:4px;">P0</span></td></tr>
+    <tr><td>clientType</td><td>H5</td><td>MINI_APP</td><td><span style="background:#fdedec;color:#c0392b;padding:2px 6px;border-radius:4px;">P0</span></td></tr>
+    <tr><td>认证完成回跳</td><td>redirectUrl = 商城页面</td><td>redirectUrl = 中间H5页 + wx.miniProgram.navigateTo</td><td><span style="background:#fdedec;color:#c0392b;padding:2px 6px;border-radius:4px;">P0</span></td></tr>
+    <tr><td>本地草稿存储</td><td>localStorage</td><td>wx.setStorageSync</td><td><span style="background:#fff7e6;color:#9a6200;padding:2px 6px;border-radius:4px;">P1</span></td></tr>
+    <tr><td>页面路由方式</td><td>浏览器URL路由</td><td>wx.navigateTo / wx.redirectTo（≤10层）</td><td><span style="background:#fff7e6;color:#9a6200;padding:2px 6px;border-radius:4px;">P1</span></td></tr>
+    <tr><td>X-Platform Header</td><td>X-Platform: h5</td><td>X-Platform: miniapp</td><td><span style="background:#fff7e6;color:#9a6200;padding:2px 6px;border-radius:4px;">P1</span></td></tr>
+    <tr><td>步骤指示器</td><td>4步</td><td>3步</td><td><span style="background:#f6ffed;color:#389e0d;padding:2px 6px;border-radius:4px;">P2</span></td></tr>
+    <tr><td>表单分页</td><td>单页滚动</td><td>2个页面（企业信息 → 法人+经办人）</td><td><span style="background:#f6ffed;color:#389e0d;padding:2px 6px;border-radius:4px;">P2</span></td></tr>
+    <tr><td>「统一社会信用代码」标签</td><td>统一社会信用代码</td><td>税号（字段名 credit_code 相同）</td><td><span style="background:#f6ffed;color:#389e0d;padding:2px 6px;border-radius:4px;">P2</span></td></tr>
+    <tr><td>后端接口</td><td colspan="2" style="text-align:center">✅ 完全复用，无需分别实现</td><td>—</td></tr>
+    <tr><td>数据表/状态机</td><td colspan="2" style="text-align:center">✅ 完全复用，无需分别实现</td><td>—</td></tr>
   </table>
 
-  <h3 class="sub-title">5.2 小程序端页面路由</h3>
+  <h3 class="sub-title">5.2 后端必改项（P0）</h3>
+  <table>
+    <tr><th>改动点</th><th>说明</th></tr>
+    <tr><td><strong>clientType 动态识别</strong></td><td>读取请求 Header 的 X-Platform 字段，小程序端传 MINI_APP，H5端传 H5。传错导致e签宝H5在WebView内渲染异常</td></tr>
+    <tr><td><strong>redirectUrl 适配</strong></td><td>小程序端的 redirectUrl 应指向部署在业务域名下的中间H5页（miniapp-callback.html），由该页面调用 wx.miniProgram.navigateTo 跳回小程序</td></tr>
+    <tr><td><strong>业务域名配置</strong></td><td>小程序后台配置 webviewUrl 业务域名 openapi.esign.cn，否则 web-view 组件无法加载 e签宝 H5 页面</td></tr>
+  </table>
+
+  <h3 class="sub-title">5.3 小程序接入前置条件</h3>
+  <table>
+    <tr><th>序号</th><th>前置条件</th><th>配置位置</th></tr>
+    <tr><td>1</td><td>添加业务域名 openapi.esign.cn</td><td>微信公众平台 → 开发管理 → 业务域名</td></tr>
+    <tr><td>2</td><td>部署微信校验txt文件到服务器根目录</td><td>从微信公众平台下载 → 放到Nginx/Apache根目录</td></tr>
+    <tr><td>3</td><td>部署回调中间页 /auth/miniapp-callback.html</td><td>商城Web服务器公开静态资源目录</td></tr>
+    <tr><td>4</td><td>申请e签宝 appId / appSecret（沙箱+正式）</td><td>e签宝开放平台 → 应用管理</td></tr>
+    <tr><td>5</td><td>配置HTTPS证书有效</td><td>SSL证书服务商 / 运维</td></tr>
+  </table>
+
+  <h3 class="sub-title">5.4 小程序端页面路由</h3>
   <table>
     <tr><th>对应PC端</th><th>小程序路径</th></tr>
     <tr><td>认证入口</td><td>/pages/auth/index</td></tr>
@@ -660,9 +683,30 @@ e签宝回调 → 验签→加锁→更新状态→调接口2同步企业信息
     <tr><td>结果页</td><td>/pages/auth/success 等</td></tr>
   </table>
 
-  <div class="alert alert-warning">
-    <strong>页面栈提示：</strong>全流程约6层，在小程序10层限制内。过渡页建议用 wx.redirectTo 而非 wx.navigateTo。
-  </div>
+  <h3 class="sub-title">5.5 e签宝接口调用时序（小程序端）</h3>
+  <pre class="flow-box">① 小程序前端 POST /api/company/auth/submit
+   Header: { Authorization, X-Platform: miniapp }
+
+② 商城后端 获取AccessToken (HMAC-SHA256鉴权)
+   POST /v3/oauth2/access_token
+   → 缓存Redis (有效期7200秒)
+
+③ 商城后端 调用e签宝接口1 (获取认证页面链接)
+   POST /v3/org-auth/create
+   clientType=MINI_APP  ← 关键！
+   redirectUrl=https://xxx.com/auth/miniapp-callback.html
+   notifyUrl=https://xxx.com/api/company/auth/callback
+
+④ 返回 authUrl → 前端 WebView 加载
+
+⑤ 用户在WebView完成认证 →
+   e签宝跳转redirectUrl(中间H5页)
+
+⑥ 中间H5页 wx.miniProgram.navigateTo
+   → 跳转小程序结果页
+
+⑦ e签宝异步回调 notifyUrl
+   → 后端验签(HMAC-SHA256) → 查询接口2 → 更新数据库</pre>
 </div>
 
 <!-- ===== 六、数据表字段说明 ===== -->
@@ -781,7 +825,7 @@ e签宝回调 → 验签→加锁→更新状态→调接口2同步企业信息
 
 <hr>
 <p style="color:var(--muted);font-size:12px;text-align:center;padding:14px 0;">
-  PRD v7.2 · 2026-04-28 · 产品部
+  PRD v7.3 · 2026-04-28 · 产品部
 </p>
 
 </div>

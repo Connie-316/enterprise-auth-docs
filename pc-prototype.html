@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企业认证原型 v6.9 | 数智聚模商城</title>
+    <title>企业认证原型 v7.0 | 数智聚模商城</title>
     <!-- Mermaid.js for professional flowcharts -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
@@ -564,7 +564,7 @@
             color: #d9d9d9;
         }
     
-/* ========== v6.9：注释/开发提示专用样式 ========== */
+/* ========== v7.0：注释/开发提示专用样式 ========== */
 .dev-note {
     background: #f0f5ff;
     border-left: 3px solid #1890ff;
@@ -616,14 +616,14 @@
 <div class="proto-nav" style="position: fixed; top: 0; left: 300px; right: 0; background: #001529; color: #fff; z-index: 9999; padding: 6px 16px;">
     <div style="display: flex; align-items: center; gap: 12px;">
         <button onclick="goBack()" id="backBtn" style="background:#595959;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;display:none;">← 返回</button>
-        <span style="font-weight: 600; white-space: nowrap; font-size: 13px;">🎨 企业认证原型 v6.9</span>
+        <span style="font-weight: 600; white-space: nowrap; font-size: 13px;">🎨 企业认证原型 v7.0</span>
         <span style="color: #4a90d9; font-size: 11px;">|</span>
         <span id="nav-breadcrumb" style="font-size: 11px; color: #8c9bb3;">当前：<b>流程总览</b></span>
     </div>
 </div>
 
 <!-- ====== v6.8 新增：可折叠交互式导航面板 ====== -->
-<!-- ====== v6.9：固定左侧页面导航侧边栏（含业务流程速览） ====== -->
+<!-- ====== v7.0：固定左侧页面导航侧边栏（含业务流程速览） ====== -->
 <div id="nav-sidebar" style="position:fixed;top:0;left:0;width:260px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:9998;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;box-shadow:2px 0 12px rgba(0,0,0,.08);">
 
     <!-- 侧栏头部 -->
@@ -899,7 +899,7 @@
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px; animation: spin 2s linear infinite; display: inline-block;">⏳</div>
                     <style>@keyframes spin { 0%{ transform: rotate(0deg); } 100%{ transform: rotate(360deg); } }
-/* ========== v6.9：注释/开发提示专用样式 ========== */
+/* ========== v7.0：注释/开发提示专用样式 ========== */
 .dev-note {
     background: #f0f5ff;
     border-left: 3px solid #1890ff;
@@ -1342,7 +1342,7 @@
                 <div style="margin-bottom: 40px;">
                     <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
                         二、详细业务流程图（SVG交互版）
-                        <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">物料商城API同步接入"e签宝"企业认证业务流程图 v6.9</span>
+                        <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">物料商城API同步接入"e签宝"企业认证业务流程图 v7.0</span>
                     </div>
 
                     
@@ -2398,7 +2398,7 @@
         // ==================== 原型页面切换函数 ====================
         
         // v6.8 新增：导航面板控制
-        // v6.9：侧边栏展开/折叠
+        // v7.0：侧边栏展开/折叠
         function toggleSidebar() {
             var sb = document.getElementById('nav-sidebar');
             var eb = document.getElementById('sidebar-expand');
@@ -2419,7 +2419,7 @@
             document.getElementById(id).classList.toggle('open');
         }
         // v6.8 新增：从导航面板跳转页面（自动关闭面板）
-        // v6.9：页面浏览历史 + 跳转
+        // v7.0：页面浏览历史 + 跳转
         var pageHistory = ['flowOverview'];
         function jumpToPage(pageName) {
             if (pageHistory[pageHistory.length-1] !== pageName) {
@@ -2496,7 +2496,7 @@
             // v6.8：更新面包屑
             var bc = document.getElementById('nav-breadcrumb');
             if (bc) bc.innerHTML = '当前：<b>' + (PAGE_NAMES[pageName] || pageName) + '</b>';
-            // v6.9：更新侧边栏当前项高亮
+            // v7.0：更新侧边栏当前项高亮
             document.querySelectorAll('.nav-leaf.current').forEach(function(el){ el.classList.remove('current'); });
             document.querySelectorAll('.nav-group-title.active').forEach(function(el){ el.classList.remove('active'); });
             
