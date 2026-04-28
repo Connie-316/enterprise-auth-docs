@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>企业认证 - 小程序端原型 v7.0</title>
+  <title>企业认证 - 小程序端原型 v7.1</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -26,7 +26,7 @@
     }
     .version-tag {
       display: inline-block;
-      background: #1677ff;
+      background: #52c41a;
       color: #fff;
       border-radius: 4px;
       font-size: 12px;
@@ -564,76 +564,87 @@
     <div style="position:sticky;top:0;background:linear-gradient(135deg,#1890ff,#096dd9);padding:14px 16px;z-index:10;display:flex;align-items:center;gap:10px;">
         <span style="font-size:20px;">🗺️</span>
         <div style="flex:1;">
-            <div style="font-weight:700;font-size:14px;color:#fff;">小程序端 · 页面目录</div>
+            <div style="font-weight:700;font-size:14px;color:#fff;">开发者导航</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.75);margin-top:2px;">小程序端 · 快速索引</div>
         </div>
         <button onclick="toggleMiniSidebar()" style="background:none;border:none;font-size:16px;cursor:pointer;color:rgba(255,255,255,.85);line-height:1;padding:4px;border-radius:4px;" title="收起" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='none'">◀</button>
     </div>
-
-    
-    </div>
-
-    
-    </div>
-
-    <!-- 页面导航列表（树状结构） -->
-    <div style="flex:1;overflow-y:auto;padding:8px 0;" id="navList">
-        <!-- 流程总览 -->
-        <div class="nav-group open" id="ng-overview" style="margin-bottom:4px;">
-            <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-overview')" style="padding:8px 14px 8px 16px;cursor:pointer;font-size:12px;color:#1890ff;font-weight:600;border-left:3px solid #1890ff;background:#e6f7ff;" onmouseover="this.style.background='#f0f5ff'" onmouseout="this.style.background='#e6f7ff'">📊 流程总览</div>
+    <!-- 开发者必读提示 -->
+    <div style="background:#fff7e6;border-bottom:1px solid #ffd591;padding:10px 14px;font-size:11px;color:#ad6800;line-height:1.6;">
+        <div style="font-weight:600;margin-bottom:4px;">👋 开发者指南</div>
+        <div>左侧为页面索引，点击即可跳转查看对应原型</div>
+        <div style="margin-top:6px;background:#fff;border-radius:4px;padding:6px 8px;">
+            <div style="margin-bottom:2px;"><span style="color:#cf1322;font-weight:600;">⚠️ P0必改项：</span></div>
+            <div>• clientType = <code style="background:#f5f5f5;padding:1px 3px;border-radius:2px;">MINI_APP</code></div>
+            <div>• redirectUrl 需中间页跳转</div>
+            <div>• 需配置业务域名</div>
         </div>
-        <!-- 阶段0 -->
+    </div>
+
+    
+    </div>
+
+    
+    </div>
+
+    <!-- 页面导航列表（开发者友好分组） -->
+    <div style="flex:1;overflow-y:auto;padding:8px 0;" id="navList">
+        <!-- 快速入口 -->
+        <div class="nav-group open" id="ng-overview" style="margin-bottom:4px;">
+            <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-overview')" style="padding:8px 14px 8px 16px;cursor:pointer;font-size:12px;color:#1890ff;font-weight:600;border-left:3px solid #1890ff;background:#e6f7ff;" onmouseover="this.style.background='#f0f5ff'" onmouseout="this.style.background='#e6f7ff'">📊 快速总览（必读）</div>
+        </div>
+        <!-- 入口与草稿 -->
         <div class="nav-group open" id="ng-entry" style="margin-bottom:4px;">
             <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-entry')">
-                <span id="ng-entry-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 🚀 入口与草稿
+                <span id="ng-entry-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 🚀 步骤0：入口判断
             </div>
             <div id="ng-entry-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-entry')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">① 认证入口</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-draft')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">💾 草稿恢复</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-entry')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">① 认证入口页<br><span style="font-size:10px;color:#999;">判断是否已认证/已授权</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-draft')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">💾 草稿恢复页<br><span style="font-size:10px;color:#999;">localStorage恢复/重新填写</span></div>
             </div>
         </div>
-        <!-- 阶段1 -->
+        <!-- 表单填写（轻量2步） -->
         <div class="nav-group open" id="ng-form" style="margin-bottom:4px;">
             <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-form')">
-                <span id="ng-form-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 📋 阶段1：表单填写（步骤1-2）
+                <span id="ng-form-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 📋 步骤1-2：表单填写
             </div>
             <div id="ng-form-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-company')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">② 企业信息填写</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-phone')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">② 法人+经办人信息</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-checking')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#722ed1;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#722ed1'" onmouseout="this.style.background='';this.style.color='#722ed1'">②.₅ 过渡加载（纯前端）</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-company')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">② 企业信息<br><span style="font-size:10px;color:#999;">企查查API自动填充</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-phone')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">② 法人+经办人<br><span style="font-size:10px;color:#999;">含身份证、订单通知电话</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-checking')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#722ed1;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#722ed1'" onmouseout="this.style.background='';this.style.color='#722ed1'">②.₅ 过渡加载<br><span style="font-size:10px;color:#999;">纯前端1-2s，后端预检</span></div>
             </div>
         </div>
-        <!-- 阶段2 -->
+        <!-- 提交认证 -->
         <div class="nav-group open" id="ng-submit" style="margin-bottom:4px;">
             <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-submit')">
-                <span id="ng-submit-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 📄 场景一·提交认证（步骤3）
+                <span id="ng-submit-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 📄 步骤3：提交认证
             </div>
             <div id="ng-submit-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-form')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">④ 完整认证表单</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-webview')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#08979c;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#08979c'" onmouseout="this.style.background='';this.style.color='#08979c'">◆ WebView(e签宝H5)</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-form')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">④ 完整表单<br><span style="font-size:10px;color:#999;">场景一/二统一表单</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-webview')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#08979c;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#08979c'" onmouseout="this.style.background='';this.style.color='#08979c'">◆ WebView跳转<br><span style="font-size:10px;color:#999;">e签宝H5内嵌（⚠️P0必改）</span></div>
             </div>
         </div>
-        <!-- 阶段3：结果 -->
+        <!-- 结果状态 -->
         <div class="nav-group open" id="ng-result" style="margin-bottom:4px;">
             <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-result')">
-                <span id="ng-result-arrow" style="font-size:10px;transition:transform .2s;">▶</span> ✅❌ 结果状态
+                <span id="ng-result-arrow" style="font-size:10px;transition:transform .2s;">▶</span> ✅❌ 结果与状态码
             </div>
             <div id="ng-result-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-processing')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7.5 审核中</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-success')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8A 认证+授权通过</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-failed')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8B 认证失败</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-wait')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8C 等待授权</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-ok')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7A 授权通过</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-rej')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7B 授权拒绝</div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-processing')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7.5 审核中<br><span style="font-size:10px;color:#999;">等待e签宝回调（5-10分钟）</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-success')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8A 认证+授权通过<br><span style="font-size:10px;color:#999;">场景一最终状态</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-failed')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8B 认证失败<br><span style="font-size:10px;color:#999;">可重新发起认证</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-wait')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">8C 等待授权<br><span style="font-size:10px;color:#999;">场景一·管理员审批</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-ok')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7A 授权通过<br><span style="font-size:10px;color:#999;">场景二最终状态</span></div>
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-rej')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">7B 授权拒绝<br><span style="font-size:10px;color:#999;">可重新申请（最多3次）</span></div>
             </div>
         </div>
-        <!-- 辅助 -->
-        <div class="nav-group" id="ng-aux" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#888;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-aux')">
-                <span id="ng-aux-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 💾 辅助
+        <!-- 开发者参考 -->
+        <div class="nav-group open" id="ng-aux" style="margin-bottom:4px;">
+            <div style="padding:8px 14px;font-weight:600;color:#cf1322;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-aux')">
+                <span id="ng-aux-arrow" style="font-size:10px;transition:transform .2s;">▶</span> ⚠️ PC/小程序差异（必读）
             </div>
-            <div id="ng-aux-children" style="padding-left:8px;display:none;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-draft')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">💾 草稿恢复</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-diff')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⚠️ PC/小程序差异</div>
+            <div id="ng-aux-children" style="padding-left:8px;">
+                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-diff')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#cf1322;border-left:3px solid #ffccc7;transition:all .12s;background:#fff2f0;" onmouseover="this.style.background='#ffe7e6'" onmouseout="this.style.background='#fff2f0'">⚠️ PC/小程序差异<br><span style="font-size:10px;color:#cf1322;">P0必改项+技术差异表</span></div>
             </div>
         </div>
     </div>
@@ -646,55 +657,97 @@
 <!-- 展开按钮（侧栏收起时显示） -->
 <button id="sidebar-expand" onclick="toggleMiniSidebar()" style="display:none;position:fixed;top:10px;left:8px;z-index:10001;background:#1890ff;color:#fff;border:none;width:30px;height:30px;border-radius:0 6px 6px 0;cursor:pointer;font-size:14px;box-shadow:2px 0 8px rgba(0,0,0,.2);line-height:1;">▶</button>
 
-<!-- ========== 流程总览 ========== -->
+<!-- ========== 流程总览（开发者视角） ========== -->
 <div class="screen-page visible" id="p-overview">
-  <div class="group-header"><div class="line"></div><div class="text">小程序端 · 流程总览</div><div class="line"></div></div>
+  <div class="group-header"><div class="line"></div><div class="text">📊 开发者视角 · 快速入门</div><div class="line"></div></div>
   <div style="padding:0 16px 24px;">
+    <!-- 开发者必读 -->
+    <div style="background:linear-gradient(135deg,#fff2f0,#fff);border:1px solid #ffccc7;border-radius:10px;padding:14px;margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;color:#cf1322;margin-bottom:10px;">👋 开发者你好！快速索引：</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:11px;">
+        <div onclick="jumpToMiniPage('p-entry')" style="background:#fff;border-radius:6px;padding:6px 10px;cursor:pointer;border:1px solid #ffccc7;color:#cf1322;font-weight:600;">① 认证入口</div>
+        <div onclick="jumpToMiniPage('p-company')" style="background:#fff;border-radius:6px;padding:6px 10px;cursor:pointer;border:1px solid #ffccc7;color:#cf1322;font-weight:600;">② 企业信息</div>
+        <div onclick="jumpToMiniPage('p-phone')" style="background:#fff;border-radius:6px;padding:6px 10px;cursor:pointer;border:1px solid #ffccc7;color:#cf1322;font-weight:600;">② 法人经办人</div>
+        <div onclick="jumpToMiniPage('p-webview')" style="background:#fff;border-radius:6px;padding:6px 10px;cursor:pointer;border:1px solid #ffccc7;color:#cf1322;font-weight:600;">◆ WebView</div>
+        <div onclick="jumpToMiniPage('p-diff')" style="background:#cf1322;border-radius:6px;padding:6px 10px;cursor:pointer;color:#fff;font-weight:600;">⚠️ PC差异表</div>
+      </div>
+    </div>
+
+    <!-- 场景对比 -->
     <div style="background:linear-gradient(135deg,#e6f7ff,#bae7ff);border:1px solid #91d5ff;border-radius:10px;padding:16px;margin-bottom:16px;">
-      <div style="font-size:14px;font-weight:700;color:#003a8c;margin-bottom:12px;">📖 一句话理解业务流程</div>
+      <div style="font-size:14px;font-weight:700;color:#003a8c;margin-bottom:12px;">🔀 两种场景：商城统一表单，e签宝内部判断走哪条</div>
       <div style="display:flex;gap:16px;flex-wrap:wrap;">
         <div style="flex:1;min-width:280px;background:#fff;border-radius:8px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-          <div style="font-size:12px;font-weight:700;color:#1890ff;margin-bottom:8px;border-bottom:2px solid #91d5ff;padding-bottom:4px;">🔵 场景一：首次认证</div>
+          <div style="font-size:12px;font-weight:700;color:#1890ff;margin-bottom:8px;border-bottom:2px solid #91d5ff;padding-bottom:4px;">🔵 场景一：首次认证（企业未认证）</div>
           <div style="font-size:11px;color:#333;line-height:1.8;">
-            <div>① 认证入口 → ② 企业信息 → ②.₅ 过渡(1-2s)</div>
-            <div>→ ④ 完整表单(法人+经办人) → 提交</div>
-            <div>→ WebView e签宝H5(人脸+营业执照)</div>
-            <div>→ 8A 认证+授权通过 ✅</div>
+            <div>① 入口 → ② 企业信息 → ②.₅ 过渡</div>
+            <div>→ ④ 完整表单 → WebView e签宝</div>
+            <div>→ <b>人脸识别 + 营业执照 + 授权</b></div>
+            <div>→ 7.5审核 → 8A 认证+授权通过 ✅</div>
           </div>
         </div>
         <div style="flex:1;min-width:280px;background:#fff;border-radius:8px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-          <div style="font-size:12px;font-weight:700;color:#cf1322;margin-bottom:8px;border-bottom:2px solid #ffa39e;padding-bottom:4px;">🔴 场景二：已认证授权</div>
+          <div style="font-size:12px;font-weight:700;color:#cf1322;margin-bottom:8px;border-bottom:2px solid #ffa39e;padding-bottom:4px;">🔴 场景二：已认证授权（企业已实名）</div>
           <div style="font-size:11px;color:#333;line-height:1.8;">
-            <div>①→②→②.₅→④ 同场景一，<b style="color:#cf1322;">跳过人脸</b></div>
-            <div>→ WebView e签宝H5(仅授权审批)</div>
-            <div>→ 8C 等待授权 → 7A 审批通过 ✅</div>
-            <div>→ 7B 拒绝可重新申请(最多3次)</div>
+            <div>①→②→②.₅→④ 同场景一</div>
+            <div>→ WebView e签宝（<b style="color:#cf1322;">跳过人脸</b>）</div>
+            <div>→ 仅管理员扫码授权</div>
+            <div>→ 8C等待 → 7A 授权通过 ✅</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div style="font-size:13px;font-weight:600;color:#262626;margin-bottom:8px;">📋 页面流程</div>
-    <div style="background:#fff;border-radius:8px;padding:12px;font-size:12px;color:#555;line-height:2;">
-      <div><span style="color:#1890ff;font-weight:600;">①</span> 认证入口 → <span style="color:#1890ff;font-weight:600;">②</span> 企业信息 → <span style="color:#722ed1;font-weight:600;">②.₅</span> 过渡加载 → <span style="color:#1890ff;font-weight:600;">④</span> 完整表单</div>
-      <div>→ <span style="color:#08979c;font-weight:600;">◆</span> WebView e签宝H5 → <span style="color:#fa8c16;font-weight:600;">7.5</span> 审核中 → 结果页</div>
-    </div>
-
-    <div style="font-size:13px;font-weight:600;color:#262626;margin:16px 0 8px;">🔑 场景判断</div>
-    <div style="background:#fff;border-radius:8px;padding:12px;font-size:12px;color:#555;">
-      <div style="margin-bottom:8px;"><b>商城侧不判断场景</b>，统一展示完整表单</div>
-      <div><b>e签宝H5内部自动判断：</b></div>
-      <div style="margin-left:12px;">
-        <div>• 未认证企业 → 人脸识别 + 营业执照 + 管理员授权（场景一）</div>
-        <div>• 已认证企业 → 仅管理员授权（场景二）</div>
+    <!-- P0必改项 -->
+    <div style="background:#fff2f0;border:1px solid #ffccc7;border-radius:10px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:700;color:#cf1322;margin-bottom:12px;">⚠️ 小程序端P0必改项（开发前必读）</div>
+      <div style="background:#fff;border-radius:6px;padding:12px;font-size:12px;">
+        <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed #ffd591;">
+          <div style="font-weight:600;color:#cf1322;margin-bottom:4px;">1. clientType 参数 ⚠️</div>
+          <div>必须传 <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;">MINI_APP</code>，传 H5/ALL 会导致e签宝页面渲染异常</div>
+        </div>
+        <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed #ffd591;">
+          <div style="font-weight:600;color:#cf1322;margin-bottom:4px;">2. redirectUrl 必须用中间页跳转</div>
+          <div>指向 <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;">业务域名/auth/miniapp-callback.html</code>，由该页调用 <code>wx.miniProgram.navigateTo</code> 跳回小程序</div>
+        </div>
+        <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed #ffd591;">
+          <div style="font-weight:600;color:#cf1322;margin-bottom:4px;">3. 业务域名配置</div>
+          <div>微信公众平台 → 开发管理 → 业务域名，添加 <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;">openapi.esign.cn</code></div>
+        </div>
+        <div>
+          <div style="font-weight:600;color:#cf1322;margin-bottom:4px;">4. X-Platform Header</div>
+          <div>请求Header中需包含 <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;">X-Platform: miniapp</code>，供后端识别来源</div>
+        </div>
       </div>
     </div>
 
-    <div style="font-size:13px;font-weight:600;color:#262626;margin:16px 0 8px;">⚠️ 小程序端P0必改项</div>
-    <div style="background:#fff;border-radius:8px;padding:12px;font-size:12px;color:#555;">
-      <div style="margin-bottom:4px;">1. <b>clientType</b> 必须传 <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;">MINI_APP</code>（非 H5/ALL）</div>
-      <div style="margin-bottom:4px;">2. <b>redirectUrl</b> 必须指向中间H5页，由该页调 <code>wx.miniProgram.navigateTo</code> 跳回</div>
-      <div>3. 小程序后台配置 <b>业务域名</b> <code style="background:#f5f5f5;padding:1px 4px;border-radius:3px;">openapi.esign.cn</code></div>
+    <!-- 页面与状态码 -->
+    <div style="background:#fff;border-radius:10px;padding:16px;margin-bottom:16px;box-shadow:0 1px 6px rgba(0,0,0,.06);">
+      <div style="font-size:14px;font-weight:700;color:#262626;margin-bottom:12px;">📋 页面与状态码对应关系</div>
+      <div style="font-size:12px;color:#555;line-height:2;">
+        <div style="margin-bottom:8px;"><span style="color:#1890ff;font-weight:600;">①</span> 认证入口 → 判断是否已认证</div>
+        <div style="margin-bottom:8px;"><span style="color:#1890ff;font-weight:600;">②</span> 企业信息 → 企查查自动填充</div>
+        <div style="margin-bottom:8px;"><span style="color:#722ed1;font-weight:600;">②.₅</span> 过渡加载 → 前端1-2s等待后端预检</div>
+        <div style="margin-bottom:8px;"><span style="color:#1890ff;font-weight:600;">④</span> 完整表单 → 场景一/二统一</div>
+        <div style="margin-bottom:8px;"><span style="color:#08979c;font-weight:600;">◆</span> WebView → e签宝H5内嵌</div>
+        <div style="margin-bottom:8px;"><span style="color:#fa8c16;font-weight:600;">7.5</span> 审核中 → 等待e签宝回调（5-10分钟）</div>
+        <div style="margin-bottom:4px;"><span style="color:#52c41a;font-weight:600;">8A</span> 认证+授权通过 → <span style="background:#f6ffed;padding:1px 4px;border-radius:3px;">场景一最终状态</span></div>
+        <div style="margin-bottom:4px;"><span style="color:#ff4d4f;font-weight:600;">8B</span> 认证失败 → 可重新发起认证</div>
+        <div style="margin-bottom:4px;"><span style="color:#fa8c16;font-weight:600;">8C</span> 等待授权 → 场景一·待管理员审批</div>
+        <div style="margin-bottom:4px;"><span style="color:#52c41a;font-weight:600;">7A</span> 授权通过 → <span style="background:#f6ffed;padding:1px 4px;border-radius:3px;">场景二最终状态</span></div>
+        <div><span style="color:#ff4d4f;font-weight:600;">7B</span> 授权拒绝 → 可重新申请（最多3次）</div>
+      </div>
+    </div>
+
+    <!-- 核心架构 -->
+    <div style="background:#f6ffed;border:1px solid #b7eb8f;border-radius:10px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:700;color:#389e0d;margin-bottom:10px;">🏗️ 核心架构（商城侧不判断场景）</div>
+      <div style="font-size:12px;color:#555;line-height:1.8;">
+        <div style="margin-bottom:8px;"><b>商城侧：</b>统一展示完整表单，提交到 <code>/api/company/auth/submit</code></div>
+        <div style="margin-bottom:8px;"><b>e签宝H5内部：</b>自动检测企业是否已实名认证</div>
+        <div>• 未认证 → 走场景一流程（人脸+执照+授权）</div>
+        <div>• 已认证 → 走场景二流程（仅授权）</div>
+      </div>
     </div>
 
     <div style="margin-top:16px;">

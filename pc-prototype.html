@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企业认证原型 v7.0 | 数智聚模商城</title>
+    <title>企业认证原型 v7.1 | 数智聚模商城</title>
     <!-- Mermaid.js for professional flowcharts -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
@@ -616,139 +616,165 @@
 <div class="proto-nav" style="position: fixed; top: 0; left: 300px; right: 0; background: #001529; color: #fff; z-index: 9999; padding: 6px 16px;">
     <div style="display: flex; align-items: center; gap: 12px;">
         <button onclick="goBack()" id="backBtn" style="background:#595959;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;display:none;">← 返回</button>
-        <span style="font-weight: 600; white-space: nowrap; font-size: 13px;">🎨 企业认证原型 v7.0</span>
+        <span style="font-weight: 600; white-space: nowrap; font-size: 13px;">🎨 企业认证原型 v7.1</span>
         <span style="color: #4a90d9; font-size: 11px;">|</span>
         <span id="nav-breadcrumb" style="font-size: 11px; color: #8c9bb3;">当前：<b>流程总览</b></span>
     </div>
 </div>
 
 <!-- ====== v6.8 新增：可折叠交互式导航面板 ====== -->
-<!-- ====== v7.0：固定左侧页面导航侧边栏（含业务流程速览） ====== -->
+<!-- ====== v7.1：固定左侧页面导航侧边栏（开发者友好版） ====== -->
 <div id="nav-sidebar" style="position:fixed;top:0;left:0;width:260px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:9998;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;box-shadow:2px 0 12px rgba(0,0,0,.08);">
 
     <!-- 侧栏头部 -->
     <div style="position:sticky;top:0;background:linear-gradient(135deg,#1890ff,#096dd9);padding:14px 16px;z-index:10;display:flex;align-items:center;gap:10px;">
         <span style="font-size:20px;">🗺️</span>
         <div style="flex:1;">
-            <div style="font-weight:700;font-size:14px;color:#fff;">页面目录</div>
+            <div style="font-weight:700;font-size:14px;color:#fff;">PC端 · 开发者导航</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.75);margin-top:2px;">Web端企业认证原型索引</div>
         </div>
         <button onclick="toggleSidebar()" style="background:none;border:none;font-size:16px;cursor:pointer;color:rgba(255,255,255,.85);line-height:1;padding:4px;border-radius:4px;" title="收起侧栏" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='none'">◀</button>
     </div>
 
-    <!-- 树形导航（从v6.8保留） -->
+    <!-- 开发者必读提示 -->
+    <div style="background:#fff7e6;border-bottom:1px solid #ffd591;padding:10px 14px;font-size:11px;color:#ad6800;line-height:1.6;">
+        <div style="font-weight:600;margin-bottom:4px;">👋 开发者指南</div>
+        <div>左侧为页面索引，点击即可跳转查看对应原型</div>
+        <div style="margin-top:6px;background:#fff;border-radius:4px;padding:6px 8px;">
+            <div style="margin-bottom:2px;"><span style="color:#1890ff;font-weight:600;">ℹ️ PC端：</span>直接跳转e签宝H5页面</div>
+            <div><span style="color:#cf1322;font-weight:600;">⚠️ 小程序：</span>需用WebView内嵌+中间页跳转</div>
+        </div>
+    </div>
+
+    <!-- 树形导航（开发者友好分组） -->
 <div class="nav-tree">
-            <!-- 阶段0：入口判断 -->
+            <!-- 快速总览 -->
             <div class="nav-group open" id="ng-entry">
-                <div class="nav-group-title" onclick="toggleGroup('ng-entry')"><span class="nav-group-arrow">▶</span> 🚀 阶段0 · 入口与草稿</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-entry')"><span class="nav-group-arrow">▶</span> 📊 快速总览</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('flowOverview')">
                         <div class="nav-leaf-icon">📊</div>
-                        <div class="nav-leaf-body">流程总览图
+                        <div class="nav-leaf-body">流程总览图<span style="display:block;font-size:10px;color:#999;font-weight:400;">业务流程+场景说明</span>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- 步骤0-1：入口+表单 -->
             <div class="nav-group open" id="ng-start">
-                <div class="nav-group-title" onclick="toggleGroup('ng-start')"><span class="nav-group-arrow">▶</span> 📋 阶段1 · 表单填写</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-start')"><span class="nav-group-arrow">▶</span> 📋 步骤1-2：表单填写</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('unverified')">
                         <div class="nav-leaf-icon">①</div>
-                        <div class="nav-leaf-body">页面1：认证入口（权益引导页）
+                        <div class="nav-leaf-body">认证入口<span style="display:block;font-size:10px;color:#999;font-weight:400;">判断是否已认证/已授权</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('page2')">
                         <div class="nav-leaf-icon">②</div>
-                        <div class="nav-leaf-body">页面2：填写企业信息（轻量表单）
+                        <div class="nav-leaf-body">企业信息填写<span style="display:block;font-size:10px;color:#999;font-weight:400;">企查查API自动填充</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('checking')">
                         <div class="nav-leaf-icon">②.₅</div>
-                        <div class="nav-leaf-body">页面3.5：过渡加载态
+                        <div class="nav-leaf-body">过渡加载态<span style="display:block;font-size:10px;color:#999;font-weight:400;">纯前端1-2s后端预检</span>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- 步骤3-4：提交+跳转 -->
             <div class="nav-group open" id="ng-form">
-                <div class="nav-group-title" onclick="toggleGroup('ng-form')"><span class="nav-group-arrow">▶</span> 📄 场景一 · 提交认证</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-form')"><span class="nav-group-arrow">▶</span> 📄 步骤3-4：提交认证</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('form')">
                         <div class="nav-leaf-icon">④</div>
-                        <div class="nav-leaf-body">页面4：完整认证表单
+                        <div class="nav-leaf-body">完整认证表单<span style="display:block;font-size:10px;color:#999;font-weight:400;">场景一/二统一（4步指示器）</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignModal')">
                         <div class="nav-leaf-icon">◆</div>
-                        <div class="nav-leaf-body">确认跳转e签宝弹窗
+                        <div class="nav-leaf-body">确认跳转e签宝弹窗<span style="display:block;font-size:10px;color:#999;font-weight:400;">场景一：认证；场景二：授权</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignRedirect')">
                         <div class="nav-leaf-icon">◉</div>
-                        <div class="nav-leaf-body">e签宝 H5（PC端跳转）
+                        <div class="nav-leaf-body">e签宝H5跳转页<span style="display:block;font-size:10px;color:#999;font-weight:400;">PC端：window.location.href</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzModal')">
                         <div class="nav-leaf-icon">◆</div>
-                        <div class="nav-leaf-body">授权申请弹窗（场景二）
+                        <div class="nav-leaf-body">授权申请弹窗<span style="display:block;font-size:10px;color:#999;font-weight:400;">场景二：仅授权申请</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('esignRedirectAuthz')">
                         <div class="nav-leaf-icon">◉</div>
-                        <div class="nav-leaf-body">e签宝 授权页（PC端跳转）
+                        <div class="nav-leaf-body">e签宝授权页<span style="display:block;font-size:10px;color:#999;font-weight:400;">场景二：管理员扫码</span>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- 结果状态 -->
             <div class="nav-group open" id="ng-result">
-                <div class="nav-group-title" onclick="toggleGroup('ng-result')"><span class="nav-group-arrow">▶</span> ✅❌ 结果状态</div>
+                <div class="nav-group-title" onclick="toggleGroup('ng-result')"><span class="nav-group-arrow">▶</span> ✅❌ 结果状态码</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('verifying')">
                         <div class="nav-leaf-icon">7.5</div>
-                        <div class="nav-leaf-body">审核中（VERIFYING）
+                        <div class="nav-leaf-body">审核中<span style="display:block;font-size:10px;color:#999;font-weight:400;">VERIFYING（5-10分钟）</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('verified')">
                         <div class="nav-leaf-icon">8A</div>
-                        <div class="nav-leaf-body">认证+授权通过
+                        <div class="nav-leaf-body">认证+授权通过<span style="display:block;font-size:10px;color:#52c41a;font-weight:400;">场景一最终状态</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('rejected')">
                         <div class="nav-leaf-icon">8B</div>
-                        <div class="nav-leaf-body">认证失败
+                        <div class="nav-leaf-body">认证失败<span style="display:block;font-size:10px;color:#999;font-weight:400;">可重新发起认证</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzPending')">
                         <div class="nav-leaf-icon">8C</div>
-                        <div class="nav-leaf-body">等待授权（场景一）
+                        <div class="nav-leaf-body">等待授权<span style="display:block;font-size:10px;color:#999;font-weight:400;">场景一·待管理员审批</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzApproved')">
                         <div class="nav-leaf-icon">7A</div>
-                        <div class="nav-leaf-body">授权通过（场景二）
+                        <div class="nav-leaf-body">授权通过<span style="display:block;font-size:10px;color:#52c41a;font-weight:400;">场景二最终状态</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzRejected')">
                         <div class="nav-leaf-icon">7B</div>
-                        <div class="nav-leaf-body">授权拒绝
+                        <div class="nav-leaf-body">授权拒绝<span style="display:block;font-size:10px;color:#999;font-weight:400;">可重新申请（最多3次）</span>
                         </div>
                     </div>
                     <div class="nav-leaf" onclick="jumpToPage('authzTimeout')">
                         <div class="nav-leaf-icon">7C</div>
-                        <div class="nav-leaf-body">授权超时
+                        <div class="nav-leaf-body">授权超时<span style="display:block;font-size:10px;color:#999;font-weight:400;">24h自动失效</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 草稿恢复 -->
-            <div class="nav-group" id="ng-draft">
-                <div class="nav-group-title" onclick="toggleGroup('ng-draft')"><span class="nav-group-arrow">▶</span> 💾 辅助：草稿恢复</div>
+            <!-- 辅助功能 -->
+            <div class="nav-group open" id="ng-draft">
+                <div class="nav-group-title" onclick="toggleGroup('ng-draft')"><span class="nav-group-arrow">▶</span> 💾 辅助功能</div>
                 <div class="nav-children">
                     <div class="nav-leaf" onclick="jumpToPage('draft')">
                         <div class="nav-leaf-icon">💾</div>
-                        <div class="nav-leaf-body">草稿恢复页
+                        <div class="nav-leaf-body">草稿恢复<span style="display:block;font-size:10px;color:#999;font-weight:400;">localStorage恢复/重新填写</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PC/小程序差异（重要参考） -->
+            <div class="nav-group open" id="ng-diff" style="margin-top:8px;">
+                <div class="nav-group-title" onclick="toggleGroup('ng-diff')" style="background:#fff2f0;border-left:3px solid #ff4d4f;"><span class="nav-group-arrow">▶</span> ⚠️ PC/小程序差异（必读）</div>
+                <div class="nav-children" style="padding:4px 0;">
+                    <div class="nav-leaf" onclick="jumpToPage('pDiff')" style="background:#fff2f0;border-left:3px solid #ff4d4f;">
+                        <div class="nav-leaf-icon">⚠️</div>
+                        <div class="nav-leaf-body" style="color:#cf1322;">PC vs 小程序差异表<span style="display:block;font-size:10px;color:#cf1322;font-weight:400;">P0必改项+技术差异+接入条件</span>
                         </div>
                     </div>
                 </div>
