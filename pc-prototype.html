@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企业认证原型 v7.2 | 数智聚模商城</title>
+    <title>企业认证原型 v7.3 | 数智聚模商城</title>
     <!-- Mermaid.js for professional flowcharts -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
@@ -1228,283 +1228,69 @@
                 <!-- 1. 整体流程图 -->
                 <div style="margin-bottom: 40px;">
                     <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
-                        二、详细业务流程图（SVG交互版）
-                        <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">物料商城API同步接入"e签宝"企业认证业务流程图 v7.0</span>
+                        二、详细业务流程图（Mermaid自动布局版）
+                        <span style="font-size: 12px; font-weight: 400; color: #8c8c8c; margin-left: 12px;">v7.2 - 线条自动布局，无交叉重叠</span>
                     </div>
 
-                    
+                    <div style="background: #fafafa; border-radius: 8px; padding: 16px; text-align: left;">
+                        <div class="mermaid">
+flowchart TB
+    subgraph 公共流程
+        A([开始]) --> B{是否有历史草稿?}
+        B -->|Y| C[草稿恢复页]
+        B -->|N| D[页面1:认证入口]
+        C --> E{是否继续填写?}
+        E -->|Y| D
+        E -->|N| F[返回首页]
+        D --> G[页面2:企业信息<br/>企查查API自动填充]
+        G --> H[页面3.5:过渡加载<br/>纯前端1-2秒]
+        H --> I[页面4:完整认证表单]
+    end
 
-                    <div style="background: #fafafa; border-radius: 8px; padding: 16px; overflow-x: auto; text-align: center;">
-                        <svg id="flowchart-svg" viewBox="0 0 1100 1580" xmlns="http://www.w3.org/2000/svg"
-                             style="width:100%; max-width:1100px; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif; cursor:zoom-in;"
-                             onclick="openSvgPreview()">
-                            <defs>
-                                <!-- 箭头标记 -->
-                                <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L8,3 z" fill="#595959"/>
-                                </marker>
-                                <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L8,3 z" fill="#1890ff"/>
-                                </marker>
-                                <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L8,3 z" fill="#f5222d"/>
-                                </marker>
-                                <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L8,3 z" fill="#52c41a"/>
-                                </marker>
-                                <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-                                    <path d="M0,0 L0,6 L8,3 z" fill="#fa8c16"/>
-                                </marker>
-                            </defs>
+    subgraph 场景一["🔵 场景一:首次认证(企业未认证)"]
+        I --> J[/提交认证/]
+        J --> K[e签宝H5<br/>人脸识别+营业执照OCR]
+        K --> L{认证结果}
+        L -->|通过| M[页面8A:认证+授权通过✅]
+        L -->|失败| N[页面8B:认证失败<br/>可重新发起]
+    end
 
-                            <!-- ===== 标题 ===== -->
-                            <text x="550" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#262626">物料商城API同步接入"e签宝"企业认证业务流程图</text>
+    subgraph 场景二["🔴 场景二:已认证授权(企业已实名)"]
+        I --> O[/提交认证/]
+        O --> P[e签宝H5<br/>仅授权审批]
+        P --> Q{授权结果}
+        Q -->|通过| R[页面7A:授权通过✅]
+        Q -->|拒绝| S[页面7B:授权拒绝<br/>可重新申请]
+        Q -->|超时| T[页面7C:授权超时<br/>24h自动失效]
+    end
 
-                            <!-- ===== 图例 ===== -->
-                            <rect x="20" y="45" width="920" height="36" rx="4" fill="#f0f5ff" stroke="#adc6ff" stroke-width="1"/>
-                            <rect x="36" y="55" width="16" height="16" rx="8" fill="#1890ff"/>
-                            <text x="58" y="67" font-size="12" fill="#444">圆角矩形=操作步骤</text>
-                            <polygon points="116,63 128,55 140,63 128,71" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="148" y="67" font-size="12" fill="#444">菱形=判断</text>
-                            <rect x="220" y="55" width="16" height="16" rx="2" fill="#f6ffed" stroke="#52c41a" stroke-width="1.5"/>
-                            <text x="242" y="67" font-size="12" fill="#444">绿色矩形=成功终态</text>
-                            <rect x="365" y="55" width="16" height="16" rx="2" fill="#fff1f0" stroke="#f5222d" stroke-width="1.5"/>
-                            <text x="387" y="67" font-size="12" fill="#444">红色矩形=失败/异常</text>
-                            <rect x="520" y="55" width="16" height="16" rx="2" fill="#e6f7ff" stroke="#1890ff" stroke-width="1.5"/>
-                            <text x="542" y="67" font-size="12" fill="#444">蓝色矩形=外部系统</text>
-                            <line x1="676" y1="63" x2="706" y2="63" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
-                            <text x="712" y="67" font-size="12" fill="#444">场景一</text>
-                            <line x1="780" y1="63" x2="810" y2="63" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
-                            <text x="816" y="67" font-size="12" fill="#444">场景二</text>
+    I -->|e签宝判断| J
+    I -->|e签宝判断| O
 
-                            <!-- =====================================================
-                                 公共起始段：开始 → 草稿判断 → 草稿恢复 → 继续？ → 页面1入口
-                                 ===================================================== -->
+    classDef startEnd fill:#1890ff,stroke:#0050b3,color:#fff
+    classDef decision fill:#fffbe6,stroke:#fa8c16
+    classDef page fill:#e6f7ff,stroke:#91d5ff
+    classDef esign fill:#bae7ff,stroke:#1890ff
+    classDef success fill:#f6ffed,stroke:#52c41a,color:#52c41a
+    classDef fail fill:#fff1f0,stroke:#ff4d4f,color:#ff4d4f
 
-                            <!-- 开始 -->
-                            <ellipse cx="480" cy="115" rx="44" ry="22" fill="#1890ff" stroke="#0050b3" stroke-width="1.5"/>
-                            <text x="480" y="120" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">开始</text>
-                            <line x1="480" y1="137" x2="480" y2="158" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-
-                            <!-- 判断：是否有历史草稿 -->
-                            <polygon points="480,162 560,195 480,228 400,195" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="480" y="190" text-anchor="middle" font-size="13" fill="#333">是否有</text>
-                            <text x="480" y="207" text-anchor="middle" font-size="13" fill="#333">历史草稿？</text>
-                            <!-- Y → 草稿恢复页 -->
-                            <line x1="480" y1="228" x2="480" y2="258" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-                            <text x="488" y="248" font-size="11" fill="#595959">Y</text>
-                            <!-- N → 页面1 -->
-                            <line x1="560" y1="195" x2="720" y2="195" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-                            <text x="618" y="189" font-size="11" fill="#595959">N</text>
-
-                            <!-- 草稿恢复页 (页面3) -->
-                            <rect x="380" y="258" width="200" height="46" rx="6" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="480" y="277" text-anchor="middle" font-size="13" fill="#333" font-weight="500">草稿恢复页</text>
-                            <text x="480" y="294" text-anchor="middle" font-size="11" fill="#8c8c8c">（永久有效，展示已填信息）</text>
-                            <line x1="480" y1="304" x2="480" y2="330" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-
-                            <!-- 判断：是否继续填写 -->
-                            <polygon points="480,334 560,367 480,400 400,367" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="480" y="362" text-anchor="middle" font-size="13" fill="#333">是否继续</text>
-                            <text x="480" y="379" text-anchor="middle" font-size="13" fill="#333">填写？</text>
-                            <!-- Y → 向右到与"N草稿"汇合点 -->
-                            <line x1="560" y1="367" x2="720" y2="367" stroke="#595959" stroke-width="1.5"/>
-                            <text x="618" y="361" font-size="11" fill="#595959">Y（继续填写）</text>
-                            <!-- N → 返回首页 -->
-                            <line x1="400" y1="367" x2="240" y2="367" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-                            <text x="296" y="361" font-size="11" fill="#595959">N（放弃）</text>
-
-                            <!-- 返回首页 -->
-                            <rect x="140" y="346" width="100" height="40" rx="6" fill="#f5f5f5" stroke="#d9d9d9" stroke-width="1.5"/>
-                            <text x="190" y="370" text-anchor="middle" font-size="13" fill="#595959">返回首页</text>
-
-                            <!-- 汇合：N无草稿 和 Y继续填写 → 竖线到页面1 -->
-                            <!-- 竖线：x=720, 从y=195到y=430（汇合点） -->
-                            <line x1="720" y1="195" x2="720" y2="430" stroke="#595959" stroke-width="1.5"/>
-                            <line x1="720" y1="367" x2="720" y2="430" stroke="#595959" stroke-width="1.5"/>
-                            <line x1="720" y1="430" x2="630" y2="430" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-
-                            <!-- 页面1：权益入口页 (v5.4新增) -->
-                            <rect x="430" y="408" width="200" height="46" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
-                            <text x="530" y="427" text-anchor="middle" font-size="13" fill="#1890ff" font-weight="500">📋 页面1：权益入口</text>
-                            <text x="530" y="444" text-anchor="middle" font-size="11" fill="#1890ff">展示账期/专属价/合同等权益</text>
-                            <line x1="530" y1="454" x2="530" y2="478" stroke="#1890ff" stroke-width="1.5" marker-end="url(#arr-blue)"/>
-
-                            <!-- 页面2：企业信息轻量表单 (v5.4新增) -->
-                            <rect x="430" y="478" width="200" height="46" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
-                            <text x="530" y="497" text-anchor="middle" font-size="13" fill="#1890ff" font-weight="500">📝 页面2：填写企业信息</text>
-                            <text x="530" y="514" text-anchor="middle" font-size="11" fill="#1890ff">企查查搜索自动填充，4个字段</text>
-                            <line x1="530" y1="524" x2="530" y2="548" stroke="#1890ff" stroke-width="1.5" marker-end="url(#arr-blue)"/>
-
-                            <!-- 页面3.5：准备认证材料过渡态（v6.6修复：统一表单架构，纯前端过渡） -->
-                            <rect x="395" y="548" width="270" height="46" rx="6" fill="#f9f0ff" stroke="#722ed1" stroke-width="2"/>
-                            <text x="530" y="567" text-anchor="middle" font-size="13" fill="#722ed1" font-weight="500">🔍 页面3.5：准备认证材料</text>
-                            <text x="530" y="584" text-anchor="middle" font-size="11" fill="#722ed1">纯前端过渡态(1-2s)，不调用后端API（统一表单架构）</text>
-                            <line x1="530" y1="594" x2="530" y2="622" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-
-                            <!-- =====================================================
-                                 场景一：前端展示完整表单 → e签宝H5自动适配
-                                 统一表单架构：商城侧不做分流，统一走完整表单页，
-                                 e签宝H5内部自动检测企业是否已认证并自行适配。
-                                 ===================================================== -->
-
-                            <!-- 统一表单架构（v6.6）：页面3.5(纯前端过渡)后直接进入完整表单页 -->
-                            <line x1="530" y1="594" x2="530" y2="718" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
-
-                            <!-- 页面4：完整认证表单（场景一） -->
-                            <rect x="380" y="718" width="300" height="56" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
-                            <text x="530" y="741" text-anchor="middle" font-size="13" fill="#1890ff" font-weight="500">📄 页面4：完整认证表单</text>
-                            <text x="530" y="757" text-anchor="middle" font-size="11" fill="#1890ff">法人信息+经办人信息+协议勾选</text>
-                            <text x="530" y="769" text-anchor="middle" font-size="10" fill="#8c8c8c">（企查查预填 | 可保存草稿）</text>
-                            <line x1="530" y1="774" x2="530" y2="798" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
-
-                            <!-- e签宝认证弹窗 -->
-                            <rect x="390" y="798" width="280" height="40" rx="6" fill="#f9f0ff" stroke="#722ed1" stroke-width="1.5" stroke-dasharray="5,3"/>
-                            <text x="530" y="813" text-anchor="middle" font-size="13" fill="#722ed1" font-weight="500">🔲 弹窗：确认跳转e签宝认证</text>
-                            <text x="530" y="829" text-anchor="middle" font-size="11" fill="#722ed1">勾选协议 → 点击【立即认证】</text>
-                            <line x1="530" y1="838" x2="530" y2="862" stroke="#1890ff" stroke-width="2" marker-end="url(#arr-blue)"/>
-
-                            <!-- e签宝H5认证页（外部） -->
-                            <rect x="380" y="862" width="300" height="46" rx="6" fill="#e6fffb" stroke="#13c2c2" stroke-width="2"/>
-                            <text x="530" y="881" text-anchor="middle" font-size="13" fill="#08979c" font-weight="500">🌐 e签宝H5页（外部系统）</text>
-                            <text x="530" y="898" text-anchor="middle" font-size="11" fill="#08979c">统一表单架构：H5内部自动检测并适配首次认证/已认证授权</text>
-                            <line x1="530" y1="908" x2="530" y2="932" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-
-                            <!-- 判断：认证是否成功 -->
-                            <polygon points="530,936 620,969 530,1002 440,969" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="530" y="964" text-anchor="middle" font-size="13" fill="#333">e签宝认证</text>
-                            <text x="530" y="981" text-anchor="middle" font-size="13" fill="#333">是否成功？</text>
-
-                            <!-- 认证成功 Y -->
-                            <line x1="620" y1="969" x2="760" y2="969" stroke="#52c41a" stroke-width="2" marker-end="url(#arr-green)"/>
-                            <text x="677" y="962" font-size="11" fill="#52c41a" font-weight="500">Y 成功</text>
-
-                            <!-- 认证失败 N -->
-                            <line x1="530" y1="1002" x2="530" y2="1028" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
-                            <text x="538" y="1020" font-size="11" fill="#f5222d" font-weight="500">N 失败</text>
-
-                            <!-- 认证失败页（8B） -->
-                            <rect x="380" y="1028" width="300" height="46" rx="6" fill="#fff1f0" stroke="#f5222d" stroke-width="1.5"/>
-                            <text x="530" y="1048" text-anchor="middle" font-size="13" fill="#cf1322" font-weight="500">❌ 页面8B：认证失败</text>
-                            <text x="530" y="1065" text-anchor="middle" font-size="11" fill="#cf1322">展示失败原因 + 处理建议</text>
-                            <!-- 重新认证 → 回到表单页（预填） -->
-                            <line x1="380" y1="1051" x2="280" y2="1051" stroke="#f5222d" stroke-width="1.5"/>
-                            <line x1="280" y1="1051" x2="280" y2="741" stroke="#f5222d" stroke-width="1.5"/>
-                            <line x1="280" y1="741" x2="380" y2="741" stroke="#f5222d" stroke-width="1.5" marker-end="url(#arr-red)"/>
-                            <rect x="160" y="880" width="100" height="36" rx="4" fill="#fff1f0" stroke="#f5222d" stroke-width="1"/>
-                            <text x="210" y="898" text-anchor="middle" font-size="12" fill="#cf1322">重新认证</text>
-                            <text x="210" y="912" text-anchor="middle" font-size="10" fill="#8c8c8c">（表单预填）</text>
-
-                            <!-- =====================================================
-                                 认证成功后汇入：通知管理员授权（x=760区域）
-                                 场景二也汇入此处
-                                 ===================================================== -->
-
-                            <!-- 场景二右侧分支（v6.6说明：场景二分流发生在e签宝H5内部，非商城侧）
-                                 当企业在e签宝已实名认证时，H5自动切换为授权流程（无需人脸识别+营业执照），
-                                 认证通过后商城侧收到回调，展示授权相关状态页。 -->
-                            <!-- 授权申请弹窗 -->
-                            <rect x="760" y="638" width="170" height="40" rx="6" fill="#fff0f6" stroke="#eb2f96" stroke-width="1.5" stroke-dasharray="5,3"/>
-                            <text x="845" y="654" text-anchor="middle" font-size="12" fill="#c41d7f" font-weight="500">🔲 弹窗：授权申请</text>
-                            <text x="845" y="669" text-anchor="middle" font-size="11" fill="#c41d7f">填写申请人/补充信息/协议</text>
-                            <line x1="845" y1="678" x2="845" y2="702" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
-
-                            <!-- 场景二：跳转e签宝授权过渡页 -->
-                            <rect x="760" y="702" width="170" height="46" rx="6" fill="#fff0f6" stroke="#eb2f96" stroke-width="1.5"/>
-                            <text x="845" y="721" text-anchor="middle" font-size="12" fill="#c41d7f" font-weight="500">🌐 跳转e签宝授权页</text>
-                            <text x="845" y="737" text-anchor="middle" font-size="11" fill="#c41d7f">管理员在e签宝完成审批</text>
-                            <line x1="845" y1="748" x2="845" y2="969" stroke="#f5222d" stroke-width="2"/>
-                            <line x1="845" y1="969" x2="760" y2="969" stroke="#f5222d" stroke-width="2" marker-end="url(#arr-red)"/>
-
-                            <!-- 通知管理员授权 (x=760,y=969 汇合点) -->
-                            <rect x="760" y="948" width="170" height="42" rx="6" fill="#e6f7ff" stroke="#1890ff" stroke-width="1.5"/>
-                            <text x="845" y="966" text-anchor="middle" font-size="12" fill="#1890ff" font-weight="500">📨 通知管理员授权</text>
-                            <text x="845" y="981" text-anchor="middle" font-size="11" fill="#1890ff">系统发送授权申请通知</text>
-                            <line x1="845" y1="990" x2="845" y2="1014" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-
-                            <!-- 等待授权（AUTHZ_PENDING）页面8C -->
-                            <rect x="760" y="1014" width="170" height="42" rx="6" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="845" y="1032" text-anchor="middle" font-size="12" fill="#d46b08" font-weight="500">⏳ 页面8C：等待授权</text>
-                            <text x="845" y="1048" text-anchor="middle" font-size="11" fill="#d46b08">授权中（24h有效）</text>
-                            <line x1="845" y1="1056" x2="845" y2="1080" stroke="#595959" stroke-width="1.5" marker-end="url(#arr)"/>
-
-                            <!-- 判断：管理员是否授权 -->
-                            <polygon points="845,1084 925,1117 845,1150 765,1117" fill="#fffbe6" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="845" y="1112" text-anchor="middle" font-size="12" fill="#333">管理员</text>
-                            <text x="845" y="1129" text-anchor="middle" font-size="12" fill="#333">是否授权？</text>
-
-                            <!-- Y 授权通过 -->
-                            <line x1="845" y1="1150" x2="845" y2="1178" stroke="#52c41a" stroke-width="2" marker-end="url(#arr-green)"/>
-                            <text x="854" y="1168" font-size="11" fill="#52c41a" font-weight="500">Y 授权</text>
-
-                            <!-- N 拒绝 → 向右 -->
-                            <line x1="925" y1="1117" x2="940" y2="1117" stroke="#f5222d" stroke-width="1.5"/>
-                            <line x1="940" y1="1117" x2="940" y2="1230" stroke="#f5222d" stroke-width="1.5" marker-end="url(#arr-red)"/>
-                            <text x="930" y="1110" font-size="11" fill="#f5222d" font-weight="500">N 拒绝</text>
-
-                            <!-- 超时 → 向左 -->
-                            <line x1="765" y1="1117" x2="650" y2="1117" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
-                            <text x="693" y="1110" font-size="11" fill="#fa8c16" font-weight="500">超时(24h)</text>
-
-                            <!-- 授权成功 -->
-                            <rect x="770" y="1178" width="150" height="42" rx="6" fill="#f6ffed" stroke="#52c41a" stroke-width="2"/>
-                            <text x="845" y="1196" text-anchor="middle" font-size="13" fill="#237804" font-weight="500">✅ 授权成功</text>
-                            <text x="845" y="1212" text-anchor="middle" font-size="11" fill="#389e0d">可签署电子合同</text>
-                            <line x1="845" y1="1220" x2="845" y2="1480" stroke="#52c41a" stroke-width="2"/>
-                            <line x1="845" y1="1480" x2="498" y2="1480" stroke="#52c41a" stroke-width="2" marker-end="url(#arr-green)"/>
-
-                            <!-- 授权超时页（7C，v5.4新增） -->
-                            <rect x="560" y="1097" width="170" height="42" rx="6" fill="#fff1f0" stroke="#fa8c16" stroke-width="1.5"/>
-                            <text x="645" y="1115" text-anchor="middle" font-size="12" fill="#d4380d" font-weight="500">⏰ 页面7C：授权超时</text>
-                            <text x="645" y="1131" text-anchor="middle" font-size="11" fill="#d4380d">超24h未处理，自动失效</text>
-
-                            <!-- 超时 → 重新申请循环（最多3次） -->
-                            <line x1="645" y1="1139" x2="645" y2="1165" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
-                            <rect x="560" y="1165" width="170" height="36" rx="6" fill="#fff7e6" stroke="#fa8c16" stroke-width="1.5" stroke-dasharray="4,3"/>
-                            <text x="645" y="1183" text-anchor="middle" font-size="12" fill="#d46b08">🔄 重新申请授权</text>
-                            <text x="645" y="1196" text-anchor="middle" font-size="10" fill="#8c8c8c">（最多3次）</text>
-                            <!-- 重新申请 → 回到通知管理员 -->
-                            <line x1="645" y1="1201" x2="645" y2="1260" stroke="#fa8c16" stroke-width="1.5"/>
-                            <line x1="645" y1="1260" x2="760" y2="1260" stroke="#fa8c16" stroke-width="1.5"/>
-                            <line x1="760" y1="1260" x2="760" y2="969" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
-                            <text x="700" y="1255" font-size="10" fill="#fa8c16">重新发起申请</text>
-
-                            <!-- 超过3次 → 提示联系管理员 -->
-                            <line x1="560" y1="1183" x2="450" y2="1183" stroke="#fa8c16" stroke-width="1.5" marker-end="url(#arr-orange)"/>
-                            <rect x="310" y="1165" width="140" height="36" rx="6" fill="#fff1f0" stroke="#f5222d" stroke-width="1"/>
-                            <text x="380" y="1183" text-anchor="middle" font-size="12" fill="#cf1322">超3次上限</text>
-                            <text x="380" y="1196" text-anchor="middle" font-size="10" fill="#8c8c8c">联系管理员处理</text>
-                            <text x="532" y="1176" font-size="10" fill="#fa8c16">超次数</text>
-
-                            <!-- 授权拒绝页（7B-fail） -->
-                            <rect x="900" y="1210" width="150" height="46" rx="6" fill="#fff1f0" stroke="#f5222d" stroke-width="1.5"/>
-                            <text x="975" y="1229" text-anchor="middle" font-size="12" fill="#cf1322" font-weight="500">❌ 授权被拒绝</text>
-                            <text x="975" y="1245" text-anchor="middle" font-size="11" fill="#cf1322">展示拒绝原因</text>
-                            <text x="975" y="1257" text-anchor="middle" font-size="10" fill="#8c8c8c">可重新申请（最多3次）</text>
-                            <!-- 重新申请 → 回授权申请弹窗 -->
-                            <line x1="975" y1="1256" x2="975" y2="1290" stroke="#f5222d" stroke-width="1.5"/>
-                            <line x1="975" y1="1290" x2="845" y2="1290" stroke="#f5222d" stroke-width="1.5"/>
-                            <line x1="845" y1="1290" x2="845" y2="1150" stroke="#f5222d" stroke-width="1.5" marker-end="url(#arr-red)"/>
-                            <text x="895" y="1285" font-size="10" fill="#f5222d">重新申请（最多3次）</text>
-
-                            <!-- 结束 -->
-                            <ellipse cx="480" cy="1490" rx="44" ry="22" fill="#52c41a" stroke="#237804" stroke-width="1.5"/>
-                            <text x="480" y="1495" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">结束</text>
-
-                            <!-- 场景分区背景 -->
-                            <rect x="340" y="700" width="370" height="300" rx="8" fill="none" stroke="#1890ff" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
-                            <text x="356" y="716" font-size="11" fill="#1890ff" opacity="0.7">场景一：首次认证（e签宝实名认证+授权一体化）</text>
-
-                            <rect x="740" y="625" width="210" height="185" rx="8" fill="none" stroke="#eb2f96" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>
-                            <text x="756" y="641" font-size="11" fill="#eb2f96" opacity="0.7">场景二：已认证，申请管理员授权</text>
-                        </svg>
-
-                        <div style="margin-top: 12px; font-size: 12px; color: #8c8c8c; text-align: right;">
-                            点击流程图可放大查看 &nbsp;|&nbsp; v6.7 统一表单架构最终版（第二轮监察室审核） &nbsp;|&nbsp; 2026-04-24
+    class A startEnd
+    class F startEnd
+    class B,E,L,Q decision
+    class C,D,G,H,I page
+    class J,K,O,P esign
+    class M,R success
+    class N,S,T fail
                         </div>
                     </div>
+                    <div style="margin-top:12px;font-size:12px;color:#888;">
+                        <span style="display:inline-block;width:12px;height:12px;background:#1890ff;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>蓝=操作步骤 &nbsp;
+                        <span style="display:inline-block;width:12px;height:12px;background:#fffbe6;border:1px solid #fa8c16;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>黄=判断 &nbsp;
+                        <span style="display:inline-block;width:12px;height:12px;background:#f6ffed;border:1px solid #52c41a;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>绿=成功 &nbsp;
+                        <span style="display:inline-block;width:12px;height:12px;background:#fff1f0;border:1px solid #ff4d4f;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>红=失败
+                    </div>
                 </div>
-                
+
                 <!-- 2. 页面层级关系图 -->
                 <div style="margin-bottom: 40px;">
                     <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
