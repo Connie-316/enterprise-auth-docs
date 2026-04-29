@@ -595,8 +595,8 @@
 .nav-section { padding:8px 16px 4px;font-size:11px;color:#999;font-weight:600;letter-spacing:.5px; }
 </style>
 
-<!-- ========== 流程总览（开发者视角） ========== -->
-<div class="screen-page visible" id="p-overview">
+<!-- ========== 流程总览（开发者视角）- 固定显示，非页面切换内容 ========== -->
+<div id="p-overview" style="display:block;">
   <div class="group-header"><div class="line"></div><div class="text">📊 开发者视角 · 快速入门</div><div class="line"></div></div>
   <div style="padding:0 16px 24px;">
     <!-- 开发者必读 -->
@@ -1471,7 +1471,7 @@
 </div>
 
 
-// ====== v7.0：侧栏导航树 JS ======
+<script>
 function toggleNavGroup(groupId) {
     var children = document.getElementById(groupId + '-children');
     var arrow = document.getElementById(groupId + '-arrow');
@@ -1494,13 +1494,12 @@ function jumpToMiniPage(pageId) {
     if (target) target.classList.add('active');
 }
 
-<script>
 // v6.8 新增：导航面板
 // v7.0：侧边栏展开/折叠
 function toggleMiniSidebar() {
     var sb = document.getElementById('mini-sidebar');
     var eb = document.getElementById('sidebar-expand');
-    var topbar = document.querySelector('.fixed-top-bar') || document.body.children[1]; // top bar
+    var topbar = document.querySelector('.fixed-top-bar') || document.body.children[1];
     if (sb.style.display === 'none') {
         sb.style.display = 'flex';
         eb.style.display = 'none';
