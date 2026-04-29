@@ -1158,7 +1158,7 @@
                         <!-- 场景一 -->
                         <div style="flex:1;min-width:320px;background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
                             <div style="font-size:13px;font-weight:700;color:#1890ff;margin-bottom:10px;border-bottom:2px solid #91d5ff;padding-bottom:6px;">
-                                🔵 场景一：首次认证（主流路径）
+                                🔵 场景一：首次认证（企业未在e签宝认证）
                             </div>
                             <div style="font-size:12.5px;color:#333;line-height:2;">
                                 <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
@@ -1183,6 +1183,10 @@
                                 </div>
                                 <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
                                     <span style="background:#08979c;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:11px;flex-shrink:0;">5</span>
+                                    <span><b>后端判断</b>：查库auth_status=UNVERIFIED → <b style="color:#1890ff;">场景一</b>，调接口1传完整参数</span>
+                                </div>
+                                <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
+                                    <span style="background:#08979c;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:11px;flex-shrink:0;">6</span>
                                     <span><b>e签宝H5</b> 人脸识别+营业执照OCR → <b style="color:#52c41a;">认证通过</b></span>
                                 </div>
                                 <div style="display:flex;align-items:flex-start;gap:8px;">
@@ -1200,14 +1204,18 @@
                             <div style="font-size:12.5px;color:#333;line-height:2;">
                                 <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
                                     <span style="background:#cf1322;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:11px;flex-shrink:0;">1~4</span>
-                                    <span>同场景一（页面1→2→3.5→4），但<b>跳过人脸识别</b></span>
+                                    <span>同场景一（页面1→2→3.5→4），前端统一表单</span>
                                 </div>
                                 <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
                                     <span style="background:#08979c;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:11px;flex-shrink:0;">5</span>
-                                    <span><b>e签宝H5</b> 检测已认证 → 自动切换为<b style="color:#cf1322;">授权模式</b></span>
+                                    <span><b>后端判断</b>：查库auth_status≠UNVERIFIED → <b style="color:#cf1322;">场景二</b>，调接口1不传transactorInfo</span>
                                 </div>
                                 <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
                                     <span style="background:#fa8c16;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:11px;flex-shrink:0;">6</span>
+                                    <span><b>e签宝H5</b> 检测已认证 → 自动切换为<b style="color:#cf1322;">授权模式</b></span>
+                                </div>
+                                <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
+                                    <span style="background:#fa8c16;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:11px;flex-shrink:0;">7</span>
                                     <span><b>页面7.5</b> 等待管理员审批 ⏳</span>
                                 </div>
                                 <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;">
@@ -1220,9 +1228,33 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- 后端场景判断说明 -->
+                        <div style="flex:1;min-width:320px;background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:2px solid #fa8c16;">
+                            <div style="font-size:13px;font-weight:700;color:#fa8c16;margin-bottom:10px;border-bottom:2px solid #ffe58f;padding-bottom:6px;">
+                                ⚙️ 场景判断逻辑（后端）
+                            </div>
+                            <div style="font-size:12px;color:#333;line-height:2.2;">
+                                <div style="margin-bottom:8px;"><b>判断时机：</b>用户提交表单后，后端立即查询company_auth表</div>
+                                <div style="margin-bottom:8px;"><b>判断逻辑：</b></div>
+                                <div style="background:#fff7e6;padding:10px 12px;border-radius:4px;font-size:11.5px;">
+                                    <div style="margin-bottom:4px;">① 查询 <b>company_auth</b> 表 WHERE user_id = ?</div>
+                                    <div style="margin-bottom:4px;">② 判断 <b>auth_status</b>：</div>
+                                    <div style="padding-left:16px;">
+                                        <div style="margin-bottom:2px;">├─ <b>UNVERIFIED(0)</b> → <span style="color:#1890ff;">场景一</span></div>
+                                        <div style="margin-bottom:2px;">│   └─ businessScene=<b>FIRST_TIME</b></div>
+                                        <div style="margin-bottom:2px;">│   └─ 调接口1传<b>完整参数</b>（含transactorInfo）</div>
+                                        <div style="margin-bottom:2px;">└─ <b>其他状态</b> → <span style="color:#cf1322;">场景二</span></div>
+                                        <div style="margin-bottom:2px;">    └─ businessScene=<b>ALREADY_AUTH</b></div>
+                                        <div>    └─ 调接口1<b>不传</b>transactorInfo</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top:8px;"><b>原因：</b>e签宝无"根据thirdPartyUserId预查询认证状态"接口，需先调用接口1拿到authFlowId后才能查询</div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    
+
+
                 </div>
 
                 <!-- 1. 整体流程图 -->

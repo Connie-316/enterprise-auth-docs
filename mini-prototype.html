@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>企业认证 - 小程序端原型 v6.7</title>
+  <title>企业认证 - 小程序端原型 v7.0</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -547,108 +547,53 @@
 
 </style>
 </head>
-<body>
-
-<div class="page-title">企业认证 · 小程序端原型</div>
-<div class="center">
-  <span class="version-tag">v6.8 · 统一表单架构</span>
-</div>
-<div class="page-subtitle">微信小程序端完整认证交互原型，业务逻辑与H5端一致，仅实现层不同</div>
+<body style="padding-top:0;">
 
 <!-- 顶部导航栏 -->
 <div style="position:fixed;top:0;left:200px;right:0;height:44px;background:#001529;z-index:9999;display:flex;align-items:center;padding:0 16px;gap:16px;border-bottom:1px solid #333;">
     <span style="color:#fff;font-size:13px;font-weight:600;">📱 小程序端</span>
-    <div id="mini-breadcrumb" style="color:#8c9bb3;font-size:12px;">当前：<b>① 认证入口</b></div>
+    <div id="mini-breadcrumb" style="color:#8c9bb3;font-size:12px;">当前：<b>📊 总览</b></div>
 </div>
 
 <!-- ====== v6.9：固定左侧页面导航侧边栏（小程序端） ====== -->
 <div id="mini-sidebar" style="position:fixed;top:0;left:0;width:200px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:10000;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;font-size:13px;box-shadow:2px 0 12px rgba(0,0,0,.08);">
-    
+
     <!-- 侧栏头部 -->
     <div style="position:sticky;top:0;background:linear-gradient(135deg,#1890ff,#096dd9);padding:14px 16px;z-index:10;display:flex;align-items:center;gap:10px;">
         <span style="font-size:20px;">🗺️</span>
         <div style="flex:1;">
             <div style="font-weight:700;font-size:14px;color:#fff;">小程序端 · 页面目录</div>
         </div>
-        <button onclick="toggleMiniSidebar()" style="background:none;border:none;font-size:16px;cursor:pointer;color:rgba(255,255,255,.85);line-height:1;padding:4px;border-radius:4px;" title="收起" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='none'">◀</button>
+        <button onclick="toggleMiniSidebar()" style="background:none;border:none;font-size:16px;cursor:pointer;color:rgba(255,255,255,.85);line-height:1;padding:4px;border-radius:4px;" title="收起">◀</button>
     </div>
 
-    
-    </div>
-
-    
-    </div>
-
-    <!-- 页面导航列表（树状结构） -->
-    <div style="flex:1;overflow-y:auto;padding:8px 0;" id="navList">
-        <!-- 阶段0 -->
-        <div class="nav-group open" id="ng-entry" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-entry')">
-                <span id="ng-entry-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 🚀 阶段0：入口与草稿
-            </div>
-            <div id="ng-entry-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-entry')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">📊 认证入口</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-draft')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">💾 草稿恢复</div>
-            </div>
-        </div>
-        <!-- 阶段1 -->
-        <div class="nav-group open" id="ng-form" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-form')">
-                <span id="ng-form-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 📋 阶段1：表单填写（步骤1-2）
-            </div>
-            <div id="ng-form-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-company')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">② 企业信息填写</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-phone')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">② 法人+经办人信息</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-checking')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#722ed1;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#722ed1'" onmouseout="this.style.background='';this.style.color='#722ed1'">②.₅ 过渡加载（纯前端）</div>
-            </div>
-        </div>
-        <!-- 阶段2 -->
-        <div class="nav-group open" id="ng-submit" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-submit')">
-                <span id="ng-submit-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 📄 场景一·提交认证（步骤3）
-            </div>
-            <div id="ng-submit-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-form')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#1890ff'" onmouseout="this.style.background='';this.style.color='#555'">④ 完整认证表单</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-webview')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#08979c;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa';this.style.color='#08979c'" onmouseout="this.style.background='';this.style.color='#08979c'">◆ WebView(e签宝H5)</div>
-            </div>
-        </div>
-        <!-- 阶段3：结果 -->
-        <div class="nav-group open" id="ng-result" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#1890ff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-result')">
-                <span id="ng-result-arrow" style="font-size:10px;transition:transform .2s;">▶</span> ✅❌ 场景一·结果状态
-            </div>
-            <div id="ng-result-children" style="padding-left:8px;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-processing')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#fa8c16;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⏳ 审核中(5-10分钟)</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-success')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">✅ 认证成功</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-failed')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">❌ 认证失败</div>
-            </div>
-        </div>
-        <!-- 场景二：授权 -->
-        <div class="nav-group" id="ng-authz" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#cf1322;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-authz')">
-                <span id="ng-authz-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 🔑 场景二：授权（仅场景二）
-            </div>
-            <div id="ng-authz-children" style="padding-left:8px;display:none;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-wait')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⏳ 等待授权</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-ok')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">✅ 授权通过</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-authz-rej')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">❌ 授权拒绝</div>
-            </div>
-        </div>
-        <!-- 辅助 -->
-        <div class="nav-group" id="ng-aux" style="margin-bottom:4px;">
-            <div style="padding:8px 14px;font-weight:600;color:#888;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="toggleNavGroup('ng-aux')">
-                <span id="ng-aux-arrow" style="font-size:10px;transition:transform .2s;">▶</span> 💾 辅助
-            </div>
-            <div id="ng-aux-children" style="padding-left:8px;display:none;">
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-draft')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">💾 草稿恢复</div>
-                <div class="nav-item-sidebar" onclick="jumpToMiniPage('p-diff')" style="padding:6px 14px 6px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;transition:all .12s;" onmouseover="this.style.background='#f5f7fa'" onmouseout="this.style.background=''">⚠️ 差异说明</div>
-            </div>
-        </div>
+    <!-- 页面导航列表（扁平结构） -->
+    <div id="navList" style="flex:1;overflow-y:auto;padding:8px 0;">
+        <div class="nav-item" data-page="p-overview" style="padding:8px 14px;cursor:pointer;font-size:12px;color:#1890ff;font-weight:600;border-left:3px solid #1890ff;background:#e6f7ff;">📊 总览（开发必读）</div>
+        <div style="padding:8px 14px 4px;font-size:11px;color:#999;font-weight:600;">📋 表单阶段</div>
+        <div class="nav-item" data-page="p-entry" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;">① 认证入口</div>
+        <div class="nav-item" data-page="p-company" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;">② 企业信息填写</div>
+        <div class="nav-item" data-page="p-phone" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;">② 法人+经办人</div>
+        <div class="nav-item" data-page="p-checking" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#722ed1;border-left:3px solid transparent;">②.₅ 过渡加载</div>
+        <div style="padding:8px 14px 4px;font-size:11px;color:#999;font-weight:600;">📄 提交认证</div>
+        <div class="nav-item" data-page="p-form" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;">④ 完整表单</div>
+        <div class="nav-item" data-page="p-webview" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#08979c;border-left:3px solid transparent;">◆ WebView(e签宝)</div>
+        <div style="padding:8px 14px 4px;font-size:11px;color:#999;font-weight:600;">✅❌ 结果状态</div>
+        <div class="nav-item" data-page="p-processing" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#fa8c16;border-left:3px solid transparent;">⏳ 审核中</div>
+        <div class="nav-item" data-page="p-success" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;">✅ 认证成功</div>
+        <div class="nav-item" data-page="p-failed" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;">❌ 认证失败</div>
+        <div style="padding:8px 14px 4px;font-size:11px;color:#999;font-weight:600;">🔑 场景二·授权</div>
+        <div class="nav-item" data-page="p-authz-wait" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;">⏳ 等待授权</div>
+        <div class="nav-item" data-page="p-authz-ok" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#52c41a;border-left:3px solid transparent;">✅ 授权通过</div>
+        <div class="nav-item" data-page="p-authz-rej" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#ff4d4f;border-left:3px solid transparent;">❌ 授权拒绝</div>
+        <div style="padding:8px 14px 4px;font-size:11px;color:#999;font-weight:600;">💾 辅助</div>
+        <div class="nav-item" data-page="p-draft" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#555;border-left:3px solid transparent;">💾 草稿恢复</div>
+        <div class="nav-item" data-page="p-diff" style="padding:8px 14px 8px 28px;cursor:pointer;font-size:12px;color:#8c8c8c;border-left:3px solid transparent;">⚠️ PC端差异</div>
     </div>
 
     <!-- 底部操作 -->
     <div style="padding:10px 14px;border-top:1px solid #eee;flex-shrink:0;">
-        <button onclick="jumpToMiniPage('p-entry')" style="width:100%;padding:9px;background:#e6f7ff;border:1px solid #91d5ff;border-radius:6px;color:#1890ff;cursor:pointer;font-size:12.5px;font-weight:600;transition:all .15s;" onmouseover="this.style.background='#1890ff';this.style.color='#fff'" onmouseout="this.style.background='#e6f7ff';this.style.color='#1890ff'">📊 返回认证入口</button>
+        <button onclick="jumpToMiniPage('p-entry')" data-page="p-entry" class="nav-item" style="width:100%;padding:9px;background:#e6f7ff;border:1px solid #91d5ff;border-radius:6px;color:#1890ff;cursor:pointer;font-size:12.5px;font-weight:600;transition:all .15s;">📊 返回认证入口</button>
     </div>
 </div>
 <!-- 展开按钮（侧栏收起时显示） -->
@@ -657,69 +602,65 @@
 <!-- ========== 总览页（开发者视角） ========== -->
 <div class="screen-page visible" id="p-overview">
   <div style="max-width:900px;margin:0 auto;padding:20px;">
-    <h1 style="font-size:20px;font-weight:700;color:#1a1a1a;margin-bottom:16px;">📱 小程序端企业认证 · 开发者总览</h1>
+    <h1 style="font-size:20px;font-weight:700;color:#1a1a1a;margin-bottom:12px;">📱 小程序端企业认证 · 开发必读</h1>
+    <p style="font-size:13px;color:#666;margin-bottom:16px;">微信小程序企业认证原型，3步流程</p>
 
-    <!-- 核心概念 -->
-    <div style="background:linear-gradient(135deg,#e6f7ff,#bae7ff);border:1px solid #91d5ff;border-radius:12px;padding:20px;margin-bottom:20px;">
-      <div style="font-size:15px;font-weight:700;color:#003a8c;margin-bottom:12px;">🏗️ 核心架构</div>
-      <div style="font-size:13px;color:#333;line-height:1.8;">
-        <div>• <b>商城侧：</b>统一展示完整表单，提交到 <code>/api/company/auth/submit</code></div>
-        <div>• <b>e签宝H5内部：</b>自动检测企业是否已实名认证，决定走场景一或场景二</div>
-      </div>
+    <!-- 核心流程 -->
+    <div style="background:linear-gradient(135deg,#e6f7ff,#bae7ff);border:1px solid #91d5ff;border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:#003a8c;margin-bottom:8px;">🏗️ 核心流程</div>
+      <pre style="font-size:12px;background:#fff;border-radius:6px;padding:10px;margin:0;line-height:1.6;">企查查搜索 → 填写表单 → 提交 → 后端判断场景 → 调e签宝接口1 → 返回authUrl → 跳转WebView
+
+后端判断逻辑：
+  auth_status = UNVERIFIED(0) → 场景一（businessScene=FIRST_TIME）
+  auth_status = 其他         → 场景二（businessScene=ALREADY_AUTH）</pre>
     </div>
 
     <!-- 两种场景 -->
-    <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:280px;background:#fff;border-radius:10px;padding:16px;border:1px solid #e8e8e8;">
-        <div style="font-size:13px;font-weight:700;color:#1890ff;margin-bottom:10px;">🔵 场景一：首次认证（企业未认证）</div>
-        <div style="font-size:12px;color:#555;line-height:1.8;">
-          <div>① 入口 → ② 企业信息 → ②.₅ 过渡</div>
-          <div>→ ④ 完整表单 → WebView e签宝</div>
-          <div>→ <b>人脸识别 + 营业执照 + 授权</b></div>
-          <div>→ 7.5 审核 → 8A 认证+授权通过</div>
+    <div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;background:#fff;border-radius:10px;padding:12px;border:1px solid #e8e8e8;">
+        <div style="font-size:12px;font-weight:700;color:#1890ff;margin-bottom:6px;">🔵 场景一：首次认证</div>
+        <div style="font-size:11px;color:#555;line-height:1.6;">
+          <div>①→②→②.₅→④ → WebView</div>
+          <div>→ <b>人脸+营业执照+授权</b></div>
         </div>
       </div>
-      <div style="flex:1;min-width:280px;background:#fff;border-radius:10px;padding:16px;border:1px solid #e8e8e8;">
-        <div style="font-size:13px;font-weight:700;color:#cf1322;margin-bottom:10px;">🔴 场景二：已认证授权（企业已实名）</div>
-        <div style="font-size:12px;color:#555;line-height:1.8;">
-          <div>①→②→②.₅→④ 同场景一</div>
-          <div>→ WebView e签宝（<b style="color:#cf1322;">跳过人脸</b>）</div>
-          <div>→ 仅管理员扫码授权</div>
-          <div>→ 8C 等待 → 7A 授权通过</div>
+      <div style="flex:1;min-width:240px;background:#fff;border-radius:10px;padding:12px;border:1px solid #e8e8e8;">
+        <div style="font-size:12px;font-weight:700;color:#cf1322;margin-bottom:6px;">🔴 场景二：已认证授权</div>
+        <div style="font-size:11px;color:#555;line-height:1.6;">
+          <div>①→②→②.₅→④ 同上</div>
+          <div>→ WebView（<b style="color:#cf1322;">跳过人脸</b>）</div>
         </div>
       </div>
     </div>
 
     <!-- P0必改项 -->
-    <div style="background:#fff2f0;border:1px solid #ffccc7;border-radius:12px;padding:20px;margin-bottom:20px;">
-      <div style="font-size:14px;font-weight:700;color:#cf1322;margin-bottom:12px;">⚠️ 小程序端P0必改项（开发前必读）</div>
-      <div style="font-size:12px;color:#555;line-height:1.9;">
-        <div>1. <b>clientType 参数</b>：必须传 <code>MINI_APP</code>，传错e签宝H5渲染异常</div>
-        <div>2. <b>redirectUrl</b>：必须指向中间H5页，由 <code>wx.miniProgram.navigateTo</code> 跳回小程序</div>
-        <div>3. <b>业务域名</b>：微信公众平台配置 <code>openapi.esign.cn</code></div>
-        <div>4. <b>X-Platform Header</b>：传 <code>X-Platform: miniapp</code></div>
+    <div style="background:#fff2f0;border:1px solid #ffccc7;border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:#cf1322;margin-bottom:6px;">⚠️ P0必改项（开发前必读）</div>
+      <div style="font-size:12px;color:#555;line-height:1.7;">
+        <div>1. <b>clientType=MINI_APP</b></div>
+        <div>2. <b>redirectUrl指向中间H5页</b> + wx.miniProgram.navigateTo 跳回</div>
+        <div>3. <b>业务域名</b>：微信公众平台配置 openapi.esign.cn</div>
+        <div>4. <b>X-Platform: miniapp</b></div>
       </div>
     </div>
 
     <!-- 页面索引 -->
-    <div style="background:#fff;border-radius:10px;border:1px solid #e8e8e8;padding:16px;margin-bottom:20px;">
-      <div style="font-size:14px;font-weight:700;color:#262626;margin-bottom:12px;">📋 页面索引</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;font-size:12px;">
-        <div onclick="jumpToMiniPage('p-entry')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">① 认证入口</div>
-        <div onclick="jumpToMiniPage('p-company')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">② 企业信息</div>
-        <div onclick="jumpToMiniPage('p-phone')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">② 法人经办人</div>
-        <div onclick="jumpToMiniPage('p-checking')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">②.₅ 过渡</div>
-        <div onclick="jumpToMiniPage('p-form')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">④ 完整表单</div>
-        <div onclick="jumpToMiniPage('p-webview')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">◆ WebView</div>
-        <div onclick="jumpToMiniPage('p-processing')" style="padding:8px 12px;background:#fff7e6;border:1px solid #ffd591;border-radius:6px;cursor:pointer;color:#d46b08;">⏳ 审核中</div>
-        <div onclick="jumpToMiniPage('p-success')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">✅ 认证成功</div>
-        <div onclick="jumpToMiniPage('p-diff')" style="padding:8px 12px;background:#fff2f0;border:1px solid #ffccc7;border-radius:6px;cursor:pointer;color:#cf1322;">⚠️ PC差异</div>
+    <div style="background:#fff;border-radius:10px;border:1px solid #e8e8e8;padding:12px;margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:#262626;margin-bottom:8px;">📋 页面索引（点击跳转）</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;font-size:12px;">
+        <div onclick="jumpToMiniPage('p-entry')" style="padding:6px 10px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:5px;cursor:pointer;color:#389e0d;">① 认证入口</div>
+        <div onclick="jumpToMiniPage('p-company')" style="padding:6px 10px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:5px;cursor:pointer;color:#389e0d;">② 企业信息</div>
+        <div onclick="jumpToMiniPage('p-phone')" style="padding:6px 10px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:5px;cursor:pointer;color:#389e0d;">② 法人经办人</div>
+        <div onclick="jumpToMiniPage('p-checking')" style="padding:6px 10px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:5px;cursor:pointer;color:#389e0d;">②.₅ 过渡</div>
+        <div onclick="jumpToMiniPage('p-form')" style="padding:6px 10px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:5px;cursor:pointer;color:#389e0d;">④ 完整表单</div>
+        <div onclick="jumpToMiniPage('p-webview')" style="padding:6px 10px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:5px;cursor:pointer;color:#389e0d;">◆ WebView</div>
+        <div onclick="jumpToMiniPage('p-processing')" style="padding:6px 10px;background:#fff7e6;border:1px solid #ffd591;border-radius:5px;cursor:pointer;color:#d46b08;">⏳ 审核中</div>
+        <div onclick="jumpToMiniPage('p-success')" style="padding:6px 10px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:5px;cursor:pointer;color:#389e0d;">✅ 认证成功</div>
       </div>
     </div>
 
-    <!-- 开始按钮 -->
-    <div style="text-align:center;margin-top:20px;">
-      <button onclick="jumpToMiniPage('p-entry')" style="padding:12px 32px;background:#1890ff;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">开始浏览页面 →</button>
+    <div style="text-align:center;">
+      <button onclick="jumpToMiniPage('p-entry')" style="padding:10px 28px;background:#1890ff;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;">开始浏览页面 →</button>
     </div>
   </div>
 </div>
@@ -804,9 +745,10 @@
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation blue" style="max-width:200px;">H5端页面1对应<br>小程序认证入口状态页</div>
+<div class="annotation blue" style="max-width:200px;">H5端页面1对应<br>小程序认证入口状态页</div>
     </div>
   </div>
+</div>
 </div>
 
 <!-- ========== 页74: 企业信息填写（对应截图画面74）========== -->
@@ -1514,57 +1456,24 @@
 </div>
 
 
-// ====== v6.9：侧栏导航树 JS ======
-function toggleNavGroup(groupId) {
-    var children = document.getElementById(groupId + '-children');
-    var arrow = document.getElementById(groupId + '-arrow');
-    if (children) {
-        if (children.style.display === 'none') {
-            children.style.display = 'block';
-            if (arrow) arrow.style.transform = 'rotate(90deg)';
-        } else {
-            children.style.display = 'none';
-            if (arrow) arrow.style.transform = 'rotate(0deg)';
-        }
-    }
-}
-
 <script>
 function jumpToMiniPage(pageId) {
     showPage(pageId);
-    // 高亮当前导航项
-    document.querySelectorAll('.nav-item-sidebar').forEach(function(el) {
-        el.style.background = '';
-        el.style.borderLeftColor = 'transparent';
-        el.style.fontWeight = '400';
-    });
-    // 找到对应的导航项并高亮
-    var navItems = document.querySelectorAll('.nav-item-sidebar');
-    navItems.forEach(function(item) {
-        if (item.getAttribute('onclick') && item.getAttribute('onclick').indexOf(pageId) > -1) {
-            item.style.background = '#e6f7ff';
-            item.style.borderLeftColor = '#1890ff';
-            item.style.fontWeight = '600';
-        }
-    });
 }
 
 function showPage(id) {
-  // 隐藏所有页
   document.querySelectorAll('.screen-page').forEach(p => p.classList.remove('visible'));
-  // 显示目标页
-  document.getElementById(id).classList.add('visible');
-  // 更新面包屑
-  if (typeof miniHistory === 'undefined') window.miniHistory = ['p-entry'];
-  if (miniHistory[miniHistory.length-1] !== id) miniHistory.push(id);
+  var targetPage = document.getElementById(id);
+  if (targetPage) {
+    targetPage.classList.add('visible');
+  }
   var bc = document.getElementById('mini-breadcrumb');
   if (bc) bc.innerHTML = '当前：<b>' + (MINI_PAGE_NAMES[id] || id) + '</b>';
-  // 更新侧边栏高亮（通过onclick属性匹配）
-  document.querySelectorAll('.nav-item-sidebar').forEach(el => {
+  document.querySelectorAll('.nav-item').forEach(el => {
     el.style.background = '';
     el.style.color = '';
   });
-  var target = document.querySelector('.nav-item-sidebar[onclick*="'+id+'"]');
+  var target = document.querySelector('.nav-item[data-page="'+id+'"]');
   if (target) {
     target.style.background = '#e6f7ff';
     target.style.color = '#1890ff';
@@ -1589,6 +1498,59 @@ function goBack() {
     miniHistory.pop();
     showPage(miniHistory[miniHistory.length-1]);
 }
+
+// 事件委托：导航点击
+document.getElementById('navList').addEventListener('click', function(e) {
+    var navItem = e.target.closest('.nav-item');
+    if (navItem && navItem.dataset.page) {
+        jumpToMiniPage(navItem.dataset.page);
+    }
+});
+
+// 底部按钮点击
+document.querySelector('#mini-sidebar button[data-page]').addEventListener('click', function(e) {
+    var page = e.target.dataset.page;
+    if (page) jumpToMiniPage(page);
+});
+
+// 导航项 hover 效果
+document.getElementById('navList').addEventListener('mouseover', function(e) {
+    var navItem = e.target.closest('.nav-item');
+    if (navItem && !navItem.style.background) {
+        navItem.style.background = '#f5f7fa';
+        navItem.style.color = '#1890ff';
+    }
+});
+document.getElementById('navList').addEventListener('mouseout', function(e) {
+    var navItem = e.target.closest('.nav-item');
+    if (navItem && navItem.dataset.page) {
+        // 只有非当前项才恢复
+        var current = document.querySelector('.nav-item[style*="rgb(230, 247, 255)"]');
+        if (navItem !== current) {
+            navItem.style.background = '';
+            navItem.style.color = '';
+        }
+    }
+});
+
+// 页面名称映射（用于面包屑显示）
+var MINI_PAGE_NAMES = {
+    'p-overview': '📊 总览',
+    'p-entry': '① 认证入口',
+    'p-company': '② 企业信息填写',
+    'p-phone': '② 法人+经办人',
+    'p-checking': '②.₅ 过渡加载',
+    'p-form': '④ 完整认证表单',
+    'p-webview': '◆ WebView(e签宝)',
+    'p-processing': '⏳ 审核中',
+    'p-success': '✅ 认证成功',
+    'p-failed': '❌ 认证失败',
+    'p-authz-wait': '⏳ 等待授权',
+    'p-authz-ok': '✅ 授权通过',
+    'p-authz-rej': '❌ 授权拒绝',
+    'p-draft': '💾 草稿恢复',
+    'p-diff': '⚠️ 差异说明'
+};
 
 </script>
 

@@ -341,8 +341,8 @@
     <tr><th>#</th><th>注意点</th><th>说明</th></tr>
     <tr>
       <td>D1</td>
-      <td><strong>商城不做场景判断</strong></td>
-      <td>场景由e签宝H5内部自动识别并切换。商城统一走完整表单→调接口→跳转H5→等回调</td>
+      <td><strong>后端判断场景，前端统一表单</strong></td>
+      <td>前端统一展示表单。用户提交后，后端查 company_auth 表的 auth_status：UNVERIFIED(0)→场景一；其他→场景二。根据场景决定接口1的 businessScene 参数和是否传 transactorInfo</td>
     </tr>
     <tr>
       <td>D2</td>
@@ -777,7 +777,21 @@ e签宝回调 → 验签→加锁→更新状态→调接口2同步企业信息
     <tr><td>6</td><td>删除草稿（如有）；返回 200</td><td>—</td></tr>
   </table>
 
-  <h3 class="sub-title">7.3 商城侧接口（前端调用）</h3>
+  <h3 class="sub-title">7.3 场景判断逻辑（后端）</h3>
+  <pre class="flow-box">POST /api/company/auth/submit 后：
+
+1. 查询 company_auth 表 WHERE user_id = ?
+2. 判断 auth_status：
+   ├─ UNVERIFIED(0) → 场景一
+   │   ├─ businessScene = FIRST_TIME
+   │   └─ 调接口1时传完整参数（含 transactorInfo）
+   └─ 其他状态 → 场景二
+       ├─ businessScene = ALREADY_AUTH
+       └─ 调接口1时不传 transactorInfo（e签宝已有企业信息）
+
+3. 返回 authUrl，前端跳转e签宝H5</pre>
+
+  <h3 class="sub-title">7.4 商城侧接口（前端调用）</h3>
   <p>所有接口 Header 需携带 <code>Authorization: Bearer {token}</code></p>
   <table>
     <tr><th>接口路径</th><th>方法</th><th>说明</th></tr>
