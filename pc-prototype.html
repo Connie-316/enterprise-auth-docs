@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>企业认证原型 v7.3 | 数智聚模商城</title>
-    <!-- Mermaid.js for professional flowcharts -->
+    <!-- 注释：Mermaid.js for professional flowcharts -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
         mermaid.initialize({
@@ -612,14 +612,14 @@
     ============================================================
 -->
 
-<!-- ====== v7.2：精简版左侧导航 ====== -->
+<!-- 注释：====== v7.2：精简版左侧导航 ====== -->
 <div id="nav-sidebar" style="position:fixed;top:0;left:0;width:200px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:9998;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
-    <!-- 侧栏头部 -->
+    <!-- 注释：侧栏头部 -->
     <div style="background:linear-gradient(135deg,#1890ff,#096dd9);padding:12px 14px;display:flex;align-items:center;gap:8px;">
         <span style="font-size:16px;">🗺️</span>
         <span style="font-weight:700;font-size:13px;color:#fff;">PC原型导航</span>
     </div>
-    <!-- 页面导航列表 -->
+    <!-- 注释：页面导航列表 -->
     <div style="flex:1;overflow-y:auto;padding:8px 0;" id="navList">
         <div onclick="jumpToPage('flowOverview')" class="nav-item active" data-page="flowOverview">📊 流程总览</div>
         <div class="nav-section">📋 表单填写</div>
@@ -654,13 +654,13 @@
 
 <body style="padding-top: 0; padding-left: 200px;">
     <div class="container">
-        <!-- 左侧导航 -->
+        <!-- 注释：左侧导航 -->
         <main class="main-content">
             <div class="page-header">
                 <h1>企业认证</h1>
             </div>
             
-            <!-- ==================== 页面1：认证入口页（未认证状态，UNVERIFIED） ==================== -->
+            <!-- 注释：==================== 页面1：认证入口页（未认证状态，UNVERIFIED） ==================== -->
             
             <div class="form-card proto-page" id="unverifiedCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
@@ -701,7 +701,7 @@
                 </div>
             </div>
             
-            <!-- ==================== 页面2：企业信息填写（轻量表单） ==================== -->
+            <!-- 注释：==================== 页面2：企业信息填写（轻量表单） ==================== -->
             
             <div class="form-card proto-page" id="page2Card" style="display:none">
                 <div class="steps" style="display:flex; margin-bottom: 24px;">
@@ -771,7 +771,7 @@
                 </div>
             </div>
             
-            <!-- ==================== 页面3.5：过渡加载 ==================== -->
+            <!-- 注释：==================== 页面3.5：过渡加载 ==================== -->
             
             <div class="form-card proto-page" id="checkingCard" style="display:none">
                 <div class="steps" style="display:flex; margin-bottom: 24px;">
@@ -820,7 +820,7 @@
                 </div>
             </div>
             
-            <!-- 认证流程 -->
+            <!-- 注释：认证流程 -->
             <div class="steps" id="steps" style="display:none;">
                 <div class="step active" id="step1">
                     <div class="step-number">1</div>
@@ -843,7 +843,7 @@
                 </div>
             </div>
             
-            <!-- 流程图入口提示 -->
+            <!-- 注释：流程图入口提示 -->
             <div style="background: #f0f5ff; border: 1px solid #91d5ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 20px;">📊</span>
@@ -855,7 +855,7 @@
                 <button class="btn btn-primary" style="font-size: 12px; padding: 6px 16px;" onclick="showPage('flowOverview')">查看流程图</button>
             </div>
             
-            <!-- 提示信息 -->
+            <!-- 注释：提示信息 -->
             <div class="tips" id="tips" style="display:none;">
                 <div class="tips-title">📋 认证须知</div>
                 <ul class="tips-list">
@@ -867,13 +867,13 @@
             </div>
             
             
-            <!-- 表单区域 -->
+            <!-- 注释：表单区域 -->
             <div class="form-card" id="formCard" style="display:none;">
                 <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 4px; padding: 10px 16px; margin-bottom: 20px; font-size: 13px; color: #d46b08;">
                     ℹ️ 请完善以下信息，提交后将在e签宝完成实名认证与授权
                 </div>
                 
-                <!-- 企业信息 -->
+                <!-- 注释：企业信息 -->
                 <div class="section-title">企业信息</div>
                 
                 <div class="form-row">
@@ -923,7 +923,7 @@
                     </div>
                 </div>
                 
-                <!-- 法人信息 -->
+                <!-- 注释：法人信息 -->
                 <div class="section-title">法人信息 <span class="tag tag-warning">e签宝实名认证必填</span></div>
                 
                 <div class="form-row">
@@ -941,7 +941,7 @@
                     </div>
                 </div>
                 
-                <!-- 经办人信息 -->
+                <!-- 注释：经办人信息 -->
                 <div class="section-title">经办人信息 <span class="tag tag-warning">e签宝实名认证必填</span></div>
                 
                 <div class="form-row">
@@ -968,7 +968,7 @@
                     </div>
                 </div>
                 
-                <!-- 补充信息（选填） -->
+                <!-- 注释：补充信息（选填） -->
                 <div class="section-title">补充信息 <span class="tag tag-warning">选填</span></div>
                 
                 <div class="form-row">
@@ -1001,9 +1001,9 @@
                     </div>
                 </div>
                 
-                <!-- 提交按钮 -->
+                <!-- 注释：提交按钮 -->
                 <div class="form-actions">
-                    <!-- 协议确认（必填，v5.4新增） -->
+                    <!-- 注释：协议确认（必填，v5.4新增） -->
                     <div style="margin-bottom: 20px; padding: 12px 16px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 4px;">
                         <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 13px; color: #666;">
                             <input type="checkbox" id="agreeProtocol" style="margin-top: 2px; flex-shrink: 0;">
@@ -1022,7 +1022,7 @@
                 </div>
             </div>
             
-            <!-- 认证+授权成功信息展示（默认隐藏） -->
+            <!-- 注释：认证+授权成功信息展示（默认隐藏） -->
             <div class="form-card" id="successCard" style="display:none">
                 <div class="section-title">认证授权信息</div>
                 <div class="info-display">
@@ -1054,7 +1054,7 @@
                 </div>
             </div>
             
-            <!-- 授权申请中展示（默认隐藏） -->
+            <!-- 注释：授权申请中展示（默认隐藏） -->
             
             <div class="form-card" id="authzPendingCard" style="display:none">
                 <div style="text-align: center; padding-top: 32px; padding-bottom: 16px;">
@@ -1064,7 +1064,7 @@
                 </div>
                 
                 <div style="max-width: 520px; margin: 0 auto; padding: 0 24px 32px;">
-                    <!-- 认证信息展示 -->
+                    <!-- 注释：认证信息展示 -->
                     <div style="background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
                         <div style="font-size: 13px; color: #52c41a; font-weight: 500; margin-bottom: 12px;">✅ 认证信息</div>
                         <div class="info-item">
@@ -1085,7 +1085,7 @@
                         </div>
                     </div>
                     
-                    <!-- 当前状态 -->
+                    <!-- 注释：当前状态 -->
                     <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
                         <div style="font-size: 13px; color: #d46b08; font-weight: 500; margin-bottom: 8px;">📨 当前状态</div>
                         <p style="font-size: 14px; color: #666; margin-bottom: 4px;">等待企业管理员授权审批</p>
@@ -1102,7 +1102,7 @@
                 </div>
             </div>
             
-            <!-- 授权已通过展示（默认隐藏） -->
+            <!-- 注释：授权已通过展示（默认隐藏） -->
             <div class="form-card" id="authzApprovedCard" style="display:none">
                 <div class="section-title">授权信息</div>
                 <div class="info-display">
@@ -1141,21 +1141,21 @@
                 </div>
             </div>
             
-            <!-- ==================== 业务流程图综述页面 ==================== -->
+            <!-- 注释：==================== 业务流程图综述页面 ==================== -->
             
             
 
             <div class="form-card proto-page" id="flowOverviewCard" style="display:block; padding: 32px;">
                 <div class="section-title">📊 企业认证业务流程总览</div>
 
-                <!-- 【新增】业务流程文字描述——让开发者一眼看懂大致逻辑 -->
+                <!-- 注释：【新增】业务流程文字描述——让开发者一眼看懂大致逻辑 -->
                 <div style="background:linear-gradient(135deg,#e6f7ff,#bae7ff);border:1px solid #91d5ff;border-radius:10px;padding:20px 24px;margin-bottom:28px;">
                     <div style="font-size:16px;font-weight:700;color:#003a8c;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
                         📖 一句话理解业务流程
                     </div>
                     
                     <div style="display:flex;gap:24px;flex-wrap:wrap;">
-                        <!-- 场景一 -->
+                        <!-- 注释：场景一 -->
                         <div style="flex:1;min-width:320px;background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
                             <div style="font-size:13px;font-weight:700;color:#1890ff;margin-bottom:10px;border-bottom:2px solid #91d5ff;padding-bottom:6px;">
                                 🔵 场景一：首次认证（企业未在e签宝认证）
@@ -1196,7 +1196,7 @@
                             </div>
                         </div>
 
-                        <!-- 场景二 -->
+                        <!-- 注释：场景二 -->
                         <div style="flex:1;min-width:320px;background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);">
                             <div style="font-size:13px;font-weight:700;color:#cf1322;margin-bottom:10px;border-bottom:2px solid #ffa39e;padding-bottom:6px;">
                                 🔴 场景二：已在e签宝认证（授权路径）
@@ -1229,7 +1229,7 @@
                             </div>
                         </div>
 
-                        <!-- 后端场景判断说明 -->
+                        <!-- 注释：后端场景判断说明 -->
                         <div style="flex:1;min-width:320px;background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:2px solid #fa8c16;">
                             <div style="font-size:13px;font-weight:700;color:#fa8c16;margin-bottom:10px;border-bottom:2px solid #ffe58f;padding-bottom:6px;">
                                 ⚙️ 场景判断逻辑（后端）
@@ -1257,7 +1257,7 @@
 
                 </div>
 
-                <!-- 1. 整体流程图 -->
+                <!-- 注释：1. 整体流程图 -->
                 <div style="margin-bottom: 40px;">
                     <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
                         二、详细业务流程图（Mermaid自动布局版）
@@ -1315,7 +1315,7 @@ flowchart TB
                     </div>
                 </div>
 
-                <!-- 2. 页面层级关系图 -->
+                <!-- 注释：2. 页面层级关系图 -->
                 <div style="margin-bottom: 40px;">
                     <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
                         二、页面层级关系图
@@ -1331,14 +1331,14 @@ flowchart TB
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- L1 主入口 -->
+                                <!-- 注释：L1 主入口 -->
                                 <tr style="background: #f6ffed;">
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #52c41a;">L1 主入口</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">企业认证入口页</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">用户首次进入/有草稿</td>
                                 </tr>
-                                <!-- L2 表单填写 -->
+                                <!-- 注释：L2 表单填写 -->
                                 <tr>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #1890ff;" rowspan="2">L2 表单填写</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
@@ -1350,7 +1350,7 @@ flowchart TB
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">🔲 企查查搜索下拉</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff;">输入企业名称时触发</td>
                                 </tr>
-                                <!-- L3 认证/授权 -->
+                                <!-- 注释：L3 认证/授权 -->
                                 <tr>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #1890ff;" rowspan="3">L3 认证/授权</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9; background: #f9f0ff; color: #722ed1;">弹窗</td>
@@ -1367,7 +1367,7 @@ flowchart TB
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">e签宝H5认证页</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">点击【立即认证】跳转</td>
                                 </tr>
-                                <!-- L4 状态页 -->
+                                <!-- 注释：L4 状态页 -->
                                 <tr>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9; font-weight: 500; color: #fa8c16;" rowspan="6">L4 状态页</td>
                                     <td style="padding: 12px 16px; border: 1px solid #d9d9d9;">主页面</td>
@@ -1410,14 +1410,14 @@ flowchart TB
                     </div>
                 </div>
                 
-                <!-- 3. 状态流转图 -->
+                <!-- 注释：3. 状态流转图 -->
                 <div style="margin-bottom: 24px;">
                     <div style="font-size: 16px; font-weight: 500; color: #262626; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #1890ff;">
                         三、认证状态流转图
                     </div>
                     <div style="background: #fafafa; border-radius: 8px; padding: 24px;">
                         <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
-                            <!-- 状态卡片 -->
+                            <!-- 注释：状态卡片 -->
                             <div style="flex: 1; min-width: 140px; background: #f5f5f5; border: 2px solid #d9d9d9; border-radius: 8px; padding: 16px; text-align: center;">
                                 <div style="font-size: 24px; margin-bottom: 8px;">⚪</div>
                                 <div style="font-size: 13px; font-weight: 500; color: #999;">UNVERIFIED</div>
@@ -1451,7 +1451,7 @@ flowchart TB
                             </div>
                         </div>
                         
-                        <!-- 状态流转说明表 -->
+                        <!-- 注释：状态流转说明表 -->
                         <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                             <thead>
                                 <tr style="background: #f5f5f5;">
@@ -1521,7 +1521,7 @@ flowchart TB
                     </div>
                 </div>
                 
-                <!-- 快速导航 -->
+                <!-- 注释：快速导航 -->
                 <div style="background: #f0f5ff; border-radius: 8px; padding: 20px;">
                     <div style="font-size: 14px; font-weight: 500; color: #1890ff; margin-bottom: 12px;">🚀 快速导航到原型页面</div>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
@@ -1541,7 +1541,7 @@ flowchart TB
                 </div>
             </div>
             
-            <!-- ==================== 缺失页面补充 ==================== -->
+            <!-- 注释：==================== 缺失页面补充 ==================== -->
             
             
             <div class="form-card proto-page" id="draftCard" style="display:none">
@@ -1632,14 +1632,14 @@ flowchart TB
                     </div>
                     
                     <div style="font-size: 13px; color: #999; margin-bottom: 16px;">已填写的信息将保留（预填回原表单），只需修改错误字段后重新提交</div>
-                    <!-- v5.4 Fix #4: 重新认证 → 跳转页面4完整表单（预填数据），而非草稿页 -->
+                    <!-- 注释：v5.4 Fix #4: 重新认证 → 跳转页面4完整表单（预填数据），而非草稿页 -->
                     <button class="btn btn-primary" onclick="showPage('form')">重新认证（修改后重提）</button>
                 </div>
             </div>
             
             
             <div class="form-card proto-page" id="esignRedirectCard" style="display:none">
-                <!-- 场景说明标注 -->
+                <!-- 注释：场景说明标注 -->
                 <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #d46b08;">
                     ⚠️ <strong>页面归属：场景一（首次认证）专用</strong> — 路径：<code>/company/auth/redirect</code><br>
                     场景二（已认证授权）的跳转说明页路径为 <code>/company/auth/redirect-authz</code>，文案不同（无人脸识别/营业执照步骤）。<br>
@@ -1731,7 +1731,7 @@ flowchart TB
                     </div>
                     
                     <div style="display: flex; gap: 12px; justify-content: center;">
-                        <!-- v5.4修复：移除【取消】按钮；【重新申请】弹出修改理由弹窗 -->
+                        <!-- 注释：v5.4修复：移除【取消】按钮；【重新申请】弹出修改理由弹窗 -->
                         <button class="btn btn-primary" onclick="openReapplyModal()">重新申请</button>
                     </div>
                     <div style="font-size: 12px; color: #999; margin-top: 12px;">
@@ -1740,7 +1740,7 @@ flowchart TB
                 </div>
             </div>
             
-            <!-- ==================== 场景二：跳转e签宝授权页（v5.4新增） ==================== -->
+            <!-- 注释：==================== 场景二：跳转e签宝授权页（v5.4新增） ==================== -->
             <div class="form-card proto-page" id="esignRedirectAuthzCard" style="display:none">
                 <div style="background: #fff7e6; border: 1px solid #ffd591; border-radius: 6px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #d46b08;">
                     ⚠️ <strong>场景二（已认证授权）专用</strong> — 路径：<code>/company/auth/redirect-authz</code>，步骤指示器3步，无「e签宝实名认证」步骤
@@ -1767,7 +1767,7 @@ flowchart TB
                 </div>
             </div>
             
-            <!-- ==================== 授权超时等待页（v5.4补充，PRD 4.3 页面7C） ==================== -->
+            <!-- 注释：==================== 授权超时等待页（v5.4补充，PRD 4.3 页面7C） ==================== -->
             <div class="form-card proto-page" id="authzTimeoutCard" style="display:none">
                 <div style="text-align: center; padding: 48px 24px;">
                     <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
@@ -1788,7 +1788,7 @@ flowchart TB
         </main>
     </div>
     
-    <!-- 重新申请弹窗（修改申请理由，v5.4新增） -->
+    <!-- 注释：重新申请弹窗（修改申请理由，v5.4新增） -->
     <div class="modal-overlay" id="reapplyModal">
         <div class="modal" style="width: 440px;">
             <h3 style="margin-bottom: 8px;">重新申请授权</h3>
@@ -1804,7 +1804,7 @@ flowchart TB
         </div>
     </div>
     
-    <!-- e签宝认证弹窗 -->
+    <!-- 注释：e签宝认证弹窗 -->
     <div class="modal-overlay" id="esignModal">
         <div class="modal">
             <div class="modal-icon">🔐</div>
@@ -1817,8 +1817,8 @@ flowchart TB
         </div>
     </div>
     
-    <!-- 授权申请弹窗 -->
-    <!-- 
+    <!-- 注释：授权申请弹窗 -->
+    <!-- 注释：
         ============================================================
         弹窗：授权申请弹窗（场景二专用）
         ============================================================
@@ -1839,7 +1839,7 @@ flowchart TB
                 <p style="color: #666; font-size: 13px; margin: 0;">该企业已在e签宝完成实名认证（e签宝H5内部检测）<br>需申请管理员授权即可使用电子合同功能</p>
             </div>
             
-            <!-- 企业信息（自动填充，不可编辑） -->
+            <!-- 注释：企业信息（自动填充，不可编辑） -->
             <div style="background: #f5f5f5; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px;">
                 <div style="font-size: 13px; color: #666; margin-bottom: 8px; font-weight: 500;">━ 企业信息</div>
                 <div style="margin-bottom: 6px;">
@@ -1853,7 +1853,7 @@ flowchart TB
                 </div>
             </div>
             
-            <!-- 申请人信息（选填） -->
+            <!-- 注释：申请人信息（选填） -->
             <div style="margin-bottom: 16px;">
                 <div style="font-size: 13px; color: #666; margin-bottom: 12px; font-weight: 500;">━ 申请人信息（选填）</div>
                 <div style="font-size: 12px; color: #999; margin-bottom: 10px;">以下信息为商城自身业务记录，e签宝不要求</div>
@@ -1871,7 +1871,7 @@ flowchart TB
                 </div>
             </div>
             
-            <!-- 补充信息（选填）v5.4新增 -->
+            <!-- 注释：补充信息（选填）v5.4新增 -->
             <div style="margin-bottom: 16px;">
                 <div style="font-size: 13px; color: #666; margin-bottom: 12px; font-weight: 500;">━ 补充信息（选填）</div>
                 <div style="margin-bottom: 10px;">
@@ -1896,7 +1896,7 @@ flowchart TB
                 </div>
             </div>
             
-            <!-- 协议确认（必填）v5.4新增 -->
+            <!-- 注释：协议确认（必填）v5.4新增 -->
             <div style="margin-bottom: 20px; padding: 10px 12px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 4px;">
                 <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 13px; color: #666;">
                     <input type="checkbox" id="authzAgreeProtocol" style="margin-top: 2px; flex-shrink: 0;">
@@ -2527,7 +2527,7 @@ flowchart TB
         
     </script>
 
-    <!-- 流程图放大预览（原图全屏） -->
+    <!-- 注释：流程图放大预览（原图全屏） -->
     <div id="flowchartPreviewOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.92); z-index:9999; cursor:grab;" onclick="closeFlowchartPreview(event)">
         <div style="position:absolute; top:20px; right:30px; z-index:10001; display:flex; gap:10px; align-items:center;">
             <button onclick="event.stopPropagation(); zoomFlowchart(-0.15)" style="background:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:20px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.3);">−</button>
