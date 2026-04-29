@@ -649,8 +649,78 @@
 <!-- 展开按钮（侧栏收起时显示） -->
 <button id="sidebar-expand" onclick="toggleMiniSidebar()" style="display:none;position:fixed;top:10px;left:8px;z-index:10001;background:#1890ff;color:#fff;border:none;width:30px;height:30px;border-radius:0 6px 6px 0;cursor:pointer;font-size:14px;box-shadow:2px 0 8px rgba(0,0,0,.2);line-height:1;">▶</button>
 
+<!-- ========== 总览页（开发者视角） ========== -->
+<div class="screen-page visible" id="p-overview">
+  <div style="max-width:900px;margin:0 auto;padding:20px;">
+    <h1 style="font-size:20px;font-weight:700;color:#1a1a1a;margin-bottom:16px;">📱 小程序端企业认证 · 开发者总览</h1>
+
+    <!-- 核心概念 -->
+    <div style="background:linear-gradient(135deg,#e6f7ff,#bae7ff);border:1px solid #91d5ff;border-radius:12px;padding:20px;margin-bottom:20px;">
+      <div style="font-size:15px;font-weight:700;color:#003a8c;margin-bottom:12px;">🏗️ 核心架构</div>
+      <div style="font-size:13px;color:#333;line-height:1.8;">
+        <div>• <b>商城侧：</b>统一展示完整表单，提交到 <code>/api/company/auth/submit</code></div>
+        <div>• <b>e签宝H5内部：</b>自动检测企业是否已实名认证，决定走场景一或场景二</div>
+      </div>
+    </div>
+
+    <!-- 两种场景 -->
+    <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:280px;background:#fff;border-radius:10px;padding:16px;border:1px solid #e8e8e8;">
+        <div style="font-size:13px;font-weight:700;color:#1890ff;margin-bottom:10px;">🔵 场景一：首次认证（企业未认证）</div>
+        <div style="font-size:12px;color:#555;line-height:1.8;">
+          <div>① 入口 → ② 企业信息 → ②.₅ 过渡</div>
+          <div>→ ④ 完整表单 → WebView e签宝</div>
+          <div>→ <b>人脸识别 + 营业执照 + 授权</b></div>
+          <div>→ 7.5 审核 → 8A 认证+授权通过</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:280px;background:#fff;border-radius:10px;padding:16px;border:1px solid #e8e8e8;">
+        <div style="font-size:13px;font-weight:700;color:#cf1322;margin-bottom:10px;">🔴 场景二：已认证授权（企业已实名）</div>
+        <div style="font-size:12px;color:#555;line-height:1.8;">
+          <div>①→②→②.₅→④ 同场景一</div>
+          <div>→ WebView e签宝（<b style="color:#cf1322;">跳过人脸</b>）</div>
+          <div>→ 仅管理员扫码授权</div>
+          <div>→ 8C 等待 → 7A 授权通过</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P0必改项 -->
+    <div style="background:#fff2f0;border:1px solid #ffccc7;border-radius:12px;padding:20px;margin-bottom:20px;">
+      <div style="font-size:14px;font-weight:700;color:#cf1322;margin-bottom:12px;">⚠️ 小程序端P0必改项（开发前必读）</div>
+      <div style="font-size:12px;color:#555;line-height:1.9;">
+        <div>1. <b>clientType 参数</b>：必须传 <code>MINI_APP</code>，传错e签宝H5渲染异常</div>
+        <div>2. <b>redirectUrl</b>：必须指向中间H5页，由 <code>wx.miniProgram.navigateTo</code> 跳回小程序</div>
+        <div>3. <b>业务域名</b>：微信公众平台配置 <code>openapi.esign.cn</code></div>
+        <div>4. <b>X-Platform Header</b>：传 <code>X-Platform: miniapp</code></div>
+      </div>
+    </div>
+
+    <!-- 页面索引 -->
+    <div style="background:#fff;border-radius:10px;border:1px solid #e8e8e8;padding:16px;margin-bottom:20px;">
+      <div style="font-size:14px;font-weight:700;color:#262626;margin-bottom:12px;">📋 页面索引</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;font-size:12px;">
+        <div onclick="jumpToMiniPage('p-entry')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">① 认证入口</div>
+        <div onclick="jumpToMiniPage('p-company')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">② 企业信息</div>
+        <div onclick="jumpToMiniPage('p-phone')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">② 法人经办人</div>
+        <div onclick="jumpToMiniPage('p-checking')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">②.₅ 过渡</div>
+        <div onclick="jumpToMiniPage('p-form')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">④ 完整表单</div>
+        <div onclick="jumpToMiniPage('p-webview')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">◆ WebView</div>
+        <div onclick="jumpToMiniPage('p-processing')" style="padding:8px 12px;background:#fff7e6;border:1px solid #ffd591;border-radius:6px;cursor:pointer;color:#d46b08;">⏳ 审核中</div>
+        <div onclick="jumpToMiniPage('p-success')" style="padding:8px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;cursor:pointer;color:#389e0d;">✅ 认证成功</div>
+        <div onclick="jumpToMiniPage('p-diff')" style="padding:8px 12px;background:#fff2f0;border:1px solid #ffccc7;border-radius:6px;cursor:pointer;color:#cf1322;">⚠️ PC差异</div>
+      </div>
+    </div>
+
+    <!-- 开始按钮 -->
+    <div style="text-align:center;margin-top:20px;">
+      <button onclick="jumpToMiniPage('p-entry')" style="padding:12px 32px;background:#1890ff;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">开始浏览页面 →</button>
+    </div>
+  </div>
+</div>
+
 <!-- ========== 页38: 认证入口（对应截图画面38）========== -->
-<div class="screen-page visible" id="p-entry">
+<div class="screen-page" id="p-entry">
   <div class="group-header"><div class="line"></div><div class="text">画面 38 · 认证功能入口</div><div class="line"></div></div>
   
     
@@ -1490,7 +1560,7 @@ function toggleMiniSidebar() {
 }
 // v6.8：页面名映射（面包屑）
 var MINI_PAGE_NAMES = {
-  'p-entry':'① 认证入口','p-company':'② 企业信息填写','p-phone':'② 法人+经办人',
+  'p-overview':'📊 总览','p-entry':'① 认证入口','p-company':'② 企业信息填写','p-phone':'② 法人+经办人',
   'p-checking':'②.₅ 过渡加载','p-form':'④ 完整表单','p-webview':'◆ WebView',
   'p-processing':'⏳ 认证中','p-success':'✅ 认证成功','p-failed':'❌ 认证失败',
   'p-authz-wait':'⏳ 等待授权','p-authz-ok':'✅ 授权通过','p-authz-rej':'❌ 授权拒绝',
