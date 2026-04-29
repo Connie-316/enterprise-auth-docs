@@ -11,7 +11,7 @@
       background: #f0f0f0;
       color: #333;
       padding-left: 200px;
-      padding-top: 50px;
+      padding-top: 44px;
     }
     .page-title {
       text-align: center;
@@ -554,27 +554,6 @@
 <div style="position:fixed;top:0;left:200px;right:0;height:44px;background:#001529;z-index:9999;display:flex;align-items:center;padding:0 16px;gap:16px;border-bottom:1px solid #333;">
     <span style="color:#fff;font-size:13px;font-weight:600;">📱 小程序端</span>
     <div id="mini-breadcrumb" style="color:#8c9bb3;font-size:12px;">当前：<b>① 认证入口</b></div>
-</div>
-<div class="tabs" id="tabs" style="position:fixed;top:44px;left:200px;right:0;z-index:9998;background:#fff;border-bottom:1px solid #eee;padding:8px 16px;overflow-x:auto;">
-  <div class="tab-group-label">📋 阶段1：表单（步骤1-2）</div>
-  <div class="tab active" onclick="showPage('p-entry')">① 认证入口</div>
-  <div class="tab" onclick="showPage('p-company')">② 企业信息</div>
-  <div class="tab" onclick="showPage('p-phone')">② 法人+经办人</div>
-  <div class="tab" onclick="showPage('p-checking')">②.₅ 过渡加载</div>
-  <div class="tab-group-label">📄 场景一·提交认证（步骤3）</div>
-  <div class="tab" onclick="showPage('p-form')">④ 完整表单</div>
-  <div class="tab modal-tab" onclick="showPage('p-webview')">◆ WebView</div>
-  <div class="tab-group-label">✅❌ 场景一·结果状态</div>
-  <div class="tab" onclick="showPage('p-processing')">⏳ 认证中</div>
-  <div class="tab success-tab" onclick="showPage('p-success')">✅ 认证成功</div>
-  <div class="tab error-tab" onclick="showPage('p-failed')">❌ 认证失败</div>
-  <div class="tab-group-label">🔑 场景二：授权（仅场景二）</div>
-  <div class="tab" onclick="showPage('p-authz-wait')">⏳ 等待授权</div>
-  <div class="tab success-tab" onclick="showPage('p-authz-ok')">✅ 授权通过</div>
-  <div class="tab error-tab" onclick="showPage('p-authz-rej')">❌ 授权拒绝</div>
-  <div class="tab-group-label">💾 辅助</div>
-  <div class="tab" onclick="showPage('p-draft')">💾 草稿恢复</div>
-  <div class="tab" onclick="showPage('p-diff')">⚠️ 差异说明</div>
 </div>
 
 <!-- ====== v6.9：固定左侧页面导航侧边栏（小程序端） ====== -->
@@ -1520,29 +1499,23 @@ var MINI_PAGE_NAMES = {
 function showPage(id) {
   // 隐藏所有页
   document.querySelectorAll('.screen-page').forEach(p => p.classList.remove('visible'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   // 显示目标页
   document.getElementById(id).classList.add('visible');
-  // 激活tab（v6.8更新索引）
-  const tabs = document.querySelectorAll('.tab');
-  const map = {
-    'p-entry': 0, 'p-company': 1, 'p-phone': 2, 'p-checking': 3,
-    'p-form': 4, 'p-webview': 5, 'p-processing': 6,
-    'p-success': 7, 'p-failed': 8, 'p-authz-wait': 9,
-    'p-authz-ok': 10, 'p-authz-rej': 11, 'p-draft': 12, 'p-diff': 13
-  };
-  if (map[id] !== undefined) tabs[map[id]].classList.add('active');
-  // v6.9：页面浏览历史 + 面包屑 + 返回按钮
+  // 更新面包屑
   if (typeof miniHistory === 'undefined') window.miniHistory = ['p-entry'];
   if (miniHistory[miniHistory.length-1] !== id) miniHistory.push(id);
   var bc = document.getElementById('mini-breadcrumb');
   if (bc) bc.innerHTML = '当前：<b>' + (MINI_PAGE_NAMES[id] || id) + '</b>';
-  var backBtn = document.getElementById('backBtn');
-  if (backBtn) backBtn.style.display = miniHistory.length > 1 ? 'inline-block' : 'none';
-  // 高亮当前tab
-  document.querySelectorAll('#tabs .tab').forEach(function(t){ t.classList.remove('active'); });
-  var activeTab = document.querySelector('#tabs .tab[onclick*="' + id + '"]');
-  if (activeTab) activeTab.classList.add('active');
+  // 更新侧边栏选中状态
+  document.querySelectorAll('.nav-item-sidebar').forEach(el => {
+    el.style.background = '';
+    el.style.color = el.getAttribute('data-color') || '#555';
+  });
+  var target = document.querySelector('.nav-item-sidebar[data-page="'+id+'"]');
+  if (target) {
+    target.style.background = '#e6f7ff';
+    target.style.color = '#1890ff';
+  }
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
@@ -1550,12 +1523,6 @@ function goBack() {
     if (typeof miniHistory === 'undefined' || miniHistory.length <= 1) return;
     miniHistory.pop();
     showPage(miniHistory[miniHistory.length-1]);
-}
-
-function updateTabActive(pageName) {
-    document.querySelectorAll('#tabs .tab').forEach(function(t){ t.classList.remove('active'); });
-    var target = document.querySelector('#tabs .tab[onclick*="' + pageName + '"]');
-    if (target) target.classList.add('active');
 }
 </script>
 
