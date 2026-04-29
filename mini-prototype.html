@@ -517,7 +517,7 @@
 
     /* 页面可见控制 */
     .screen-page { display: none; }
-    .screen-page.visible { display: block !important; overflow: visible; min-height: 100px; }
+    .screen-page.visible { display: block; }
   
 /* ========== v7.0：注释/开发提示专用样式 ========== */
 .dev-note {
@@ -545,7 +545,7 @@
 
 <div class="page-title">企业认证 · 小程序端原型</div>
 <div class="center">
-  <span class="version-tag">v7.2 · 统一表单架构</span>
+  <span class="version-tag">v7.0 · 统一表单架构 · 数智聚模小程序 · 数智聚模小程序</span>
 </div>
 <div class="page-subtitle">微信小程序端完整认证交互原型，业务逻辑与H5端一致，仅实现层不同</div>
 
@@ -556,7 +556,7 @@
     <span style="color:#4a90d9;font-size:10px;">|</span>
     <span id="mini-breadcrumb" style="color:#8c9bb3;font-size:10px;">当前：<b>认证入口</b></span>
 </div>
-<div class="tabs" id="tabs" style="display:none;"></div>
+<div class="tabs" id="tabs" style="display:none;">
 
 <!-- ====== v7.2：精简版左侧导航 ====== -->
 <div id="mini-sidebar" style="position:fixed;top:0;left:0;width:200px;height:100vh;background:#fff;border-right:1px solid #e8e8e8;z-index:10000;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;">
@@ -595,8 +595,8 @@
 .nav-section { padding:8px 16px 4px;font-size:11px;color:#999;font-weight:600;letter-spacing:.5px; }
 </style>
 
-<!-- ========== 流程总览（开发者视角）- 固定显示，非页面切换内容 ========== -->
-<div id="p-overview" style="display:block;">
+<!-- ========== 流程总览（开发者视角） ========== -->
+<div class="screen-page visible" id="p-overview">
   <div class="group-header"><div class="line"></div><div class="text">📊 开发者视角 · 快速入门</div><div class="line"></div></div>
   <div style="padding:0 16px 24px;">
     <!-- 开发者必读 -->
@@ -1471,7 +1471,7 @@
 </div>
 
 
-<script>
+// ====== v7.0：侧栏导航树 JS ======
 function toggleNavGroup(groupId) {
     var children = document.getElementById(groupId + '-children');
     var arrow = document.getElementById(groupId + '-arrow');
@@ -1494,12 +1494,13 @@ function jumpToMiniPage(pageId) {
     if (target) target.classList.add('active');
 }
 
+<script>
 // v6.8 新增：导航面板
 // v7.0：侧边栏展开/折叠
 function toggleMiniSidebar() {
     var sb = document.getElementById('mini-sidebar');
     var eb = document.getElementById('sidebar-expand');
-    var topbar = document.querySelector('.fixed-top-bar') || document.body.children[1];
+    var topbar = document.querySelector('.fixed-top-bar') || document.body.children[1]; // top bar
     if (sb.style.display === 'none') {
         sb.style.display = 'flex';
         eb.style.display = 'none';
