@@ -1529,6 +1529,7 @@ function toggleNavGroup(groupId) {
     }
 }
 
+<script>
 function jumpToMiniPage(pageId) {
     showPage(pageId);
     // 高亮当前导航项
@@ -1548,29 +1549,6 @@ function jumpToMiniPage(pageId) {
     });
 }
 
-<script>
-// v6.8 新增：导航面板
-// v6.9：侧边栏展开/折叠
-function toggleMiniSidebar() {
-    var sb = document.getElementById('mini-sidebar');
-    var eb = document.getElementById('sidebar-expand');
-    var topbar = document.querySelector('.fixed-top-bar') || document.body.children[1]; // top bar
-    if (sb.style.display === 'none') {
-        sb.style.display = 'flex';
-        eb.style.display = 'none';
-    } else {
-        sb.style.display = 'none';
-        eb.style.display = 'block';
-    }
-}
-// v6.8：页面名映射（面包屑）
-var MINI_PAGE_NAMES = {
-  'p-overview':'📊 总览','p-entry':'① 认证入口','p-company':'② 企业信息填写','p-phone':'② 法人+经办人',
-  'p-checking':'②.₅ 过渡加载','p-form':'④ 完整表单','p-webview':'◆ WebView',
-  'p-processing':'⏳ 认证中','p-success':'✅ 认证成功','p-failed':'❌ 认证失败',
-  'p-authz-wait':'⏳ 等待授权','p-authz-ok':'✅ 授权通过','p-authz-rej':'❌ 授权拒绝',
-  'p-draft':'💾 草稿恢复','p-diff':'⚠️ 差异说明'
-};
 function showPage(id) {
   // 隐藏所有页
   document.querySelectorAll('.screen-page').forEach(p => p.classList.remove('visible'));
@@ -1594,11 +1572,24 @@ function showPage(id) {
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
+function toggleMiniSidebar() {
+    var sb = document.getElementById('mini-sidebar');
+    var eb = document.getElementById('sidebar-expand');
+    if (sb.style.display === 'none') {
+        sb.style.display = 'flex';
+        eb.style.display = 'none';
+    } else {
+        sb.style.display = 'none';
+        eb.style.display = 'block';
+    }
+}
+
 function goBack() {
     if (typeof miniHistory === 'undefined' || miniHistory.length <= 1) return;
     miniHistory.pop();
     showPage(miniHistory[miniHistory.length-1]);
 }
+
 </script>
 
 </body>
