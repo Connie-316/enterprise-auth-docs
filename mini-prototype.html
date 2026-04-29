@@ -517,8 +517,13 @@
     .group-header .text { font-size: 12px; color: #aaa; white-space: nowrap; }
 
     /* 页面可见控制 */
-    .screen-page { display: none; }
-    .screen-page.visible { display: block; }
+    .screen-page {
+      display: none;
+    }
+    .screen-page.visible {
+      display: block;
+      padding-top: 16px;
+    }
   
 /* ========== v6.9：注释/开发提示专用样式 ========== */
 .dev-note {
@@ -1576,12 +1581,12 @@ function showPage(id) {
   if (miniHistory[miniHistory.length-1] !== id) miniHistory.push(id);
   var bc = document.getElementById('mini-breadcrumb');
   if (bc) bc.innerHTML = '当前：<b>' + (MINI_PAGE_NAMES[id] || id) + '</b>';
-  // 更新侧边栏选中状态
+  // 更新侧边栏高亮（通过onclick属性匹配）
   document.querySelectorAll('.nav-item-sidebar').forEach(el => {
     el.style.background = '';
-    el.style.color = el.getAttribute('data-color') || '#555';
+    el.style.color = '';
   });
-  var target = document.querySelector('.nav-item-sidebar[data-page="'+id+'"]');
+  var target = document.querySelector('.nav-item-sidebar[onclick*="'+id+'"]');
   if (target) {
     target.style.background = '#e6f7ff';
     target.style.color = '#1890ff';
