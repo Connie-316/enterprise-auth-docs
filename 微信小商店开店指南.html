@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>微信小商店开店指南｜手工美食创业</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    min-height: 100vh;
+    color: #333;
+    -webkit-text-size-adjust: 100%;
+  }
+  .page {
+    max-width: 520px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.08);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7c948 100%);
+    padding: 48px 24px 36px;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 0 28px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 100px; height: 100px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+  }
+  .hero-emoji { font-size: 52px; margin-bottom: 12px; position: relative; z-index:1; }
+  .hero h1 { font-size: 24px; font-weight: 800; line-height: 1.4; margin-bottom: 10px; position: relative; z-index:1; }
+  .hero p { font-size: 13px; opacity: 0.92; line-height: 1.6; position: relative; z-index:1; }
+
+  /* One-liner */
+  .one-liner {
+    margin: 20px 20px 0;
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    border-radius: 14px;
+    padding: 18px 20px;
+    border-left: 4px solid #ff6b35;
+  }
+  .one-liner p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #4e342e;
+    font-weight: 600;
+  }
+
+  /* TOC */
+  .toc {
+    margin: 16px 20px;
+    background: #f8f9ff;
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .toc a {
+    font-size: 12.5px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #fff;
+    color: #4a5568;
+    text-decoration: none;
+    border: 1px solid #e8ecf4;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .toc a:active { background: #ff6b35; color: #fff; border-color: #ff6b35; }
+
+  /* Section */
+  .section { padding: 24px 20px 8px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  .section-title .icon { font-size: 20px; }
+
+  /* Card */
+  .card {
+    background: #f8f9ff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .card p {
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: #444;
+    margin-bottom: 8px;
+  }
+  .card p:last-child { margin-bottom: 0; }
+  .hl { color: #ff6b35; font-weight: 600; }
+
+  /* Step group */
+  .step-group { margin-bottom: 20px; }
+  .step-group-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: #ff6b35;
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .step-group-label.blue { background: #4a90d9; }
+
+  /* Step item */
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    width: 30px; height: 30px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-num.orange { background: linear-gradient(135deg, #ff6b35, #f7c948); }
+  .step-content h4 { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; line-height: 1.5; }
+  .step-content p { font-size: 12.5px; color: #666; line-height: 1.7; }
+  .step-content .detail {
+    font-size: 12px;
+    color: #888;
+    margin-top: 6px;
+    padding: 8px 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    line-height: 1.7;
+  }
+  .step-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-left: 4px;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+  .tag-free { background: #e8f5e9; color: #2e7d32; }
+  .tag-pay { background: #fff3e0; color: #e65100; }
+  .tag-time { background: #e3f2fd; color: #1565c0; }
+
+  /* Checklist */
+  .checklist {
+    background: #f0fff4;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    font-size: 13.5px;
+    color: #333;
+    border-bottom: 1px dashed #c8e6c9;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px; height: 22px;
+    border: 2px solid #66bb6a;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+
+  /* Table */
+  .fee-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 12px;
+  }
+  .fee-table th {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 14px;
+    text-align: left;
+  }
+  .fee-table td {
+    padding: 11px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+  }
+  .fee-table tr:last-child td { border-bottom: none; }
+  .fee-table tr:nth-child(even) td { background: #fafbff; }
+  .fee-free { color: #2e7d32; font-weight: 600; }
+
+  /* Warning */
+  .warn-card {
+    background: #fff8e1;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 10px;
+    border-left: 4px solid #ffc107;
+  }
+  .warn-card h4 {
+    font-size: 13.5px;
+    color: #e65100;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .warn-list { list-style: none; padding: 0; }
+  .warn-list li {
+    font-size: 12.5px;
+    color: #5d4037;
+    line-height: 1.8;
+    padding: 3px 0 3px 22px;
+    position: relative;
+  }
+  .warn-list li::before {
+    content: '⚠';
+    position: absolute;
+    left: 0;
+    font-size: 11px;
+    color: #f9a825;
+  }
+
+  /* FAQ */
+  .faq-item {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .faq-q {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .faq-a {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  /* Links */
+  .link-card {
+    background: #f0f4ff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .link-icon { font-size: 22px; flex-shrink: 0; }
+  .link-info { flex: 1; }
+  .link-name { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 2px; }
+  .link-desc { font-size: 11.5px; color: #888; line-height: 1.4; }
+  .link-url {
+    font-size: 11px;
+    color: #4a90d9;
+    word-break: break-all;
+    background: rgba(74,144,217,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 4px;
+    text-decoration: none;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, #ff6b35, #4a90d9);
+    border-radius: 2px;
+  }
+  .tl-item {
+    position: relative;
+    padding: 10px 0 10px 16px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff6b35;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #ff6b35;
+  }
+  .tl-item:nth-child(4)::before { background: #4a90d9; box-shadow: 0 0 0 2px #4a90d9; }
+  .tl-item:nth-child(5)::before { background: #4a90d9; box-shadow: 0 0 0 2px #4a90d9; }
+  .tl-title { font-size: 13.5px; font-weight: 600; color: #333; margin-bottom: 3px; }
+  .tl-desc { font-size: 12px; color: #888; }
+  .tl-time {
+    font-size: 11px;
+    color: #4a90d9;
+    font-weight: 600;
+    float: right;
+    margin-top: -18px;
+  }
+
+  /* Bottom */
+  .bottom-cta {
+    text-align: center;
+    padding: 24px 20px 12px;
+  }
+  .bottom-cta-box {
+    background: linear-gradient(135deg, #ff6b35, #f7c948);
+    border-radius: 16px;
+    padding: 22px;
+    color: #fff;
+  }
+  .bottom-cta-box p {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+  .bottom-cta-box small {
+    display: block;
+    margin-top: 10px;
+    font-size: 11.5px;
+    opacity: 0.85;
+    font-weight: 400;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 12px 20px 32px;
+    font-size: 11px;
+    color: #ccc;
+    line-height: 1.6;
+  }
+
+  /* Tip box */
+  .tip-box {
+    background: #e8f5e9;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 4px solid #4caf50;
+  }
+  .tip-box p {
+    font-size: 12.5px;
+    color: #2e7d32;
+    line-height: 1.7;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-emoji">🏪</div>
+    <h1>微信小商店开店指南</h1>
+    <p>手工美食创业 · 从零到上线<br>一看就懂的完整教程</p>
+  </div>
+
+  <!-- One-liner -->
+  <div class="one-liner">
+    <p>🎯 <strong>这份文档是干嘛的？</strong><br>教你用微信开一个"线上美食小店"——别人点进你的小程序就能看菜单、下单、付款。不用写代码，不用下APP，手机就能操作。</p>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc" id="toc">
+    <a href="#what">这是什么</a>
+    <a href="#steps">开店步骤</a>
+    <a href="#license">办证细节</a>
+    <a href="#checklist">资料清单</a>
+    <a href="#fee">费用</a>
+    <a href="#time">时间规划</a>
+    <a href="#faq">常见问题</a>
+    <a href="#links">官方链接</a>
+    <a href="#warn">避坑提醒</a>
+  </div>
+
+  <!-- What -->
+  <div class="section" id="what">
+    <div class="section-title"><span class="icon">💡</span> 什么是微信小商店？</div>
+    <div class="card">
+      <p>你现在是靠<span class="hl">朋友圈 + 私聊转账</span>卖东西对吧？很原始，容易漏单、算错账。</p>
+      <p>微信小商店就是微信里的<span class="hl">"店铺页面"</span>——你上架菜品、标好价格，顾客打开就能看、下单、付钱，自动收单通知你。就像蛋糕店点单链接那种。</p>
+      <p><strong>核心优势：</strong>免费开店、无平台抽成、微信里直接用、顾客不需要下任何APP。</p>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="section" id="steps">
+    <div class="section-title"><span class="icon">📋</span> 开店步骤（一共7步）</div>
+
+    <div class="step-group">
+      <span class="step-group-label">第一阶段：线下办证（没证啥也干不了）</span>
+
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>办个体户营业执照 <span class="step-tag tag-free">免费</span> <span class="step-tag tag-time">当天~3天</span></h4>
+          <p>带身份证去当地<strong>市场监管局/政务大厅</strong></p>
+          <div class="detail">
+            📌 <strong>怎么填：</strong><br>
+            · 类型选"个体工商户"（别选公司，麻烦且没必要）<br>
+            · 经营范围必须包含 <strong>"食品销售"</strong> 或 <strong>"餐饮服务"</strong><br>
+            · 如果你现做现卖（烘焙/糕点），建议两个都写上<br>
+            · 店铺名格式：XX区 + XX店（如"朝阳区清禾糕点店"）
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>办食品经营许可证 <span class="step-tag tag-free">免费</span> <span class="step-tag tag-time">5-15个工作日</span></h4>
+          <p>拿着营业执照 + 身份证，去<strong>同一个大厅</strong>申请</p>
+          <div class="detail">
+            📌 <strong>关键要求：</strong><br>
+            · 现场核查（工作人员会来看你的厨房）<br>
+            · 厨房要求：生熟分区、有消毒设施、有上下水<br>
+            · 建议提前打电话咨询当地具体要求：<strong>12315</strong><br>
+            · 核查通过 → 拿证；不通过 → 整改后复查
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>准备收款银行卡</h4>
+          <p>个体户用经营者本人的<strong>一类储蓄卡</strong>就行，不用开对公账户</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-group">
+      <span class="step-group-label blue">第二阶段：线上开店（证到手后，1-2天搞定）</span>
+
+      <div class="step-item">
+        <div class="step-num orange">4</div>
+        <div class="step-content">
+          <h4>微信搜"微信小商店"→ 用本人微信登录</h4>
+          <p>选择主体类型：<strong>个体工商户</strong>，进入入驻流程</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num orange">5</div>
+        <div class="step-content">
+          <h4>上传证件 + 微信认证 <span class="step-tag tag-pay">30元/年</span></h4>
+          <p>上传营业执照 + 食品证 + 身份证正反面，填银行卡号</p>
+          <div class="detail">
+            📌 拍照要求：证件四角完整、字迹清晰、无反光
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num orange">6</div>
+        <div class="step-content">
+          <h4>等审核 <span class="step-tag tag-time">1-2个工作日</span></h4>
+          <p>微信官方审核通过 → 自动开通微信支付收款功能</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num orange">7</div>
+        <div class="step-content">
+          <h4>上架菜品，正式营业 🎉</h4>
+          <p>上传菜品照片 + 标价 + 设营业时间 → 生成二维码 → 发给顾客即可接单</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- License detail -->
+  <div class="section" id="license">
+    <div class="section-title"><span class="icon">📑</span> 办证补充说明</div>
+    <div class="card">
+      <p><strong>个体户 vs 公司选哪个？</strong></p>
+      <p>→ 选<strong>个体工商户</strong>。注册简单、免费、不用请会计、税务宽松。公司需要做账报税，对小白来说太麻烦。</p>
+    </div>
+    <div class="card">
+      <p><strong>没有实体门面能办证吗？</strong></p>
+      <p>→ 可以，但地址必须是<strong>合法经营场所</strong>。部分地区允许用住宅地址（需居委会盖章同意），具体打 12315 问你所在区。纯线上无地址不行。</p>
+    </div>
+    <div class="card">
+      <p><strong>如果只卖预包装食品（成品包装好的）呢？</strong></p>
+      <p>→ 只需要营业执照（经营范围含"食品销售"）+ <strong>预包装食品备案</strong>，不需要办食品经营许可证。但你是现做现卖，必须办。</p>
+    </div>
+    <div class="tip-box">
+      <p>💡 <strong>省时建议：</strong>营业执照和食品证可以同时准备材料，执照下来后马上提交食品证申请，别等拿到执照再去问。</p>
+    </div>
+  </div>
+
+  <!-- Checklist -->
+  <div class="section" id="checklist">
+    <div class="section-title"><span class="icon">✅</span> 开店资料打勾清单</div>
+    <div class="checklist">
+      <div class="check-item"><div class="check-box"></div> 个体工商户营业执照（经营范围含食品）</div>
+      <div class="check-item"><div class="check-box"></div> 食品经营许可证</div>
+      <div class="check-item"><div class="check-box"></div> 经营者身份证正反面照片（清晰、无反光）</div>
+      <div class="check-item"><div class="check-box"></div> 经营者名下一类储蓄卡（知道卡号）</div>
+      <div class="check-item"><div class="check-box"></div> 本人实名微信（做管理员账号）</div>
+      <div class="check-item"><div class="check-box"></div> 店名（已想好，建议跟营业执照一致）</div>
+      <div class="check-item"><div class="check-box"></div> 店铺头像 + 简介</div>
+      <div class="check-item"><div class="check-box"></div> 菜品实拍图 + 价格表（至少3款）</div>
+    </div>
+  </div>
+
+  <!-- Fee -->
+  <div class="section" id="fee">
+    <div class="section-title"><span class="icon">💰</span> 费用明细</div>
+    <table class="fee-table">
+      <thead><tr><th>项目</th><th>费用</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>营业执照</td><td class="fee-free">免费</td><td>个体户不收费</td></tr>
+        <tr><td>食品经营许可证</td><td class="fee-free">免费</td><td>国家不收费</td></tr>
+        <tr><td>微信认证费</td><td>30元/年</td><td>每年续费一次</td></tr>
+        <tr><td>订单手续费</td><td>0.54%/笔</td><td>含微信支付通道费，不是佣金</td></tr>
+        <tr><td>平台年费/抽成</td><td class="fee-free">0元</td><td>无！</td></tr>
+      </tbody>
+    </table>
+    <div class="tip-box">
+      <p>💰 <strong>对比美团/饿了么：</strong>平台抽成15%-25%，微信小商店只有0.54%支付手续费，一单赚100块只扣5毛4。</p>
+    </div>
+  </div>
+
+  <!-- Time -->
+  <div class="section" id="time">
+    <div class="section-title"><span class="icon">⏰</span> 时间规划</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-title">办营业执照</div>
+        <div class="tl-desc">带身份证去市场监管局</div>
+        <span class="tl-time">当天~3天</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">办食品经营许可证</div>
+        <div class="tl-desc">提交申请 → 现场核查 → 等发证</div>
+        <span class="tl-time">5-15工作日</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">拍菜品照片 + 准备资料</div>
+        <div class="tl-desc">跟办证同步进行，不浪费时间</div>
+        <span class="tl-time">同步</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">微信小商店注册 + 提交审核</div>
+        <div class="tl-desc">手机操作，上传证件</div>
+        <span class="tl-time">30分钟</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">等审核 + 上架商品</div>
+        <div class="tl-desc">审核通过后上架菜品</div>
+        <span class="tl-time">1-2天</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">正式营业 🎉</div>
+        <div class="tl-desc">发二维码/链接给顾客</div>
+        <span class="tl-time">当天</span>
+      </div>
+    </div>
+    <div class="card">
+      <p><strong>最快2周开店，最慢1个月。</strong>主要取决于食品许可证的办理速度。建议执照一下来就马上去办食品证，别拖。</p>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <div class="section-title"><span class="icon">❓</span> 常见问题</div>
+    <div class="faq-item">
+      <div class="faq-q">Q：在家做手工美食能卖吗？</div>
+      <div class="faq-a">可以，但必须有证。用住宅地址注册（需居委会盖章）或租一个小场地。无证销售属于违法经营。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Q：不会拍照/设计怎么办？</div>
+      <div class="faq-a">手机拍就行。技巧：自然光下拍、干净白桌布/木砧板当背景、菜品居中。后期用"黄油相机""醒图"APP加个简单滤镜即可。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Q：顾客怎么下单？需要教他们吗？</div>
+      <div class="faq-a">把店铺链接或二维码发到朋友圈/微信群，顾客点击直接打开小程序，跟点外卖一样，不用教。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Q：配送怎么弄？</div>
+      <div class="faq-a">微信小商店可对接<strong>顺丰同城</strong>或<strong>达达</strong>。不能直接对接美团/饿了么配送。初期量小建议自己送或顾客自提。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Q：有人退货怎么办？</div>
+      <div class="faq-a">食品类一般不支持无理由退货（食品安全法规定）。建议在商品详情写明"因食品特殊性，售出后不支持退换"。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Q：收款钱到哪了？怎么提现？</div>
+      <div class="faq-a">钱自动到你绑定的银行卡，T+1到账（第二天到）。在小商店后台可以看每日收入明细。</div>
+    </div>
+  </div>
+
+  <!-- Links -->
+  <div class="section" id="links">
+    <div class="section-title"><span class="icon">🔗</span> 官方链接</div>
+    <div class="link-card">
+      <div class="link-icon">🏪</div>
+      <div class="link-info">
+        <div class="link-name">微信小商店官网（入驻入口）</div>
+        <div class="link-desc">注册、认证、开店都在这里</div>
+        <a class="link-url" href="https://shop.weixin.qq.com">shop.weixin.qq.com</a>
+      </div>
+    </div>
+    <div class="link-card">
+      <div class="link-icon">📖</div>
+      <div class="link-info">
+        <div class="link-name">微信小商店帮助中心</div>
+        <div class="link-desc">入驻、资质、认证等官方FAQ</div>
+        <a class="link-url" href="https://kf.qq.com/product/wx_xiaoshangdian.html">kf.qq.com/product/wx_xiaoshangdian.html</a>
+      </div>
+    </div>
+    <div class="link-card">
+      <div class="link-icon">✅</div>
+      <div class="link-info">
+        <div class="link-name">微信认证入口</div>
+        <div class="link-desc">微信认证（30元/年），小商店后台可直接跳转</div>
+        <a class="link-url" href="https://mp.weixin.qq.com">mp.weixin.qq.com</a>
+      </div>
+    </div>
+    <div class="link-card">
+      <div class="link-icon">📞</div>
+      <div class="link-info">
+        <div class="link-name">食品经营许可证咨询</div>
+        <div class="link-desc">拨打 12315，或去当地市场监管局/政务服务大厅线下咨询</div>
+      </div>
+    </div>
+    <div class="link-card">
+      <div class="link-icon">📋</div>
+      <div class="link-info">
+        <div class="link-name">营业执照办理</div>
+        <div class="link-desc">当地市场监管局/政务服务中心，部分地区支持线上办理</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warning -->
+  <div class="section" id="warn">
+    <div class="section-title"><span class="icon">🚨</span> 避坑必读</div>
+    <div class="warn-card">
+      <h4>❌ 不能不办证就开店</h4>
+      <ul class="warn-list">
+        <li>个人微信不能合法卖食品，必须有个体户执照 + 食品证</li>
+        <li>无证开店：小程序审核不通过 + 面临罚款（最低5万起）</li>
+      </ul>
+    </div>
+    <div class="warn-card">
+      <h4>❌ 经营范围要写对</h4>
+      <ul class="warn-list">
+        <li>执照经营范围必须含"食品销售"或"餐饮服务"</li>
+        <li>如果没写，需要先去工商局做"经营范围变更"（加项），再办食品证</li>
+      </ul>
+    </div>
+    <div class="warn-card">
+      <h4>❌ 三个地址要一致</h4>
+      <ul class="warn-list">
+        <li>营业执照地址 = 食品证地址 = 实际经营地址</li>
+        <li>不一致可能导致审核不通过</li>
+      </ul>
+    </div>
+    <div class="warn-card">
+      <h4>❌ 不要用别人/公司的证</h4>
+      <ul class="warn-list">
+        <li>证照主体必须跟微信小商店注册主体一致</li>
+        <li>借别人的证开店 = 违法 + 出事了对方担责你担不了</li>
+      </ul>
+    </div>
+    <div class="warn-card">
+      <h4>💡 实用提醒</h4>
+      <ul class="warn-list">
+        <li>微信认证费30元/年，到期不续费店铺会受限</li>
+        <li>手续费0.54%不是佣金，是微信支付通道费</li>
+        <li>商品描述建议写配料表、保质期、过敏原，显得专业</li>
+        <li>新店开张可以设"开业优惠"引流（如满减/包邮）</li>
+        <li>定期在朋友圈发新品图，维护老客户复购</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-cta">
+    <div class="bottom-cta-box">
+      <p>📌 先去办证，证下来后<br>用手机在微信里开小商店<br>最快1天上线营业！</p>
+      <small>资料整理于 2026 年 4 月 · 适用于微信小商店（个体工商户）</small>
+    </div>
+  </div>
+
+  <div class="footer">
+    微信小商店开店指南 · 手工美食创业<br>
+    祝生意兴隆 🧧
+  </div>
+
+</div>
+</body>
+</html>
