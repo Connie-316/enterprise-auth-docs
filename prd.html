@@ -280,7 +280,7 @@
   </div>
 
   <div class="alert alert-info" style="margin-top:16px;">
-    <strong>核心概念：</strong>本功能基于 e 签宝实现企业实名认证。商城侧<strong>不区分场景</strong>，统一展示表单，由 e 签宝 H5 内部自动识别企业是否已认证并切换流程。
+    <strong>核心概念：</strong>本功能基于 e 签宝实现企业实名认证。商城侧<strong>不区分场景</strong>，统一展示表单，<strong>后端判断场景</strong>后传参给 e 签宝，e 签宝 H5 根据后端参数自动适配首次认证/已认证授权流程。
   </div>
 </div>
 
@@ -328,7 +328,7 @@
     <tr><td>草稿保存</td><td>永久保存，不限时间。下次进入自动恢复；点【重新填写】物理删除草稿</td></tr>
     <tr><td>首次认证（场景一）</td><td>企业未在e签宝认证 → 调e签宝接口 → H5内完成人脸+营业执照+管理员授权</td></tr>
     <tr><td>已认证授权（场景二）</td><td>企业已在e签宝认证 → 调e签宝接口 → H5内仅走管理员授权</td></tr>
-    <tr><td>统一表单架构</td><td>商城侧<strong>统一展示完整表单</strong>，不区分场景。e签宝H5内部自动识别并适配</td></tr>
+    <tr><td>统一表单架构</td><td>商城侧<strong>统一展示完整表单</strong>，不区分场景。<strong>后端判断场景</strong>后传参给e签宝，e签宝H5根据后端参数自动适配</td></tr>
     <tr><td>回调处理</td><td>e签宝认证/授权完成 → notifyUrl回调 → 验签 → 加锁 → 更新状态 → 调接口同步企业信息</td></tr>
     <tr><td>结果页</td><td>认证+授权通过 / 认证失败 / 认证通过等待授权 / 授权拒绝（最多重申请3次）/ 授权超时</td></tr>
     <tr><td>小程序端</td><td>共用同一套后端接口，e签宝H5通过 &lt;web-view&gt; 内嵌；clientType传 MINI_APP</td></tr>
