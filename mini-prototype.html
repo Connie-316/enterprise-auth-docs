@@ -944,7 +944,11 @@
         </div>
         <div class="phone-home-bar"></div>
       </div>
-      <div class="annotation blue" style="max-width:200px;">纯前端过渡态（1-2s），不调用后端API<br>前端统一展示完整表单，后端判断场景后传参给e签宝<br>e签宝H5根据后端参数自动适配首次认证/已认证授权</div>
+      <div class="annotation blue" style="max-width:200px;">注释：完整流程如下：<br>
+① 页面2(企业信息) → ② 页面3.5(纯前端过渡1-2s，不调接口) → ③ 页面4(完整表单) → ④ 提交<br>
+→ 后端调e签宝接口1 → 返回authUrl → ⑤ WebView(e签宝H5认证)<br>
+→ 后端判断场景(auth_status=UNVERIFIED→场景一，其他→场景二)<br>
+→ 场景一：人脸+营业执照+授权；场景二：仅授权</div>
     </div>
   </div>
 </div>
