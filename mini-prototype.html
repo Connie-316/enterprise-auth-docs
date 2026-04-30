@@ -623,15 +623,17 @@
       <div style="flex:1;min-width:240px;background:#fff;border-radius:10px;padding:12px;border:1px solid #e8e8e8;">
         <div style="font-size:12px;font-weight:700;color:#1890ff;margin-bottom:6px;">🔵 场景一：首次认证</div>
         <div style="font-size:11px;color:#555;line-height:1.6;">
-          <div>①→②→②.₅→④ → WebView</div>
-          <div>→ <b>人脸+营业执照+授权</b></div>
+          <div>①→②→②.₅→④ → 提交</div>
+          <div>→ <b>后端判断</b>：auth_status=UNVERIFIED → 调接口1传完整参数</div>
+          <div>→ <b>WebView(e签宝H5)</b>：人脸+营业执照+授权</div>
         </div>
       </div>
       <div style="flex:1;min-width:240px;background:#fff;border-radius:10px;padding:12px;border:1px solid #e8e8e8;">
         <div style="font-size:12px;font-weight:700;color:#cf1322;margin-bottom:6px;">🔴 场景二：已认证授权</div>
         <div style="font-size:11px;color:#555;line-height:1.6;">
-          <div>①→②→②.₅→④ 同上</div>
-          <div>→ WebView（<b style="color:#cf1322;">跳过人脸</b>）</div>
+          <div>①→②→②.₅→④ → 提交</div>
+          <div>→ <b>后端判断</b>：auth_status≠UNVERIFIED → 调接口1不传transactorInfo</div>
+          <div>→ <b>WebView(e签宝H5)</b>：仅授权（<b style="color:#cf1322;">跳过人脸+营业执照</b>）</div>
         </div>
       </div>
     </div>
