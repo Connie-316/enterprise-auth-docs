@@ -318,34 +318,31 @@ flowchart TD
 
     D --> F[过渡页<br/>1-2秒纯前端]
 
-    F --> G[完整认证表单页<br/>法人身份证+经办人信息]
+    F --> G[完整认证表单页<br/>法人身份证+经办人信息<br/>场景二：法人身份证自动回填]
 
-    G --> H{场景}
+    G --> H[提交认证]
 
-    H -->|场景一| I[首次认证表单]
-    H -->|场景二| J[授权申请表单]
+    H --> I[后端判断场景<br/>前端无感知]
 
-    I --> K[提交认证]
-    J --> K
+    I --> J[跳转e签宝H5]
 
-    K --> L[跳转e签宝H5]
+    J --> K{e签宝处理}
 
-    L --> M{e签宝处理}
+    K -->|场景一| L[人脸识别+营业执照<br/>+管理员授权]
+    K -->|场景二| M[仅管理员授权]
 
-    M -->|场景一| N[人脸识别+营业执照<br/>+管理员授权]
-    M -->|场景二| O[仅管理员授权]
+    L --> N[回调通知商城]
+    M --> N
 
-    N --> P[回调通知商城]
-    O --> P
+    N --> O[结果页]
 
-    P --> Q[结果页]
-
-    Q -->|认证+授权通过| R[成功页]
-    Q -->|认证失败| S[失败页]
-    Q -->|等待授权| T[等待授权页]
-    Q -->|授权拒绝| U[授权拒绝页<br/>可重新申请]
-    Q -->|授权超时| V[超时页]
+    O -->|认证+授权通过| P[成功页]
+    O -->|认证失败| Q[失败页]
+    O -->|等待授权| R[等待授权页]
+    O -->|授权拒绝| S[授权拒绝页<br/>可重新申请]
+    O -->|授权超时| T[超时页]
   </pre>
+  <p style="font-size:13px;color:#666;margin-top:8px;">⚠️ <strong>重要：</strong>场景判断在后端进行，前端用户看到的始终是同一个表单页面。场景二时法人身份证号由后端自动回填并只读。</p>
 
   <h3 class="sub-title" id="s4-2">4.2 场景差异说明</h3>
   <table>
@@ -420,7 +417,7 @@ flowchart TD
   <h3 class="sub-title" id="s6-4">6.4 过渡页</h3>
   <p><strong>原型描述：</strong>显示"正在准备认证材料..."加载动画，纯前端1-2秒，不调接口，自动跳转。</p>
   <div class="user-story">作为一个<strong>企业用户</strong>，我想要<strong>等待认证材料准备</strong>，以便于<strong>看到完整表单</strong>。</div>
-  <p><strong>前置条件：</strong>企业信息已填写并提交</p>
+  <p><strong>前置条件：</strong>企业信息已填写，点击【下一步】</p>
   <p><strong>核心逻辑：</strong>纯前端setTimeout 1-2秒后自动跳转，不调用任何后端接口</p>
   <p><strong>验收标准：</strong></p>
   <ul>
@@ -429,31 +426,28 @@ flowchart TD
     <li><span class="check-item">✅</span> 不调接口（纯前端）</li>
   </ul>
 
-  <h3 class="sub-title" id="s6-5">6.5 首次认证表单（场景一）</h3>
-  <p><strong>原型描述：</strong>表单包含：法人身份证号 + 经办人（姓名/身份证/接收订单消息电话）+ 选填项 + <strong>必勾协议</strong>。</p>
-  <div class="user-story">作为一个<strong>首次认证的企业用户</strong>，我想要<strong>填写认证信息</strong>，以便于<strong>完成e签宝实名认证</strong>。</div>
-  <p><strong>前置条件：</strong>通过过渡页，后端判断为场景一</p>
-  <p><strong>核心逻辑：</strong>需填写法人身份证号 → 提交后获取authUrl → 跳转e签宝H5</p>
-  <p><strong>边界条件：</strong>法人身份证格式错误表单验证不通过；<strong>协议未勾选提交按钮禁用</strong></p>
+  <h3 class="sub-title" id="s6-5">6.5 完整认证表单（统一表单）</h3>
+  <p><strong>原型描述：</strong>前端展示统一表单页面，根据后端判断的场景自动适配：</p>
+  <ul style="margin:8px 0;">
+    <li><strong>场景一（首次认证）：</strong>法人身份证号需手动填写</li>
+    <li><strong>场景二（已认证授权）：</strong>法人身份证号由后端自动回填（只读）</li>
+  </ul>
+  <p>表单字段：法人身份证号 + 经办人（姓名/身份证/接收订单消息电话）+ 选填项 + <strong>必勾协议</strong></p>
+  <div class="user-story">作为一个<strong>企业用户</strong>，我想要<strong>填写认证信息</strong>，以便于<strong>完成e签宝实名认证</strong>。</div>
+  <p><strong>前置条件：</strong>通过过渡页</p>
+  <p><strong>核心逻辑：</strong></p>
+  <ul style="margin:8px 0;">
+    <li>场景一：用户填写法人身份证号 → 提交后获取authUrl → 跳转e签宝H5</li>
+    <li>场景二：法人身份证号后端自动回填（只读）→ 提交后获取authUrl → 跳转e签宝授权页</li>
+  </ul>
+  <p><strong>边界条件：</strong>法人身份证格式错误表单验证不通过；<strong>协议未勾选提交按钮禁用</strong>；授权申请最多3次</p>
   <p><strong>验收标准：</strong></p>
   <ul>
-    <li><span class="check-item">✅</span> 法人身份证号必填</li>
+    <li><span class="check-item">✅</span> 场景一：法人身份证号必填</li>
+    <li><span class="check-item">✅</span> 场景二：法人身份证号自动回填且只读</li>
     <li><span class="check-item">✅</span> 协议未勾选提交按钮禁用</li>
     <li><span class="check-item">✅</span> 提交后跳转e签宝H5</li>
-  </ul>
-
-  <h3 class="sub-title" id="s6-6">6.6 授权申请表单（场景二）</h3>
-  <p><strong>原型描述：</strong>企业信息（只读）+ 法人身份证号（自动回填，只读）+ 申请人信息 + <strong>必勾协议</strong>。</p>
-  <div class="user-story">作为一个<strong>已完成认证的企业用户</strong>，我想要<strong>申请电子合同授权</strong>，以便于<strong>使用账期支付功能</strong>。</div>
-  <p><strong>前置条件：</strong>通过过渡页，后端判断为场景二</p>
-  <p><strong>核心逻辑：</strong>法人身份证号后端回填只读 → 提交后获取authUrl → 跳转e签宝授权页</p>
-  <p><strong>边界条件：</strong>授权申请最多3次，第4次返回错误</p>
-  <p><strong>验收标准：</strong></p>
-  <ul>
-    <li><span class="check-item">✅</span> 法人身份证号自动回填且只读</li>
-    <li><span class="check-item">✅</span> 协议未勾选提交按钮禁用</li>
-    <li><span class="check-item">✅</span> 提交后跳转e签宝授权页</li>
-    <li><span class="check-item">✅</span> 第4次提交返回错误提示</li>
+    <li><span class="check-item">✅</span> 场景二第4次提交返回错误提示</li>
   </ul>
 </div>
 
