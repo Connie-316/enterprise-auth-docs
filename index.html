@@ -14,7 +14,6 @@
             document.querySelectorAll('a.card').forEach(function(card) {
                 var href = card.getAttribute('href');
                 if (href && href.endsWith('.html')) {
-                    // 移除旧参数，添加新参数
                     href = href.replace(/\?.*$/, '');
                     card.setAttribute('href', href + '?v=' + date);
                 }
@@ -149,6 +148,16 @@
             font-size: 12px;
             color: #475569;
         }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .tag-new { background: #fef3c7; color: #d97706; }
+        .tag-update { background: #dbeafe; color: #2563eb; }
     </style>
 </head>
 <body>
@@ -156,27 +165,30 @@
         <div class="header">
             <div class="icon">📋</div>
             <h1>企业认证 · 产品文档中心</h1>
-            <p class="subtitle">启泰集采商城 · e签宝企业认证功能</p>
-            <span class="badge">PRD v1.0 · 原型 v7.5</span>
+            <p class="subtitle">启泰集采商城 · 微信一键登录 & 企业认证功能</p>
+            <span class="badge">微信登录 PRD v1.11 · PC原型 v7.5 · 小程序 Axure</span>
         </div>
         <div class="cards">
-            <a class="card" href="https://connie-316.github.io/enterprise-auth-docs/prd.html" target="_blank">
+            <!-- 微信一键登录PRD -->
+            <a class="card" href="PRD_微信一键登录_v1.11_优化版.html" target="_blank">
                 <div class="card-icon prd">📋</div>
                 <div class="card-body">
-                    <h2>PRD 需求文档（产品版）</h2>
-                    <p class="desc">按PRD五段式模板编写，含用户故事、Mermaid流程图、测试用例、D1-D14注意点</p>
+                    <h2>微信一键登录 PRD <span class="tag tag-new">NEW</span></h2>
+                    <p class="desc">微信扫码/授权登录、绑定手机号、登录后认证引导、下单认证拦截，支持PC端和小程序端</p>
                     <div class="meta">
-                        <span>📌 v1.0</span>
+                        <span>📌 v1.11</span>
                         <span>🕐 2026-05-05</span>
+                        <span>🔗 登录即注册 · 认证非强制</span>
                     </div>
                 </div>
                 <div class="card-arrow">→</div>
             </a>
-            <a class="card" href="https://connie-316.github.io/enterprise-auth-docs/pc-prototype.html" target="_blank">
+            <!-- PC端原型 -->
+            <a class="card" href="pc-prototype.html" target="_blank">
                 <div class="card-icon pc">🖥</div>
                 <div class="card-body">
                     <h2>PC端原型</h2>
-                    <p class="desc">Web端企业认证交互原型，4步流程，含场景一/二完整页面与状态流转</p>
+                    <p class="desc">数智聚模登录页原型，包含扫码登录、密码登录、验证码登录、认证选择弹窗等完整交互</p>
                     <div class="meta">
                         <span>📌 v7.5</span>
                         <span>🕐 2026-05-04</span>
@@ -184,21 +196,22 @@
                 </div>
                 <div class="card-arrow">→</div>
             </a>
-            <a class="card" href="https://connie-316.github.io/enterprise-auth-docs/mini-prototype.html" target="_blank">
+            <!-- 小程序端原型 -->
+            <a class="card" href="https://u.pmdaniu.com/zvz87" target="_blank">
                 <div class="card-icon mini">📱</div>
                 <div class="card-body">
-                    <h2>小程序端原型</h2>
-                    <p class="desc">微信小程序端企业认证交互原型，3步流程，含底部弹窗与分页表单</p>
+                    <h2>小程序端 Axure 原型</h2>
+                    <p class="desc">微信小程序企业认证Axure设计稿，包含微信授权登录、手机号绑定、认证流程等完整页面</p>
                     <div class="meta">
-                        <span>📌 v7.5</span>
-                        <span>🕐 2026-05-04</span>
+                        <span>🔗 外部链接</span>
+                        <span>📌 Axure</span>
                     </div>
                 </div>
-                <div class="card-arrow">→</div>
+                <div class="card-arrow">↗</div>
             </a>
         </div>
         <div class="footer">
-            启泰智能 · 数智聚模商城
+            启泰智能 · 数智聚模商城 · 自动同步更新
         </div>
     </div>
 </body>

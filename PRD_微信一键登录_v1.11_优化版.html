@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>微信一键登录 PRD</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.8;
+            color: #1f2937;
+            background: #f9fafb;
+        }
+        h1, h2, h3 { color: #111827; margin-top: 1.5em; }
+        h1 { border-bottom: 3px solid #667eea; padding-bottom: 12px; }
+        table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+        th, td { border: 1px solid #e5e7eb; padding: 10px 14px; text-align: left; }
+        th { background: #f3f4f6; font-weight: 600; }
+        tr:nth-child(even) { background: #f9fafb; }
+        code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        pre { background: #1f2937; color: #e5e7eb; padding: 16px; border-radius: 8px; overflow-x: auto; }
+        pre code { background: none; padding: 0; color: inherit; }
+        blockquote { border-left: 4px solid #667eea; margin: 16px 0; padding: 8px 16px; background: #f0f4ff; }
+        .emoji { font-size: 1.2em; }
+        hr { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+    </style>
+</head>
+<body>
+<h1>微信登录功能 PRD</h1>
+<h2>一、需求背景</h2>
+<p>数智聚模当前登录方式仅有账号密码和短信验证码，用户登录门槛较高，导致用户转化率偏低。通过微信登录，利用用户已登录的微信账号实现快速登录，降低注册/登录门槛，提升用户转化率。</p>
+<p>同时，PC端和小程序端需通过微信unionid实现用户身份打通，同一微信号在两端均映射到同一账号。</p>
+<hr />
+<h2>二、需求目标</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提升登录转化率</td>
+<td>微信扫码/授权登录，一键完成，缩短用户注册-登录路径</td>
+</tr>
+<tr>
+<td>多端账号打通</td>
+<td>PC端和小程序端通过unionid识别同一用户，用户在任一端登录后，另一端无需重新绑定</td>
+</tr>
+<tr>
+<td>登录即注册</td>
+<td>首次微信登录自动创建账号，绑定手机号后完成注册</td>
+</tr>
+<tr>
+<td>认证引导</td>
+<td>登录后引导用户完成实名认证（个人/企业），下单前必须认证</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>三、核心业务流程图</h2>
+<h3>3.1 微信扫码登录流程（PC端）</h3>
+<pre><code class="language-mermaid">graph TD
+    A[用户打开PC端登录页] --&gt; B[选择扫码登录Tab]
+    B --&gt; C[展示微信二维码]
+    C --&gt; D{用户扫码并确认}
+    D --&gt;|已绑定账号| E[直接登录成功]
+    D --&gt;|未绑定账号| F[弹出绑定手机号弹窗]
+    F --&gt; G[用户输入手机号+验证码]
+    G --&gt; H[绑定成功，登录成功]
+    E --&gt; I[登录后检查认证状态]
+    H --&gt; I
+    I --&gt;|未认证| J[弹出认证选择弹窗]
+    I --&gt;|已认证| K[进入商城首页]
+    J --&gt;|选择认证| L[跳转认证流程]
+    J --&gt;|暂不认证| K
+</code></pre>
+<h3>3.2 小程序微信登录流程</h3>
+<pre><code class="language-mermaid">graph TD
+    A[用户打开小程序] --&gt; B[点击微信登录]
+    B --&gt; C[wx.login获取code]
+    C --&gt; D[服务端用code换openid/unionid]
+    D --&gt; E{该unionid是否已绑定账号}
+    E --&gt;|已绑定| F[直接登录成功]
+    E --&gt;|未绑定| G[弹出绑定手机号页面]
+    F --&gt; H[进入小程序首页]
+    G --&gt; I[用户授权获取手机号或手动输入]
+    I --&gt; J[绑定成功，登录成功]
+    J --&gt; H
+</code></pre>
+<h3>3.3 下单认证拦截流程</h3>
+<pre><code class="language-mermaid">graph TD
+    A[用户点击提交订单] --&gt; B{用户是否已认证}
+    B --&gt;|已认证 个人/企业| C[正常提交订单]
+    B --&gt;|未认证| D[弹出认证拦截弹窗]
+    D --&gt; E[选择认证方式]
+    E --&gt;|个人认证| F[跳转个人实名认证]
+    E --&gt;|企业认证| G[跳转企业认证]
+    F --&gt; H[认证完成后返回订单页]
+    G --&gt; H
+    H --&gt; I[用户再次点击提交订单]
+    I --&gt; C
+</code></pre>
+<hr />
+<h2>四、需求功能清单</h2>
+<table>
+<thead>
+<tr>
+<th>终端</th>
+<th>模块</th>
+<th>功能</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC端</td>
+<td>登录页</td>
+<td>扫码登录Tab</td>
+<td>展示微信二维码，支持刷新，扫码后进入绑定或登录流程</td>
+</tr>
+<tr>
+<td>PC端</td>
+<td>登录页</td>
+<td>密码登录Tab</td>
+<td>账号+密码登录，支持30天免登录</td>
+</tr>
+<tr>
+<td>PC端</td>
+<td>登录页</td>
+<td>验证码登录Tab</td>
+<td>手机号+短信验证码登录，60秒倒计时</td>
+</tr>
+<tr>
+<td>PC端</td>
+<td>登录页</td>
+<td>次要登录图标</td>
+<td>每个Tab底部显示其他两种登录方式图标，点击可切换</td>
+</tr>
+<tr>
+<td>PC端</td>
+<td>登录页</td>
+<td>微信一键登录</td>
+<td>扫码Tab下方展示微信快捷登录按钮，点击跳转微信授权页</td>
+</tr>
+<tr>
+<td>PC端</td>
+<td>弹窗</td>
+<td>绑定手机号</td>
+<td>首次微信登录弹出，填写手机号+验证码完成绑定</td>
+</tr>
+<tr>
+<td>PC端</td>
+<td>弹窗</td>
+<td>认证选择弹窗</td>
+<td>登录成功后自动弹出，引导用户选择个人认证/企业认证/暂不认证</td>
+</tr>
+<tr>
+<td>小程序端</td>
+<td>登录页</td>
+<td>微信授权登录</td>
+<td>点击微信登录按钮，wx.login获取code，服务端完成登录</td>
+</tr>
+<tr>
+<td>小程序端</td>
+<td>登录页</td>
+<td>手机号绑定</td>
+<td>首次登录弹出，支持一键获取手机号或手动输入</td>
+</tr>
+<tr>
+<td>买家中心</td>
+<td>认证入口</td>
+<td>实名认证</td>
+<td>随时可主动发起认证，已认证用户可查看认证信息</td>
+</tr>
+<tr>
+<td>全局</td>
+<td>下单流程</td>
+<td>认证拦截</td>
+<td>未认证用户提交订单前拦截，引导完成认证</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>五、需求功能详述</h2>
+<h3>5.1 PC端——登录页——扫码登录Tab</h3>
+<p><strong>原型描述</strong>：
+扫码登录Tab居首位，展示180×180px微信二维码，下方提示"打开微信 &gt; 发现 &gt; 扫一扫"。二维码有效期5分钟，过期显示刷新按钮。</p>
+<p><strong>用户故事</strong>：</p>
+<blockquote>
+<p>作为一个访客，我想要用微信扫码登录，以便于无需记住账号密码即可快速登录。</p>
+</blockquote>
+<p><strong>前置条件</strong>：
+- PC端网站应用已在微信开放平台通过审核
+- 授权回调域名已配置</p>
+<p><strong>核心逻辑</strong>：
+- 二维码5分钟有效期，过期需刷新
+- 扫码后需用户在手机微信内确认授权
+- 确认后服务端通过code换取openid和unionid</p>
+<p><strong>验收标准</strong>：
+- 🎯 二维码正常展示，扫码后可登录
+- 🎯 首次扫码（新用户）跳转绑定手机号流程
+- 🎯 老用户直接登录，无需绑定</p>
+<p><strong>测试用例</strong>：
+- 已注册微信号扫码登录成功
+- 未注册微信号扫码弹出绑定手机号
+- 二维码过期显示刷新按钮</p>
+<hr />
+<h3>5.2 PC端——登录页——密码登录Tab</h3>
+<p><strong>原型描述</strong>：
+账号输入框支持邮箱/手机号，密码输入框支持显示/隐藏，底部有"30天内免登录"复选框和"忘记密码"链接。</p>
+<p><strong>验收标准</strong>：
+- 🎯 正确账号密码登录成功
+- 🎯 错误密码提示登录失败
+- 🎯 勾选30天免登录后30天内无需重复登录</p>
+<hr />
+<h3>5.3 PC端——登录页——验证码登录Tab</h3>
+<p><strong>原型描述</strong>：
+手机号输入框+验证码输入框（右侧获取验证码按钮，60秒倒计时），底部有"30天内免登录"复选框。</p>
+<p><strong>核心逻辑</strong>：
+- 获取验证码60秒内不可重复点击
+- 验证码5分钟内有效</p>
+<p><strong>验收标准</strong>：
+- 🎯 正确手机号+验证码登录成功
+- 🎯 错误验证码提示失败
+- 🎯 60秒内不可重复获取验证码</p>
+<hr />
+<h3>5.4 PC端——登录页——次要登录图标</h3>
+<p><strong>原型描述</strong>：
+每个Tab底部有一行"其他登录方式"，展示另外两种登录方式的小图标（带文字），点击切换到对应Tab。</p>
+<p><strong>核心逻辑</strong>：
+- 扫码Tab底部：密码登录图标、验证码登录图标
+- 密码Tab底部：微信扫码图标、验证码登录图标
+- 验证码Tab底部：微信扫码图标、密码登录图标
+- 点击切换Tab，已填内容不清空</p>
+<p><strong>验收标准</strong>：
+- 🎯 各Tab底部正确展示其他两种登录方式图标
+- 🎯 点击图标可正常切换，内容不清空</p>
+<hr />
+<h3>5.5 PC端——登录页——微信一键登录</h3>
+<p><strong>原型描述</strong>：
+扫码Tab下方有"微信快捷登录"绿色按钮，点击弹出确认弹窗，用户确认后跳转微信授权页。</p>
+<p><strong>用户故事</strong>：</p>
+<blockquote>
+<p>作为一个移动端用户，我想要一键授权微信登录，以便于省略输入账号密码的步骤。</p>
+</blockquote>
+<p><strong>核心逻辑</strong>：
+- 点击按钮 → 弹出确认弹窗 → 用户确认 → 跳转微信授权页 → 授权回调 → 登录</p>
+<p><strong>验收标准</strong>：
+- 🎯 点击按钮弹出确认弹窗
+- 🎯 确认后跳转微信授权页
+- 🎯 授权后正确登录或跳转绑定手机号</p>
+<hr />
+<h3>5.6 PC端——弹窗——绑定手机号</h3>
+<p><strong>原型描述</strong>：
+弹窗标题"首次微信登录，请绑定手机号完成注册"。手机号输入框+验证码输入框+获取验证码按钮+完成绑定按钮。</p>
+<p><strong>用户故事</strong>：</p>
+<blockquote>
+<p>作为一个新用户，我想要通过微信登录时绑定手机号完成注册，以便于后续可直接用微信登录。</p>
+</blockquote>
+<p><strong>前置条件</strong>：
+- 用户已通过微信授权，获取到openid和unionid</p>
+<p><strong>核心逻辑</strong>：
+- 手机号格式：11位数字
+- 验证码：6位数字，5分钟内有效
+- 绑定后该微信号与手机号关联，后续微信登录直接进入</p>
+<p><strong>边界条件</strong>：
+- 同一手机号不可重复绑定不同微信号</p>
+<p><strong>验收标准</strong>：
+- 🎯 正确手机号+验证码绑定成功
+- 🎯 已注册手机号绑定不同微信号被拒绝
+- 🎯 绑定后下次微信登录直接成功，无需再绑定</p>
+<hr />
+<h3>5.7 PC端——弹窗——认证选择弹窗</h3>
+<p><strong>原型描述</strong>：
+弹窗标题"选择认证方式"，包含个人认证卡片和企业认证卡片（带"推荐"标签），底部有"暂不认证，先逛逛"链接。</p>
+<p><strong>用户故事</strong>：</p>
+<blockquote>
+<p>作为一个新登录用户，我想要选择认证方式，以便于完成实名认证后享受更多会员权益。</p>
+</blockquote>
+<p><strong>前置条件</strong>：
+- 用户登录成功，认证状态为"未认证"</p>
+<p><strong>核心逻辑</strong>：
+- 弹窗在登录成功后自动弹出（仅首次）
+- 用户可选择个人认证、企业认证或暂不认证
+- 选择"暂不认证"可关闭弹窗，正常浏览，但下单前仍需认证</p>
+<p><strong>异常处理</strong>：
+- 已认证用户登录不再弹出此弹窗</p>
+<p><strong>验收标准</strong>：
+- 🎯 新用户登录成功后自动弹出
+- 🎯 已认证用户登录不再弹出
+- 🎯 选择"暂不认证"可关闭，正常使用
+- 🎯 选择认证方式后跳转到对应认证流程</p>
+<hr />
+<h3>5.8 小程序端——登录页——微信授权登录</h3>
+<p><strong>原型描述</strong>：
+小程序登录页提供微信登录按钮，点击后调用wx.login()获取code，发送到服务端完成登录。</p>
+<p><strong>用户故事</strong>：</p>
+<blockquote>
+<p>作为一个小程序用户，我想要用微信授权登录，以便于快速进入小程序开始购物。</p>
+</blockquote>
+<p><strong>前置条件</strong>：
+- 小程序已获取AppID和AppSecret</p>
+<p><strong>核心逻辑</strong>：
+- wx.login()获取code，有效期5分钟，一次性使用
+- code发送到服务端换取openid和unionid
+- 通过unionid判断是否为已注册用户</p>
+<p><strong>边界条件</strong>：
+- unionid可能为空（用户未关注公众号或未绑定开放平台），此时降级为只存openid</p>
+<p><strong>验收标准</strong>：
+- 🎯 点击微信登录按钮成功登录
+- 🎯 首次登录触发绑定手机号流程
+- 🎯 老用户直接登录成功</p>
+<hr />
+<h3>5.9 小程序端——登录页——手机号绑定</h3>
+<p><strong>原型描述</strong>：
+首次登录时弹出手机号绑定页面，支持两种方式：1）用户点击按钮一键获取微信手机号授权；2）手动输入手机号+验证码。</p>
+<p><strong>核心逻辑</strong>：
+- 推荐使用微信一键获取手机号，提升用户体验
+- 如微信未授权手机号，降级为手动输入</p>
+<p><strong>边界条件</strong>：
+- 一键获取手机号需要用户主动授权</p>
+<p><strong>验收标准</strong>：
+- 🎯 一键获取手机号授权成功
+- 🎯 手动输入手机号+验证码绑定成功</p>
+<hr />
+<h3>5.10 买家中心——认证入口——实名认证</h3>
+<p><strong>原型描述</strong>：
+买家中心侧边栏/个人中心有【实名认证】入口，点击进入认证选择页（个人/企业）。</p>
+<p><strong>核心逻辑</strong>：
+- 未认证用户：显示红色提示标识，点击跳转认证选择页
+- 个人已认证：显示绿色✅ + "个人认证"，可升级为企业认证
+- 企业已认证：显示绿色✅ + "企业认证"，可查看认证信息</p>
+<p><strong>验收标准</strong>：
+- 🎯 未认证用户看到红色提示标识
+- 🎯 已认证用户看到绿色✅标识
+- 🎯 点击可进入认证页面或查看认证信息</p>
+<hr />
+<h3>5.11 全局——下单流程——认证拦截</h3>
+<p><strong>原型描述</strong>：
+未认证用户点击"提交订单"时，弹出拦截弹窗，提示"需要完成认证"，显示个人认证和企业认证选项。</p>
+<p><strong>用户故事</strong>：</p>
+<blockquote>
+<p>作为一个未认证用户，我想要在下单时被引导完成认证，以便于能够顺利下单采购。</p>
+</blockquote>
+<p><strong>前置条件</strong>：
+- 用户未完成认证（auth_status = none）</p>
+<p><strong>核心逻辑</strong>：
+- 用户点击"提交订单" → 检查认证状态 → 未认证则弹出拦截弹窗
+- 已认证（个人/企业）用户正常提交订单
+- 完成认证后返回订单确认页，需再次点击提交（不自动提交）</p>
+<p><strong>验收标准</strong>：
+- 🎯 未认证用户点击提交订单被拦截
+- 🎯 已认证用户正常提交订单
+- 🎯 完成认证后返回订单页，可正常提交</p>
+<hr />
+<h2>六、系统改造说明</h2>
+<h3>6.1 数据表改造</h3>
+<p><strong>用户表新增字段</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>auth_status</td>
+<td>varchar(20)</td>
+<td>认证状态：none（未认证）/ personal（个人已认证）/ enterprise（企业已认证）</td>
+</tr>
+<tr>
+<td>auth_time</td>
+<td>datetime</td>
+<td>最近一次认证通过时间</td>
+</tr>
+</tbody>
+</table>
+<p><strong>新增微信登录表（wechat_auth）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>bigint</td>
+<td>主键</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>bigint</td>
+<td>关联用户ID（绑定后写入）</td>
+</tr>
+<tr>
+<td>openid</td>
+<td>varchar(50)</td>
+<td>微信openid</td>
+</tr>
+<tr>
+<td>unionid</td>
+<td>varchar(50)</td>
+<td>微信unionid（用于多端打通）</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>varchar(20)</td>
+<td>登录来源：pc_web / miniapp</td>
+</tr>
+<tr>
+<td>nickname</td>
+<td>varchar(50)</td>
+<td>微信昵称</td>
+</tr>
+<tr>
+<td>avatar_url</td>
+<td>varchar(200)</td>
+<td>微信头像</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>datetime</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>datetime</td>
+<td>更新时间</td>
+</tr>
+</tbody>
+</table>
+<p><strong>索引</strong>：
+- openid + platform 联合唯一索引
+- unionid 普通索引
+- user_id 普通索引</p>
+<hr />
+<h3>6.2 关键业务规则</h3>
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多端身份打通</td>
+<td>同一unionid在PC端和小程序端关联到同一user_id</td>
+</tr>
+<tr>
+<td>首次登录自动创建账号</td>
+<td>微信登录时unionid无对应账号，自动创建新账号并绑定手机号</td>
+</tr>
+<tr>
+<td>认证不强制，下单必须</td>
+<td>登录后可跳过认证，但提交订单前必须完成认证</td>
+</tr>
+<tr>
+<td>认证可升级不可降级</td>
+<td>个人认证可升级为企业认证，企业认证不可降级为个人认证</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>6.3 异常场景处理</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>微信服务不可用</td>
+<td>引导用户使用账号密码或短信验证码登录</td>
+</tr>
+<tr>
+<td>unionid为空</td>
+<td>以openid作为该端唯一标识，多端打通功能降级</td>
+</tr>
+<tr>
+<td>短信发送失败</td>
+<td>引导用户使用账号密码登录</td>
+</tr>
+<tr>
+<td>同一微信号绑定不同手机号</td>
+<td>拒绝绑定，提示"该微信号已绑定其他手机号"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>七、验收标准汇总</h2>
+<h3>7.1 登录功能验收</h3>
+<table>
+<thead>
+<tr>
+<th>验收项</th>
+<th>标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC端扫码登录</td>
+<td>二维码正常显示，扫码后老用户直接登录，新用户跳转绑定手机号</td>
+</tr>
+<tr>
+<td>PC端微信一键登录</td>
+<td>弹出确认弹窗，确认后跳转授权页，授权后正确登录</td>
+</tr>
+<tr>
+<td>PC端密码登录</td>
+<td>账号密码正确可登录，错误提示失败</td>
+</tr>
+<tr>
+<td>PC端验证码登录</td>
+<td>手机号+验证码正确可登录，错误提示失败</td>
+</tr>
+<tr>
+<td>小程序微信登录</td>
+<td>wx.login成功，服务端换取openid/unionid，正确登录</td>
+</tr>
+<tr>
+<td>多端账号打通</td>
+<td>同一微信号在PC端和小程序端登录到同一账号</td>
+</tr>
+</tbody>
+</table>
+<h3>7.2 认证功能验收</h3>
+<table>
+<thead>
+<tr>
+<th>验收项</th>
+<th>标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>认证弹窗触发</td>
+<td>新用户登录成功后弹出，已认证用户不再弹出</td>
+</tr>
+<tr>
+<td>认证弹窗可跳过</td>
+<td>选择"暂不认证"可关闭，正常浏览</td>
+</tr>
+<tr>
+<td>下单认证拦截</td>
+<td>未认证用户提交订单被拦截，引导去认证</td>
+</tr>
+<tr>
+<td>认证完成回跳</td>
+<td>认证完成后返回订单确认页，用户手动提交</td>
+</tr>
+<tr>
+<td>买家中心入口</td>
+<td>随时可主动发起认证，已认证可查看信息</td>
+</tr>
+</tbody>
+</table>
+<h3>7.3 界面交互验收</h3>
+<table>
+<thead>
+<tr>
+<th>验收项</th>
+<th>标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>次要登录图标</td>
+<td>各Tab底部正确显示其他两种登录方式图标</td>
+</tr>
+<tr>
+<td>Tab切换不丢内容</td>
+<td>切换Tab时已填写内容不清空</td>
+</tr>
+<tr>
+<td>二维码刷新</td>
+<td>过期后显示刷新按钮，点击刷新成功</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>八、原型说明</h2>
+<table>
+<thead>
+<tr>
+<th>原型文件</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>登录页原型</td>
+<td><code>/AI-微信一键登录/原型_登录页_最终版.html</code></td>
+</tr>
+</tbody>
+</table>
+<p>原型包含8个演示状态：默认登录页、微信授权确认弹窗、首次登录绑定手机号、绑定成功登录完成、老用户直接登录、二维码过期刷新、登录后认证选择弹窗、下单认证拦截弹窗。</p>
+</body>
+</html>
