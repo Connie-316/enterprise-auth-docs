@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>企业认证功能 PRD v1.0</title>
+<style>
+  :root {
+    --primary: #1a6ef5;
+    --success: #07c160;
+    --warning: #f5a623;
+    --danger: #e74c3c;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #dde3ec;
+    --bg-light: #f7f9fc;
+    --bg-code: #f0f4f8;
+    --danger-bg: #fff2f0;
+    --danger-border: #ffccc7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); line-height: 1.7; background: #fff; }
+
+  .page-header { background: linear-gradient(135deg, #1a6ef5, #0b4bcc); color: #fff; padding: 32px 48px 24px; }
+  .page-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .page-header .meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; opacity: .85; }
+  .page-header .badge { background: rgba(255,255,255,.2); padding: 2px 10px; border-radius: 20px; }
+
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 32px 60px; }
+
+  /* ========== 固定侧边栏目录导航 ========== */
+  .toc-sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 280px; height: 100vh;
+    background: #fff;
+    border-right: 1px solid var(--border);
+    z-index: 1000;
+    display: flex; flex-direction: column;
+    font-size: 13px;
+    box-shadow: 2px 0 8px rgba(0,0,0,.06);
+    transition: transform .25s ease;
+  }
+  .toc-sidebar.collapsed { transform: translateX(-240px); }
+  .toc-sidebar-header {
+    padding: 16px 18px 10px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--primary), #0b4bcc);
+    color: #fff; flex-shrink: 0;
+  }
+  .toc-sidebar-header h2 { font-size: 14px; margin-bottom: 4px; font-weight:700; }
+  .toc-sidebar-header p { font-size: 11px; opacity: .75; margin: 0; }
+  .toc-toggle-btn {
+    position: absolute; top: 12px; right: -32px;
+    width: 30px; height: 30px;
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 0 6px 6px 0; cursor: pointer;
+    font-size: 14px; display:flex; align-items:center; justify-content:center;
+    z-index: 1001; box-shadow: 2px 0 8px rgba(0,0,0,.15);
+    line-height: 1;
+  }
+  .toc-toggle-btn:hover { background: #155cd9; }
+
+  .toc-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .toc-body::-webkit-scrollbar { width: 3px; }
+  .toc-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+  .toc-tree { list-style: none; padding: 0; margin: 0; }
+  .toc-node > .toc-label {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 16px 9px 18px;
+    cursor: pointer; color: #333;
+    transition: all .15s; position:relative;
+    border-left: 3px solid transparent;
+  }
+  .toc-node > .toc-label:hover { background: #f5f7fa; }
+  .toc-node > .toc-label.active { color: var(--primary); background: #eef5ff; border-left-color: var(--primary); font-weight: 600; }
+  .toc-arrow { font-size: 10px; color: #aaa; transition: transform .2s; flex-shrink: 0; width:12px;text-align:center; }
+  .toc-node.open > .toc-label > .toc-arrow { transform: rotate(90deg); }
+
+  .toc-sub { list-style: none; padding: 0; display: none; }
+  .toc-node.open > .toc-sub { display: block; }
+  .toc-sub li a {
+    display: block; padding: 6px 14px 6px 42px;
+    color: #666; text-decoration: none; font-size: 12.5px;
+    border-left: 3px solid transparent; transition: all .12s;
+  }
+  .toc-sub li a:hover { color: var(--primary); background: #f5f7fa; }
+  .toc-sub li a.active { color: var(--primary); background: #eef5ff; border-left-color: #40a9ff; font-weight: 500; }
+
+  .toc-footer { padding: 10px 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .back-top-btn {
+    display:block; width:100%; padding:8px 0; text-align:center;
+    background:#f7f9fc; border:1px solid var(--border);
+    border-radius:6px; color:var(--primary); font-size:12.5px; font-weight:600;
+    cursor:pointer; transition:all .15s;
+  }
+  .back-top-btn:hover { background:var(--primary); color:#fff; }
+
+  body { padding-left: 280px; transition: padding-left .25s ease; }
+  body.sidebar-collapsed { padding-left: 40px; }
+
+  @media (max-width: 900px) {
+    body { padding-left: 0 !important; }
+    .toc-sidebar { transform: translateX(-280px); box-shadow: none; }
+    .toc-sidebar.show-mobile { transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,.25); }
+  }
+
+  .section { margin: 36px 0; }
+  h2.sec-title { font-size: 19px; color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 7px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  h2.sec-title .num { background: var(--primary); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+  h3.sub-title { font-size: 15px; color: #222; margin: 20px 0 9px; border-left: 3px solid var(--primary); padding-left: 9px; }
+  h4 { font-size: 14px; color: #333; margin: 16px 0 8px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 10px 0; }
+  th { background: #eef3fc; color: #1a4ca1; font-weight: 600; padding: 8px 11px; text-align: left; border: 1px solid var(--border); }
+  td { padding: 7px 11px; border: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: #f9fbff; }
+
+  pre { background: var(--bg-code); border: 1px solid #d8e4f0; border-radius: 6px; padding: 14px; font-size: 12.5px; overflow-x: auto; white-space: pre; font-family: "SFMono-Regular", Consolas, monospace; margin: 10px 0; line-height: 1.5; }
+  code { font-family: "SFMono-Regular", Consolas, monospace; background: #eef2f8; padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+
+  /* 重要提醒卡片 */
+  .important-box {
+    background: linear-gradient(135deg, #fff2f0, #fff7e6);
+    border: 2px solid var(--danger);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .important-box .title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #d4380d;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .important-box .title::before { content: "⚠️"; }
+
+  /* 注意点表格 */
+  .attention-table { margin: 0; }
+  .attention-table th { background: #fff2f0; color: #d4380d; }
+  .attention-table td:first-child { font-weight: 700; color: #d4380d; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+  p { margin: 7px 0; font-size: 14px; }
+  ul, ol { padding-left: 20px; font-size: 14px; }
+  li { margin: 3px 0; }
+
+  /* 流程图样式 */
+  .mermaid { background: #fafafa; border-radius: 8px; padding: 16px; margin: 12px 0; }
+
+  /* 状态标签 */
+  .status { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .s-unverified { background: #f0f0f0; color: #555; }
+  .s-draft { background: #fff4e0; color: #9a6200; }
+  .s-verifying { background: #e0eeff; color: #1a4ca1; }
+  .s-rejected { background: #fdedec; color: #c0392b; }
+  .s-authz-pending { background: #fff4e0; color: #7a4f00; }
+  .s-authz-approved { background: #eafaf1; color: #155a2d; }
+  .s-authz-rejected { background: #fdedec; color: #7a1c14; }
+
+  /* 用户故事引用 */
+  .user-story {
+    background: #f6ffed;
+    border-left: 4px solid #52c41a;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 13.5px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* 验收标准 */
+  .check-item { color: #52c41a; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ====== 固定侧边栏目录导航 ====== -->
+<nav class="toc-sidebar" id="tocSidebar">
+  <div class="toc-sidebar-header">
+    <h2>📋 页面目录</h2>
+    <p>点击跳转 · 滚动高亮</p>
+  </div>
+  <div class="toc-body" id="tocBody">
+    <ul class="toc-tree" id="tocTree">
+      <li class="toc-node open" data-target="s1">
+        <div class="toc-label" onclick="tocJump('s1')"><span class="toc-arrow">▶</span> 一、需求背景</div>
+      </li>
+      <li class="toc-node open" data-target="s2">
+        <div class="toc-label" onclick="tocJump('s2')"><span class="toc-arrow">▶</span> 二、需求目标</div>
+      </li>
+      <li class="toc-node open" data-target="s3">
+        <div class="toc-label" onclick="tocToggle('s3')"><span class="toc-arrow">▶</span> 三、关键注意点</div>
+        <ul class="toc-sub">
+          <li><a href="#s3-1" onclick="tocJumpSub(event,'s3-1')">3.1 开发前必读（D1-D14）</a></li>
+        </ul>
+      </li>
+      <li class="toc-node open" data-target="s4">
+        <div class="toc-label" onclick="tocToggle('s4')"><span class="toc-arrow">▶</span> 四、业务流程图</div>
+        <ul class="toc-sub">
+          <li><a href="#s4-1" onclick="tocJumpSub(event,'s4-1')">4.1 用户端流程</a></li>
+          <li><a href="#s4-2" onclick="tocJumpSub(event,'s4-2')">4.2 场景差异说明</a></li>
+        </ul>
+      </li>
+      <li class="toc-node open" data-target="s5">
+        <div class="toc-label" onclick="tocToggle('s5')"><span class="toc-arrow">▶</span> 五、功能清单</div>
+      </li>
+      <li class="toc-node open" data-target="s6">
+        <div class="toc-label" onclick="tocToggle('s6')"><span class="toc-arrow">▶</span> 六、功能详述</div>
+        <ul class="toc-sub">
+          <li><a href="#s6-1" onclick="tocJumpSub(event,'s6-1')">6.1 认证入口页</a></li>
+          <li><a href="#s6-2" onclick="tocJumpSub(event,'s6-2')">6.2 草稿恢复页</a></li>
+          <li><a href="#s6-3" onclick="tocJumpSub(event,'s6-3')">6.3 企业信息填写</a></li>
+          <li><a href="#s6-4" onclick="tocJumpSub(event,'s6-4')">6.4 过渡页</a></li>
+          <li><a href="#s6-5" onclick="tocJumpSub(event,'s6-5')">6.5 首次认证表单</a></li>
+          <li><a href="#s6-6" onclick="tocJumpSub(event,'s6-6')">6.6 授权申请表单</a></li>
+        </ul>
+      </li>
+      <li class="toc-node open" data-target="s7">
+        <div class="toc-label" onclick="tocJump('s7')"><span class="toc-arrow">▶</span> 七、边界条件</div>
+      </li>
+      <li class="toc-node open" data-target="s8">
+        <div class="toc-label" onclick="tocToggle('s8')"><span class="toc-arrow">▶</span> 八、验收标准</div>
+        <ul class="toc-sub">
+          <li><a href="#s8-1" onclick="tocJumpSub(event,'s8-1')">8.1 状态机</a></li>
+          <li><a href="#s8-2" onclick="tocJumpSub(event,'s8-2')">8.2 成功场景</a></li>
+          <li><a href="#s8-3" onclick="tocJumpSub(event,'s8-3')">8.3 失败场景</a></li>
+          <li><a href="#s8-4" onclick="tocJumpSub(event,'s8-4')">8.4 边界场景</a></li>
+        </ul>
+      </li>
+      <li class="toc-node open" data-target="s9">
+        <div class="toc-label" onclick="tocJump('s9')"><span class="toc-arrow">▶</span> 九、附录</div>
+      </li>
+    </ul>
+  </div>
+  <div class="toc-footer">
+    <button class="back-top-btn" onclick="scrollToTop()">↑ 返回顶部</button>
+  </div>
+  <button class="toc-toggle-btn" id="tocToggle" onclick="toggleTocSidebar()" title="展开/收起目录">◀</button>
+</nav>
+
+<div class="page-header" id="pageHeader">
+  <h1>企业认证功能 PRD v1.0</h1>
+  <div class="meta">
+    <span class="badge">版本：v1.0</span>
+    <span class="badge">更新：2026-05-05</span>
+    <span class="badge">关联原型：PC端 v7.5 · 小程序端 v7.5</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== 一、需求背景 ===== -->
+<div class="section" id="s1">
+  <h2 class="sec-title"><span class="num">1</span>需求背景</h2>
+  <p>本功能基于 e 签宝实现企业实名认证和授权。商城侧<strong>不区分场景</strong>，统一展示表单，<strong>后端判断场景</strong>后传参给 e 签宝，e 签宝 H5 根据后端参数自动适配首次认证/已认证授权流程。</p>
+  <pre style="margin-top:12px;">当前业务流程：用户 → 物料商城 → 企业认证 → e签宝</pre>
+</div>
+
+<!-- ===== 二、需求目标 ===== -->
+<div class="section" id="s2">
+  <h2 class="sec-title"><span class="num">2</span>需求目标</h2>
+  <table>
+    <tr><th>目标</th><th>说明</th></tr>
+    <tr><td>核心目标</td><td>实现企业实名认证和电子合同授权功能</td></tr>
+    <tr><td>业务价值</td><td>企业认证后可使用账期支付、签署电子合同</td></tr>
+    <tr><td>关键约束</td><td>认证和授权必须通过 e 签宝完成</td></tr>
+  </table>
+</div>
+
+<!-- ===== 三、关键注意点（开发前必读） ===== -->
+<div class="section" id="s3">
+  <h2 class="sec-title"><span class="num">3</span>关键注意点</h2>
+
+  <div class="important-box">
+    <div class="title">开发前必读，以下注意点决定了功能是否正确实现</div>
+  </div>
+
+  <h3 class="sub-title" id="s3-1">3.1 产品经理需关注的核心注意点（D1-D14）</h3>
+  <table class="attention-table">
+    <tr><th>#</th><th>注意点</th><th>说明</th></tr>
+    <tr><td>D1</td><td>协议必勾</td><td>未勾选时提交按钮禁用，这是法定义务</td></tr>
+    <tr><td>D2</td><td>过渡页纯前端</td><td>1-2秒setTimeout，不调任何接口</td></tr>
+    <tr><td>D3</td><td>草稿永久保存</td><td>任何环节可保存，后续继续</td></tr>
+    <tr><td>D4</td><td>草稿自动保存</td><td>每30秒+页面失焦时自动保存</td></tr>
+    <tr><td>D5</td><td>认证失败可重新认证</td><td>数据回填，直接修改</td></tr>
+    <tr><td>D6</td><td>授权重试最多3次</td><td>第4次返回400错误</td></tr>
+    <tr><td>D7</td><td>授权超时24小时</td><td>超时自动失效，需重新申请</td></tr>
+    <tr><td>D8</td><td>场景二法人身份证回填</td><td>后端自动回填，前端只读</td></tr>
+    <tr><td>D9</td><td>小程序redirectUrl</td><td>需指向中间H5页，微信内回跳</td></tr>
+    <tr><td>D10</td><td>clientType传值</td><td>小程序必须传 MINI_APP</td></tr>
+    <tr><td>D11</td><td>X-Platform头</td><td>小程序必须传 X-Platform: miniapp</td></tr>
+    <tr><td>D12</td><td>业务域名配置</td><td>微信公众平台配置 openapi.esign.cn</td></tr>
+    <tr><td>D13</td><td>后端判断场景</td><td>场景判断在后端，不在前端</td></tr>
+    <tr><td>D14</td><td>transactorInfo差异</td><td>场景一传，场景二不传</td></tr>
+  </table>
+</div>
+
+<!-- ===== 四、业务流程图 ===== -->
+<div class="section" id="s4">
+  <h2 class="sec-title"><span class="num">4</span>业务流程图</h2>
+
+  <h3 class="sub-title" id="s4-1">4.1 用户端业务流程</h3>
+  <pre class="mermaid">
+flowchart TD
+    A[认证入口页] --> B{是否有历史草稿}
+
+    B -->|有草稿| C[草稿恢复页]
+    B -->|无草稿| D[企业信息填写页<br/>企查查搜索]
+
+    C --> E[继续认证 / 重新填写]
+    E --> D
+
+    D --> F[过渡页<br/>1-2秒纯前端]
+
+    F --> G[完整认证表单页<br/>法人身份证+经办人信息]
+
+    G --> H{场景}
+
+    H -->|场景一| I[首次认证表单]
+    H -->|场景二| J[授权申请表单]
+
+    I --> K[提交认证]
+    J --> K
+
+    K --> L[跳转e签宝H5]
+
+    L --> M{e签宝处理}
+
+    M -->|场景一| N[人脸识别+营业执照<br/>+管理员授权]
+    M -->|场景二| O[仅管理员授权]
+
+    N --> P[回调通知商城]
+    O --> P
+
+    P --> Q[结果页]
+
+    Q -->|认证+授权通过| R[成功页]
+    Q -->|认证失败| S[失败页]
+    Q -->|等待授权| T[等待授权页]
+    Q -->|授权拒绝| U[授权拒绝页<br/>可重新申请]
+    Q -->|授权超时| V[超时页]
+  </pre>
+
+  <h3 class="sub-title" id="s4-2">4.2 场景差异说明</h3>
+  <table>
+    <tr><th>对比项</th><th>场景一（首次认证）</th><th>场景二（已认证授权）</th></tr>
+    <tr><td>触发条件</td><td>企业未在e签宝认证过</td><td>企业已在e签宝认证过</td></tr>
+    <tr><td>表单差异</td><td>需填写法人身份证号</td><td>法人身份证号自动回填（只读）</td></tr>
+    <tr><td>e签宝流程</td><td>人脸识别+营业执照+授权</td><td>仅授权</td></tr>
+    <tr><td>认证时长</td><td>5-10分钟</td><td>1-2分钟</td></tr>
+  </table>
+</div>
+
+<!-- ===== 五、功能清单 ===== -->
+<div class="section" id="s5">
+  <h2 class="sec-title"><span class="num">5</span>功能清单</h2>
+  <table>
+    <tr><th>终端</th><th>模块</th><th>功能</th><th>描述</th></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>认证入口页</td><td>权益引导，未认证用户进入认证流程</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>草稿恢复页</td><td>检测历史草稿，可继续或重新填写</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>企业信息填写</td><td>企查查搜索，自动填充企业信息</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>过渡页</td><td>纯前端1-2秒，不调接口</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>首次认证表单</td><td>场景一：含法人身份证填写</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>授权申请表单</td><td>场景二：仅授权申请</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>结果页</td><td>认证成功/失败/等待授权/授权拒绝</td></tr>
+    <tr><td>后端</td><td>认证服务</td><td>场景判断</td><td>后端查auth_status判断场景一/二</td></tr>
+    <tr><td>后端</td><td>认证服务</td><td>e签宝对接</td><td>调用e签宝接口获取认证链接</td></tr>
+    <tr><td>后端</td><td>认证服务</td><td>回调处理</td><td>更新认证状态</td></tr>
+  </table>
+</div>
+
+<!-- ===== 六、功能详述 ===== -->
+<div class="section" id="s6">
+  <h2 class="sec-title"><span class="num">6</span>功能详述</h2>
+
+  <h3 class="sub-title" id="s6-1">6.1 认证入口页</h3>
+  <p><strong>原型描述：</strong>权益引导页，展示认证价值和当前状态。未认证显示【去认证】按钮，已认证显示认证状态。</p>
+  <div class="user-story">作为一个<strong>未认证企业用户</strong>，我想要<strong>了解认证价值和流程</strong>，以便于<strong>决定是否进行认证</strong>。</div>
+  <p><strong>前置条件：</strong>用户已登录</p>
+  <p><strong>核心逻辑：</strong>检查企业认证状态 → 有草稿则显示【继续认证】/ 无草稿则显示【去认证】</p>
+  <p><strong>边界条件：</strong>已认证通过显示成功状态；已认证待授权显示等待状态；有草稿允许恢复或重新填写</p>
+  <p><strong>验收标准：</strong></p>
+  <ul>
+    <li><span class="check-item">✅</span> 用户能看到认证价值说明</li>
+    <li><span class="check-item">✅</span> 未认证用户能看到【去认证】入口</li>
+    <li><span class="check-item">✅</span> 已认证用户能看到当前认证状态</li>
+  </ul>
+
+  <h3 class="sub-title" id="s6-2">6.2 草稿恢复页</h3>
+  <p><strong>原型描述：</strong>检测到历史草稿时显示，提供【继续认证】和【重新填写】两个选项。</p>
+  <div class="user-story">作为一个<strong>有历史草稿的企业用户</strong>，我想要<strong>快速恢复之前的填写进度</strong>，以便于<strong>节省时间</strong>。</div>
+  <p><strong>前置条件：</strong>用户有未提交的认证草稿</p>
+  <p><strong>核心逻辑：</strong>点【继续认证】回填草稿数据；点【重新填写】清除草稿重新开始</p>
+  <p><strong>验收标准：</strong></p>
+  <ul>
+    <li><span class="check-item">✅</span> 正确显示草稿创建时间</li>
+    <li><span class="check-item">✅</span> 继续认证能回填之前数据</li>
+    <li><span class="check-item">✅</span> 重新填写能清空草稿</li>
+  </ul>
+
+  <h3 class="sub-title" id="s6-3">6.3 企业信息填写页</h3>
+  <p><strong>原型描述：</strong>企查查搜索框，输入≥2字触发模糊搜索，选中企业后自动填充4个字段。</p>
+  <div class="user-story">作为一个<strong>企业用户</strong>，我想要<strong>快速填写企业信息</strong>，以便于<strong>减少手动输入</strong>。</div>
+  <p><strong>前置条件：</strong>用户点击【去认证】或【继续认证】</p>
+  <p><strong>核心逻辑：</strong>企查查搜索 → 选中后自动填充企业名称/统一社会信用代码/法定代表人/注册地址 → 【下一步】进入过渡页</p>
+  <p><strong>边界条件：</strong>搜索无结果提示"未找到企业"；信息不完整【下一步】禁用</p>
+  <p><strong>验收标准：</strong></p>
+  <ul>
+    <li><span class="check-item">✅</span> 输入≥2字触发搜索</li>
+    <li><span class="check-item">✅</span> 选中企业后自动填充4个字段</li>
+    <li><span class="check-item">✅</span> 点击【下一步】进入过渡页</li>
+  </ul>
+
+  <h3 class="sub-title" id="s6-4">6.4 过渡页</h3>
+  <p><strong>原型描述：</strong>显示"正在准备认证材料..."加载动画，纯前端1-2秒，不调接口，自动跳转。</p>
+  <div class="user-story">作为一个<strong>企业用户</strong>，我想要<strong>等待认证材料准备</strong>，以便于<strong>看到完整表单</strong>。</div>
+  <p><strong>前置条件：</strong>企业信息已填写并提交</p>
+  <p><strong>核心逻辑：</strong>纯前端setTimeout 1-2秒后自动跳转，不调用任何后端接口</p>
+  <p><strong>验收标准：</strong></p>
+  <ul>
+    <li><span class="check-item">✅</span> 显示加载动画</li>
+    <li><span class="check-item">✅</span> 1-2秒后自动跳转</li>
+    <li><span class="check-item">✅</span> 不调接口（纯前端）</li>
+  </ul>
+
+  <h3 class="sub-title" id="s6-5">6.5 首次认证表单（场景一）</h3>
+  <p><strong>原型描述：</strong>表单包含：法人身份证号 + 经办人（姓名/身份证/接收订单消息电话）+ 选填项 + <strong>必勾协议</strong>。</p>
+  <div class="user-story">作为一个<strong>首次认证的企业用户</strong>，我想要<strong>填写认证信息</strong>，以便于<strong>完成e签宝实名认证</strong>。</div>
+  <p><strong>前置条件：</strong>通过过渡页，后端判断为场景一</p>
+  <p><strong>核心逻辑：</strong>需填写法人身份证号 → 提交后获取authUrl → 跳转e签宝H5</p>
+  <p><strong>边界条件：</strong>法人身份证格式错误表单验证不通过；<strong>协议未勾选提交按钮禁用</strong></p>
+  <p><strong>验收标准：</strong></p>
+  <ul>
+    <li><span class="check-item">✅</span> 法人身份证号必填</li>
+    <li><span class="check-item">✅</span> 协议未勾选提交按钮禁用</li>
+    <li><span class="check-item">✅</span> 提交后跳转e签宝H5</li>
+  </ul>
+
+  <h3 class="sub-title" id="s6-6">6.6 授权申请表单（场景二）</h3>
+  <p><strong>原型描述：</strong>企业信息（只读）+ 法人身份证号（自动回填，只读）+ 申请人信息 + <strong>必勾协议</strong>。</p>
+  <div class="user-story">作为一个<strong>已完成认证的企业用户</strong>，我想要<strong>申请电子合同授权</strong>，以便于<strong>使用账期支付功能</strong>。</div>
+  <p><strong>前置条件：</strong>通过过渡页，后端判断为场景二</p>
+  <p><strong>核心逻辑：</strong>法人身份证号后端回填只读 → 提交后获取authUrl → 跳转e签宝授权页</p>
+  <p><strong>边界条件：</strong>授权申请最多3次，第4次返回错误</p>
+  <p><strong>验收标准：</strong></p>
+  <ul>
+    <li><span class="check-item">✅</span> 法人身份证号自动回填且只读</li>
+    <li><span class="check-item">✅</span> 协议未勾选提交按钮禁用</li>
+    <li><span class="check-item">✅</span> 提交后跳转e签宝授权页</li>
+    <li><span class="check-item">✅</span> 第4次提交返回错误提示</li>
+  </ul>
+</div>
+
+<!-- ===== 七、边界条件 ===== -->
+<div class="section" id="s7">
+  <h2 class="sec-title"><span class="num">7</span>边界条件与异常处理</h2>
+  <table>
+    <tr><th>场景</th><th>条件</th><th>处理方式</th></tr>
+    <tr><td>草稿保存</td><td>任何环节</td><td>自动每30秒保存 + 页面失焦保存</td></tr>
+    <tr><td>草稿有效期</td><td>永久</td><td>永久保存，90天未更新自动清理</td></tr>
+    <tr><td>授权重试</td><td>最多3次</td><td>第4次提交返回400</td></tr>
+    <tr><td>授权超时</td><td>24小时</td><td>超时自动失效，需重新申请</td></tr>
+    <tr><td>认证失败</td><td>可重新认证</td><td>点【重新认证】跳转表单并回填数据</td></tr>
+    <tr><td>场景二表单</td><td>法人身份证</td><td>后端自动回填，前端只读</td></tr>
+  </table>
+</div>
+
+<!-- ===== 八、验收标准 ===== -->
+<div class="section" id="s8">
+  <h2 class="sec-title"><span class="num">8</span>验收标准</h2>
+
+  <h3 class="sub-title" id="s8-1">8.1 状态机</h3>
+  <table>
+    <tr><th>状态值</th><th>状态名</th><th>含义</th><th>下一步</th></tr>
+    <tr><td><span class="status s-unverified">UNVERIFIED (0)</span></td><td>未认证</td><td>初始状态</td><td>点【去认证】进入流程</td></tr>
+    <tr><td><span class="status s-draft">DRAFT (1)</span></td><td>草稿</td><td>有未完成的认证草稿</td><td>【继续认证】回填 / 【重新填写】清空</td></tr>
+    <tr><td><span class="status s-verifying">VERIFYING (2)</span></td><td>认证中</td><td>已提交，等待e签宝回调</td><td>等待，可点【刷新状态】</td></tr>
+    <tr><td><span class="status s-rejected">REJECTED (4)</span></td><td>认证失败</td><td>展示失败原因</td><td>点【重新认证】→ 跳表单回填</td></tr>
+    <tr><td><span class="status s-authz-pending">AUTHZ_PENDING (5)</span></td><td>授权待处理</td><td>等待管理员审批</td><td>等待 / 点【刷新状态】</td></tr>
+    <tr><td><span class="status s-authz-approved">AUTHZ_APPROVED (6)</span></td><td>授权通过</td><td>认证完成，可签合同</td><td>【去签合同】</td></tr>
+    <tr><td><span class="status s-authz-rejected">AUTHZ_REJECTED (7)</span></td><td>授权拒绝</td><td>管理员拒绝</td><td>点【重新申请】→ 弹窗改理由（最多3次）</td></tr>
+  </table>
+
+  <h3 class="sub-title" id="s8-2">8.2 成功场景</h3>
+  <table>
+    <tr><th>#</th><th>场景</th><th>预期结果</th></tr>
+    <tr><td>1</td><td>场景一完整流程</td><td>表单→过渡页→e签宝H5→人脸+营业执照+授权→成功</td></tr>
+    <tr><td>2</td><td>场景二完整流程</td><td>表单→过渡页→e签宝H5→仅授权→成功</td></tr>
+    <tr><td>3</td><td>草稿恢复</td><td>继续认证回填之前数据</td></tr>
+  </table>
+
+  <h3 class="sub-title" id="s8-3">8.3 失败场景</h3>
+  <table>
+    <tr><th>#</th><th>场景</th><th>预期结果</th></tr>
+    <tr><td>1</td><td>认证失败</td><td>显示失败原因，可重新认证</td></tr>
+    <tr><td>2</td><td>授权拒绝</td><td>显示拒绝原因，可重新申请（最多3次）</td></tr>
+    <tr><td>3</td><td>授权超时</td><td>提示超时，需重新申请</td></tr>
+  </table>
+
+  <h3 class="sub-title" id="s8-4">8.4 边界场景</h3>
+  <table>
+    <tr><th>#</th><th>场景</th><th>预期结果</th></tr>
+    <tr><td>1</td><td>法人身份证格式错误</td><td>表单验证不通过，提示格式错误</td></tr>
+    <tr><td>2</td><td>协议未勾选</td><td>提交按钮禁用</td></tr>
+    <tr><td>3</td><td>网络超时</td><td>提示重试，数据不丢失</td></tr>
+  </table>
+</div>
+
+<!-- ===== 九、附录 ===== -->
+<div class="section" id="s9">
+  <h2 class="sec-title"><span class="num">9</span>附录</h2>
+
+  <h3 class="sub-title">9.1 参考文档</h3>
+  <table>
+    <tr><th>文档</th><th>链接</th></tr>
+    <tr><td>PC端原型</td><td><a href="https://connie-316.github.io/enterprise-auth-docs/pc-prototype.html" target="_blank">pc-prototype.html</a></td></tr>
+    <tr><td>小程序端原型</td><td><a href="https://connie-316.github.io/enterprise-auth-docs/mini-prototype.html" target="_blank">mini-prototype.html</a></td></tr>
+  </table>
+
+  <h3 class="sub-title">9.2 更新记录</h3>
+  <table>
+    <tr><th>版本</th><th>日期</th><th>修改内容</th></tr>
+    <tr><td>v1.0</td><td>2026-05-05</td><td>按PRD模板规范重写，流程图聚焦用户视角页面流程，注意点前置突出显示</td></tr>
+  </table>
+</div>
+
+<hr>
+<p style="color:var(--muted);font-size:12px;text-align:center;padding:14px 0;">
+  企业认证功能 PRD v1.0 · 2026-05-05 · 产品部
+</p>
+
+</div>
+
+<!-- ====== Mermaid CDN ====== -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'default',
+  flowchart: { useMaxWidth: true, htmlLabels: true }
+});
+</script>
+
+<!-- ====== 侧边栏导航 JS ====== -->
+<script>
+function toggleTocSidebar() {
+  var sb = document.getElementById('tocSidebar');
+  var btn = document.getElementById('tocToggle');
+  sb.classList.toggle('collapsed');
+  document.body.classList.toggle('sidebar-collapsed');
+  btn.textContent = sb.classList.contains('collapsed') ? '▶' : '◀';
+}
+
+function tocToggle(id) {
+  var node = document.querySelector('.toc-node[data-target="'+id+'"]');
+  if (node) node.classList.toggle('open');
+}
+
+function tocJump(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function tocJumpSub(e, id) {
+  e.preventDefault();
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  var parent = document.querySelector('.toc-node[data-target="s3"]');
+  if (parent && !parent.classList.contains('open')) parent.classList.add('open');
+}
+
+function scrollToTop() {
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+var scrollSections = ['s1','s2','s3','s3-1','s4','s4-1','s4-2','s5','s6','s6-1','s6-2','s6-3','s6-4','s6-5','s6-6','s7','s8','s8-1','s8-2','s8-3','s8-4','s9'];
+var scrollRafId = null;
+function onScroll() {
+  if (scrollRafId) return;
+  scrollRafId = requestAnimationFrame(function() {
+    scrollRafId = null;
+    var scrollY = window.scrollY + 100;
+    var activeId = null;
+    for (var i = scrollSections.length - 1; i >= 0; i--) {
+      var el = document.getElementById(scrollSections[i]);
+      if (el && el.offsetTop <= scrollY) {
+        activeId = scrollSections[i];
+        break;
+      }
+    }
+    document.querySelectorAll('.toc-label.active').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.toc-sub a.active').forEach(function(el){ el.classList.remove('active'); });
+    if (activeId) {
+      var mainId = activeId.split('-')[0];
+      var mainNode = document.querySelector('.toc-node[data-target="'+mainId+'"] > .toc-label');
+      if (mainNode) mainNode.classList.add('active');
+      var subLink = document.querySelector('.toc-sub a[href="#'+activeId+'"]');
+      if (subLink) subLink.classList.add('active');
+      var parentNode = document.querySelector('.toc-node[data-target="'+mainId+'"]');
+      if (parentNode && !parentNode.classList.contains('open')) parentNode.classList.add('open');
+    }
+  });
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+</script>
+</body>
+</html>
