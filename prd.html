@@ -217,8 +217,7 @@
           <li><a href="#s6-2" onclick="tocJumpSub(event,'s6-2')">6.2 草稿恢复页</a></li>
           <li><a href="#s6-3" onclick="tocJumpSub(event,'s6-3')">6.3 企业信息填写</a></li>
           <li><a href="#s6-4" onclick="tocJumpSub(event,'s6-4')">6.4 过渡页</a></li>
-          <li><a href="#s6-5" onclick="tocJumpSub(event,'s6-5')">6.5 首次认证表单</a></li>
-          <li><a href="#s6-6" onclick="tocJumpSub(event,'s6-6')">6.6 授权申请表单</a></li>
+          <li><a href="#s6-5" onclick="tocJumpSub(event,'s6-5')">6.5 完整认证表单（统一表单）</a></li>
         </ul>
       </li>
       <li class="toc-node open" data-target="s7">
@@ -363,8 +362,7 @@ flowchart TD
     <tr><td>PC/小程序</td><td>企业认证</td><td>草稿恢复页</td><td>检测历史草稿，可继续或重新填写</td></tr>
     <tr><td>PC/小程序</td><td>企业认证</td><td>企业信息填写</td><td>企查查搜索，自动填充企业信息</td></tr>
     <tr><td>PC/小程序</td><td>企业认证</td><td>过渡页</td><td>纯前端1-2秒，不调接口</td></tr>
-    <tr><td>PC/小程序</td><td>企业认证</td><td>首次认证表单</td><td>场景一：含法人身份证填写</td></tr>
-    <tr><td>PC/小程序</td><td>企业认证</td><td>授权申请表单</td><td>场景二：仅授权申请</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>完整认证表单（统一表单）</td><td>商城侧统一展示，后端判断场景；场景二时法人身份证号自动回填（只读）</td></tr>
     <tr><td>PC/小程序</td><td>企业认证</td><td>结果页</td><td>认证成功/失败/等待授权/授权拒绝</td></tr>
     <tr><td>后端</td><td>认证服务</td><td>场景判断</td><td>后端查auth_status判断场景一/二</td></tr>
     <tr><td>后端</td><td>认证服务</td><td>e签宝对接</td><td>调用e签宝接口获取认证链接</td></tr>
@@ -527,7 +525,10 @@ flowchart TD
     <tr><td>错误码查询</td><td>调试用</td><td><a href="https://open.esign.cn/tools/error-code" target="_blank">查看</a></td></tr>
   </table>
 
-  <h3 class="sub-title">9.3 更新记录</h3>
+  <h3 class="sub-title">9.3 D1-D14 注意点说明</h3>
+  <p style="font-size:13px;color:#666;">本PRD的注意点（D1-D14）按<strong>逻辑主题重新分组</strong>（开发注意事项→注意事项→数据表字段→接口清单→验收要点），与旧模板PRD的D1-D14顺序不完全一致。内容实质相同，只是组织结构不同。</p>
+
+  <h3 class="sub-title">9.4 更新记录</h3>
   <table>
     <tr><th>版本</th><th>日期</th><th>修改内容</th></tr>
     <tr><td>v1.0</td><td>2026-05-05</td><td>按PRD模板规范重写，流程图聚焦用户视角，注意点前置，补充e签宝接口参考</td></tr>
@@ -583,7 +584,7 @@ function scrollToTop() {
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-var scrollSections = ['s1','s2','s3','s3-1','s4','s4-1','s4-2','s5','s6','s6-1','s6-2','s6-3','s6-4','s6-5','s6-6','s7','s8','s8-1','s8-2','s8-3','s8-4','s9'];
+var scrollSections = ['s1','s2','s3','s3-1','s4','s4-1','s4-2','s5','s6','s6-1','s6-2','s6-3','s6-4','s6-5','s7','s8','s8-1','s8-2','s8-3','s8-4','s9'];
 var scrollRafId = null;
 function onScroll() {
   if (scrollRafId) return;
