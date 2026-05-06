@@ -8,36 +8,143 @@
     <meta http-equiv="Expires" content="0">
     <title>微信一键登录 PRD</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            line-height: 1.8;
-            color: #1f2937;
+            display: flex;
+            min-height: 100vh;
+        }
+        /* 左侧固定目录 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            padding: 24px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            top: 0;
+            left: 0;
+        }
+        .sidebar-title {
+            padding: 0 24px 20px;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 16px;
+            color: #f8fafc;
+        }
+        .toc-list {
+            list-style: none;
+        }
+        .toc-list li { }
+        .toc-list a {
+            display: block;
+            padding: 10px 24px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .toc-list a:hover {
+            background: rgba(255,255,255,0.05);
+            color: #f8fafc;
+            border-left-color: #60a5fa;
+        }
+        .toc-list a.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-left-color: #3b82f6;
+        }
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px 60px;
+            max-width: 1000px;
             background: #f9fafb;
         }
-        h1, h2, h3 { color: #111827; margin-top: 1.5em; }
-        h1 { border-bottom: 3px solid #667eea; padding-bottom: 12px; }
+        h1 {
+            font-size: 28px;
+            color: #111827;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 16px;
+            margin-bottom: 32px;
+        }
+        h2 {
+            font-size: 22px;
+            color: #111827;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+        h2:first-of-type { border-top: none; margin-top: 0; }
+        h3 {
+            font-size: 17px;
+            color: #374151;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+        p { line-height: 1.8; color: #374151; margin-bottom: 12px; }
         table { border-collapse: collapse; width: 100%; margin: 16px 0; }
-        th, td { border: 1px solid #e5e7eb; padding: 10px 14px; text-align: left; }
-        th { background: #f3f4f6; font-weight: 600; }
+        th, td { border: 1px solid #e5e7eb; padding: 12px 14px; text-align: left; }
+        th { background: #f3f4f6; font-weight: 600; color: #374151; }
         tr:nth-child(even) { background: #f9fafb; }
-        code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-        pre { background: #1f2937; color: #e5e7eb; padding: 16px; border-radius: 8px; overflow-x: auto; }
+        code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #7c3aed; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 16px 0; }
         pre code { background: none; padding: 0; color: inherit; }
-        blockquote { border-left: 4px solid #667eea; margin: 16px 0; padding: 8px 16px; background: #f0f4ff; }
-        .emoji { font-size: 1.2em; }
-        hr { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+        blockquote {
+            border-left: 4px solid #667eea;
+            margin: 16px 0;
+            padding: 12px 20px;
+            background: #f0f4ff;
+            border-radius: 0 8px 8px 0;
+        }
+        hr { border: none; border-top: 1px solid #e5e7eb; margin: 32px 0; }
+        strong { color: #111827; }
+        /* Mermaid图 */
+        pre.mermaid { background: #fff; border: 1px solid #e5e7eb; }
+        /* 响应式 */
+        @media (max-width: 900px) {
+            .sidebar { width: 220px; }
+            .main-content { margin-left: 220px; padding: 24px; }
+        }
+        @media (max-width: 600px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+        }
+        /* 更新信息 */
+        .update-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            font-size: 13px;
+        }
+        .update-info strong { color: #fff; }
     </style>
 </head>
 <body>
-<h1>微信登录功能 PRD</h1>
-<h2>一、需求背景</h2>
+    <nav class="sidebar">
+        <div class="sidebar-title">📋 微信登录 PRD</div>
+        <ul class="toc-list"><li><a href="#一、需求背景" onclick="scrollTo(event, '一、需求背景')">一、需求背景</a></li><li><a href="#二、需求目标" onclick="scrollTo(event, '二、需求目标')">二、需求目标</a></li><li><a href="#三、核心业务流程图" onclick="scrollTo(event, '三、核心业务流程图')">三、核心业务流程图</a></li><li><a href="#3.1-微信扫码登录流程（PC端）" onclick="scrollTo(event, '3.1-微信扫码登录流程（PC端）')">3.1 微信扫码登录流程（PC端）</a></li><li><a href="#3.2-小程序微信登录流程" onclick="scrollTo(event, '3.2-小程序微信登录流程')">3.2 小程序微信登录流程</a></li><li><a href="#3.3-下单认证拦截流程" onclick="scrollTo(event, '3.3-下单认证拦截流程')">3.3 下单认证拦截流程</a></li><li><a href="#四、需求功能清单" onclick="scrollTo(event, '四、需求功能清单')">四、需求功能清单</a></li><li><a href="#五、需求功能详述" onclick="scrollTo(event, '五、需求功能详述')">五、需求功能详述</a></li><li><a href="#5.1-PC端——登录页——扫码登录Tab" onclick="scrollTo(event, '5.1-PC端——登录页——扫码登录Tab')">5.1 PC端——登录页——扫码登录Tab</a></li><li><a href="#5.2-PC端——登录页——密码登录Tab" onclick="scrollTo(event, '5.2-PC端——登录页——密码登录Tab')">5.2 PC端——登录页——密码登录Tab</a></li><li><a href="#5.3-PC端——登录页——验证码登录Tab" onclick="scrollTo(event, '5.3-PC端——登录页——验证码登录Tab')">5.3 PC端——登录页——验证码登录Tab</a></li><li><a href="#5.4-PC端——登录页——次要登录图标" onclick="scrollTo(event, '5.4-PC端——登录页——次要登录图标')">5.4 PC端——登录页——次要登录图标</a></li><li><a href="#5.5-PC端——登录页——微信一键登录" onclick="scrollTo(event, '5.5-PC端——登录页——微信一键登录')">5.5 PC端——登录页——微信一键登录</a></li><li><a href="#5.6-PC端——弹窗——绑定手机号" onclick="scrollTo(event, '5.6-PC端——弹窗——绑定手机号')">5.6 PC端——弹窗——绑定手机号</a></li><li><a href="#5.7-PC端——弹窗——认证选择弹窗" onclick="scrollTo(event, '5.7-PC端——弹窗——认证选择弹窗')">5.7 PC端——弹窗——认证选择弹窗</a></li><li><a href="#5.8-小程序端——登录页——微信授权登录" onclick="scrollTo(event, '5.8-小程序端——登录页——微信授权登录')">5.8 小程序端——登录页——微信授权登录</a></li><li><a href="#5.9-小程序端——登录页——手机号绑定" onclick="scrollTo(event, '5.9-小程序端——登录页——手机号绑定')">5.9 小程序端——登录页——手机号绑定</a></li><li><a href="#5.10-买家中心——认证入口——实名认证" onclick="scrollTo(event, '5.10-买家中心——认证入口——实名认证')">5.10 买家中心——认证入口——实名认证</a></li><li><a href="#5.11-全局——下单流程——认证拦截" onclick="scrollTo(event, '5.11-全局——下单流程——认证拦截')">5.11 全局——下单流程——认证拦截</a></li><li><a href="#六、系统改造说明" onclick="scrollTo(event, '六、系统改造说明')">六、系统改造说明</a></li><li><a href="#6.1-数据表改造" onclick="scrollTo(event, '6.1-数据表改造')">6.1 数据表改造</a></li><li><a href="#6.2-关键业务规则" onclick="scrollTo(event, '6.2-关键业务规则')">6.2 关键业务规则</a></li><li><a href="#6.3-异常场景处理" onclick="scrollTo(event, '6.3-异常场景处理')">6.3 异常场景处理</a></li><li><a href="#七、验收标准汇总" onclick="scrollTo(event, '七、验收标准汇总')">七、验收标准汇总</a></li><li><a href="#7.1-登录功能验收" onclick="scrollTo(event, '7.1-登录功能验收')">7.1 登录功能验收</a></li><li><a href="#7.2-认证功能验收" onclick="scrollTo(event, '7.2-认证功能验收')">7.2 认证功能验收</a></li><li><a href="#7.3-界面交互验收" onclick="scrollTo(event, '7.3-界面交互验收')">7.3 界面交互验收</a></li><li><a href="#八、原型说明" onclick="scrollTo(event, '八、原型说明')">八、原型说明</a></li></ul>
+    </nav>
+    <main class="main-content">
+        <div class="update-info">
+            <strong>📅 更新时间：</strong>2026-05-05 &nbsp;|&nbsp; <strong>📌 版本：</strong>v1.11
+        </div>
+        <h1>微信登录功能 PRD</h1>
+<h2 id="一、需求背景">一、需求背景</h2>
+
 <p>数智聚模当前登录方式仅有账号密码和短信验证码，用户登录门槛较高，导致用户转化率偏低。通过微信登录，利用用户已登录的微信账号实现快速登录，降低注册/登录门槛，提升用户转化率。</p>
 <p>同时，PC端和小程序端需通过微信unionid实现用户身份打通，同一微信号在两端均映射到同一账号。</p>
 <hr />
-<h2>二、需求目标</h2>
+<h2 id="二、需求目标">二、需求目标</h2>
+
 <table>
 <thead>
 <tr>
@@ -65,8 +172,10 @@
 </tbody>
 </table>
 <hr />
-<h2>三、核心业务流程图</h2>
-<h3>3.1 微信扫码登录流程（PC端）</h3>
+<h2 id="三、核心业务流程图">三、核心业务流程图</h2>
+
+<h3 id="3.1-微信扫码登录流程（PC端）">3.1 微信扫码登录流程（PC端）</h3>
+
 <pre><code class="language-mermaid">graph TD
     A[用户打开PC端登录页] --&gt; B[选择扫码登录Tab]
     B --&gt; C[展示微信二维码]
@@ -82,7 +191,8 @@
     J --&gt;|选择认证| L[跳转认证流程]
     J --&gt;|暂不认证| K
 </code></pre>
-<h3>3.2 小程序微信登录流程</h3>
+<h3 id="3.2-小程序微信登录流程">3.2 小程序微信登录流程</h3>
+
 <pre><code class="language-mermaid">graph TD
     A[用户打开小程序] --&gt; B[点击微信登录]
     B --&gt; C[wx.login获取code]
@@ -95,7 +205,8 @@
     I --&gt; J[绑定成功，登录成功]
     J --&gt; H
 </code></pre>
-<h3>3.3 下单认证拦截流程</h3>
+<h3 id="3.3-下单认证拦截流程">3.3 下单认证拦截流程</h3>
+
 <pre><code class="language-mermaid">graph TD
     A[用户点击提交订单] --&gt; B{用户是否已认证}
     B --&gt;|已认证 个人/企业| C[正常提交订单]
@@ -109,7 +220,8 @@
     I --&gt; C
 </code></pre>
 <hr />
-<h2>四、需求功能清单</h2>
+<h2 id="四、需求功能清单">四、需求功能清单</h2>
+
 <table>
 <thead>
 <tr>
@@ -189,8 +301,10 @@
 </tbody>
 </table>
 <hr />
-<h2>五、需求功能详述</h2>
-<h3>5.1 PC端——登录页——扫码登录Tab</h3>
+<h2 id="五、需求功能详述">五、需求功能详述</h2>
+
+<h3 id="5.1-PC端——登录页——扫码登录Tab">5.1 PC端——登录页——扫码登录Tab</h3>
+
 <p><strong>原型描述</strong>：
 扫码登录Tab居首位，展示180×180px微信二维码，下方提示"打开微信 &gt; 发现 &gt; 扫一扫"。二维码有效期5分钟，过期显示刷新按钮。</p>
 <p><strong>用户故事</strong>：</p>
@@ -213,7 +327,8 @@
 - 未注册微信号扫码弹出绑定手机号
 - 二维码过期显示刷新按钮</p>
 <hr />
-<h3>5.2 PC端——登录页——密码登录Tab</h3>
+<h3 id="5.2-PC端——登录页——密码登录Tab">5.2 PC端——登录页——密码登录Tab</h3>
+
 <p><strong>原型描述</strong>：
 账号输入框支持邮箱/手机号，密码输入框支持显示/隐藏，底部有"30天内免登录"复选框和"忘记密码"链接。</p>
 <p><strong>验收标准</strong>：
@@ -221,7 +336,8 @@
 - 🎯 错误密码提示登录失败
 - 🎯 勾选30天免登录后30天内无需重复登录</p>
 <hr />
-<h3>5.3 PC端——登录页——验证码登录Tab</h3>
+<h3 id="5.3-PC端——登录页——验证码登录Tab">5.3 PC端——登录页——验证码登录Tab</h3>
+
 <p><strong>原型描述</strong>：
 手机号输入框+验证码输入框（右侧获取验证码按钮，60秒倒计时），底部有"30天内免登录"复选框。</p>
 <p><strong>核心逻辑</strong>：
@@ -232,7 +348,8 @@
 - 🎯 错误验证码提示失败
 - 🎯 60秒内不可重复获取验证码</p>
 <hr />
-<h3>5.4 PC端——登录页——次要登录图标</h3>
+<h3 id="5.4-PC端——登录页——次要登录图标">5.4 PC端——登录页——次要登录图标</h3>
+
 <p><strong>原型描述</strong>：
 每个Tab底部有一行"其他登录方式"，展示另外两种登录方式的小图标（带文字），点击切换到对应Tab。</p>
 <p><strong>核心逻辑</strong>：
@@ -244,7 +361,8 @@
 - 🎯 各Tab底部正确展示其他两种登录方式图标
 - 🎯 点击图标可正常切换，内容不清空</p>
 <hr />
-<h3>5.5 PC端——登录页——微信一键登录</h3>
+<h3 id="5.5-PC端——登录页——微信一键登录">5.5 PC端——登录页——微信一键登录</h3>
+
 <p><strong>原型描述</strong>：
 扫码Tab下方有"微信快捷登录"绿色按钮，点击弹出确认弹窗，用户确认后跳转微信授权页。</p>
 <p><strong>用户故事</strong>：</p>
@@ -258,7 +376,8 @@
 - 🎯 确认后跳转微信授权页
 - 🎯 授权后正确登录或跳转绑定手机号</p>
 <hr />
-<h3>5.6 PC端——弹窗——绑定手机号</h3>
+<h3 id="5.6-PC端——弹窗——绑定手机号">5.6 PC端——弹窗——绑定手机号</h3>
+
 <p><strong>原型描述</strong>：
 弹窗标题"首次微信登录，请绑定手机号完成注册"。手机号输入框+验证码输入框+获取验证码按钮+完成绑定按钮。</p>
 <p><strong>用户故事</strong>：</p>
@@ -278,7 +397,8 @@
 - 🎯 已注册手机号绑定不同微信号被拒绝
 - 🎯 绑定后下次微信登录直接成功，无需再绑定</p>
 <hr />
-<h3>5.7 PC端——弹窗——认证选择弹窗</h3>
+<h3 id="5.7-PC端——弹窗——认证选择弹窗">5.7 PC端——弹窗——认证选择弹窗</h3>
+
 <p><strong>原型描述</strong>：
 弹窗标题"选择认证方式"，包含个人认证卡片和企业认证卡片（带"推荐"标签），底部有"暂不认证，先逛逛"链接。</p>
 <p><strong>用户故事</strong>：</p>
@@ -299,7 +419,8 @@
 - 🎯 选择"暂不认证"可关闭，正常使用
 - 🎯 选择认证方式后跳转到对应认证流程</p>
 <hr />
-<h3>5.8 小程序端——登录页——微信授权登录</h3>
+<h3 id="5.8-小程序端——登录页——微信授权登录">5.8 小程序端——登录页——微信授权登录</h3>
+
 <p><strong>原型描述</strong>：
 小程序登录页提供微信登录按钮，点击后调用wx.login()获取code，发送到服务端完成登录。</p>
 <p><strong>用户故事</strong>：</p>
@@ -319,7 +440,8 @@
 - 🎯 首次登录触发绑定手机号流程
 - 🎯 老用户直接登录成功</p>
 <hr />
-<h3>5.9 小程序端——登录页——手机号绑定</h3>
+<h3 id="5.9-小程序端——登录页——手机号绑定">5.9 小程序端——登录页——手机号绑定</h3>
+
 <p><strong>原型描述</strong>：
 首次登录时弹出手机号绑定页面，支持两种方式：1）用户点击按钮一键获取微信手机号授权；2）手动输入手机号+验证码。</p>
 <p><strong>核心逻辑</strong>：
@@ -331,7 +453,8 @@
 - 🎯 一键获取手机号授权成功
 - 🎯 手动输入手机号+验证码绑定成功</p>
 <hr />
-<h3>5.10 买家中心——认证入口——实名认证</h3>
+<h3 id="5.10-买家中心——认证入口——实名认证">5.10 买家中心——认证入口——实名认证</h3>
+
 <p><strong>原型描述</strong>：
 买家中心侧边栏/个人中心有【实名认证】入口，点击进入认证选择页（个人/企业）。</p>
 <p><strong>核心逻辑</strong>：
@@ -343,7 +466,8 @@
 - 🎯 已认证用户看到绿色✅标识
 - 🎯 点击可进入认证页面或查看认证信息</p>
 <hr />
-<h3>5.11 全局——下单流程——认证拦截</h3>
+<h3 id="5.11-全局——下单流程——认证拦截">5.11 全局——下单流程——认证拦截</h3>
+
 <p><strong>原型描述</strong>：
 未认证用户点击"提交订单"时，弹出拦截弹窗，提示"需要完成认证"，显示个人认证和企业认证选项。</p>
 <p><strong>用户故事</strong>：</p>
@@ -361,8 +485,10 @@
 - 🎯 已认证用户正常提交订单
 - 🎯 完成认证后返回订单页，可正常提交</p>
 <hr />
-<h2>六、系统改造说明</h2>
-<h3>6.1 数据表改造</h3>
+<h2 id="六、系统改造说明">六、系统改造说明</h2>
+
+<h3 id="6.1-数据表改造">6.1 数据表改造</h3>
+
 <p><strong>用户表新增字段</strong>：</p>
 <table>
 <thead>
@@ -447,7 +573,8 @@
 - unionid 普通索引
 - user_id 普通索引</p>
 <hr />
-<h3>6.2 关键业务规则</h3>
+<h3 id="6.2-关键业务规则">6.2 关键业务规则</h3>
+
 <table>
 <thead>
 <tr>
@@ -475,7 +602,8 @@
 </tbody>
 </table>
 <hr />
-<h3>6.3 异常场景处理</h3>
+<h3 id="6.3-异常场景处理">6.3 异常场景处理</h3>
+
 <table>
 <thead>
 <tr>
@@ -503,8 +631,10 @@
 </tbody>
 </table>
 <hr />
-<h2>七、验收标准汇总</h2>
-<h3>7.1 登录功能验收</h3>
+<h2 id="七、验收标准汇总">七、验收标准汇总</h2>
+
+<h3 id="7.1-登录功能验收">7.1 登录功能验收</h3>
+
 <table>
 <thead>
 <tr>
@@ -539,7 +669,8 @@
 </tr>
 </tbody>
 </table>
-<h3>7.2 认证功能验收</h3>
+<h3 id="7.2-认证功能验收">7.2 认证功能验收</h3>
+
 <table>
 <thead>
 <tr>
@@ -570,7 +701,8 @@
 </tr>
 </tbody>
 </table>
-<h3>7.3 界面交互验收</h3>
+<h3 id="7.3-界面交互验收">7.3 界面交互验收</h3>
+
 <table>
 <thead>
 <tr>
@@ -594,7 +726,8 @@
 </tbody>
 </table>
 <hr />
-<h2>八、原型说明</h2>
+<h2 id="八、原型说明">八、原型说明</h2>
+
 <table>
 <thead>
 <tr>
@@ -610,5 +743,30 @@
 </tbody>
 </table>
 <p>原型包含8个演示状态：默认登录页、微信授权确认弹窗、首次登录绑定手机号、绑定成功登录完成、老用户直接登录、二维码过期刷新、登录后认证选择弹窗、下单认证拦截弹窗。</p>
+    </main>
+    <script>
+        function scrollTo(e, id) {
+            e.preventDefault();
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // 更新活跃状态
+                document.querySelectorAll('.toc-list a').forEach(a => a.classList.remove('active'));
+                e.target.classList.add('active');
+            }
+        }
+        // 滚动时高亮当前章节
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('h2[id], h3[id]');
+            let current = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < 150) current = section.id;
+            });
+            document.querySelectorAll('.toc-list a').forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
+    </script>
 </body>
 </html>
