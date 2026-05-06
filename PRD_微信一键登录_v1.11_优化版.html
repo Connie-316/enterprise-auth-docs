@@ -131,90 +131,53 @@
 <body>
     <nav class="sidebar">
         <div class="sidebar-title">📋 微信登录 PRD</div>
-        <ul class="toc-list"><li><a href="#一、需求背景与目标" onclick="scrollTo(event, '一、需求背景与目标')">一、需求背景与目标</a></li><li><a href="#1.1-需求背景" onclick="scrollTo(event, '1.1-需求背景')">1.1 需求背景</a></li><li><a href="#1.2-需求目标" onclick="scrollTo(event, '1.2-需求目标')">1.2 需求目标</a></li><li><a href="#二、核心业务流程" onclick="scrollTo(event, '二、核心业务流程')">二、核心业务流程</a></li><li><a href="#三、功能清单总览" onclick="scrollTo(event, '三、功能清单总览')">三、功能清单总览</a></li><li><a href="#四、功能详细说明" onclick="scrollTo(event, '四、功能详细说明')">四、功能详细说明</a></li><li><a href="#4.1-PC端——登录页" onclick="scrollTo(event, '4.1-PC端——登录页')">4.1 PC端——登录页</a></li><li><a href="#4.2-小程序端——登录页" onclick="scrollTo(event, '4.2-小程序端——登录页')">4.2 小程序端——登录页</a></li><li><a href="#4.3-认证选择弹窗（登录后）" onclick="scrollTo(event, '4.3-认证选择弹窗（登录后）')">4.3 认证选择弹窗（登录后）</a></li><li><a href="#4.4-下单认证拦截" onclick="scrollTo(event, '4.4-下单认证拦截')">4.4 下单认证拦截</a></li><li><a href="#4.5-买家中心——实名认证入口" onclick="scrollTo(event, '4.5-买家中心——实名认证入口')">4.5 买家中心——实名认证入口</a></li><li><a href="#五、数据表改造" onclick="scrollTo(event, '五、数据表改造')">五、数据表改造</a></li><li><a href="#5.1-用户表新增字段" onclick="scrollTo(event, '5.1-用户表新增字段')">5.1 用户表新增字段</a></li><li><a href="#5.2-微信登录表（wechat_auth）" onclick="scrollTo(event, '5.2-微信登录表（wechat_auth）')">5.2 微信登录表（wechat_auth）</a></li><li><a href="#六、关键业务规则" onclick="scrollTo(event, '六、关键业务规则')">六、关键业务规则</a></li><li><a href="#七、异常场景处理" onclick="scrollTo(event, '七、异常场景处理')">七、异常场景处理</a></li><li><a href="#八、验收标准汇总" onclick="scrollTo(event, '八、验收标准汇总')">八、验收标准汇总</a></li><li><a href="#8.1-登录功能验收" onclick="scrollTo(event, '8.1-登录功能验收')">8.1 登录功能验收</a></li><li><a href="#8.2-认证功能验收" onclick="scrollTo(event, '8.2-认证功能验收')">8.2 认证功能验收</a></li><li><a href="#九、原型说明" onclick="scrollTo(event, '九、原型说明')">九、原型说明</a></li><li><a href="#十、文档版本" onclick="scrollTo(event, '十、文档版本')">十、文档版本</a></li><li><a href="#十一、开发注意事项（重点）" onclick="scrollTo(event, '十一、开发注意事项（重点）')">十一、开发注意事项（重点）</a></li><li><a href="#⚠️-阻塞项（开发前必须确认）" onclick="scrollTo(event, '⚠️-阻塞项（开发前必须确认）')">⚠️ 阻塞项（开发前必须确认）</a></li><li><a href="#🔑-核心实现要点" onclick="scrollTo(event, '🔑-核心实现要点')">🔑 核心实现要点</a></li><li><a href="#📋-接口清单" onclick="scrollTo(event, '📋-接口清单')">📋 接口清单</a></li><li><a href="#✅-联调Checklist" onclick="scrollTo(event, '✅-联调Checklist')">✅ 联调Checklist</a></li></ul>
+        <ul class="toc-list"><li><a href="#一、需求背景与目标" onclick="scrollTo(event, '一、需求背景与目标')">一、需求背景与目标</a></li><li><a href="#二、核心业务流程" onclick="scrollTo(event, '二、核心业务流程')">二、核心业务流程</a></li><li><a href="#三、功能清单" onclick="scrollTo(event, '三、功能清单')">三、功能清单</a></li><li><a href="#四、关键业务规则" onclick="scrollTo(event, '四、关键业务规则')">四、关键业务规则</a></li><li><a href="#五、数据表改造" onclick="scrollTo(event, '五、数据表改造')">五、数据表改造</a></li><li><a href="#六、开发重点注意事项" onclick="scrollTo(event, '六、开发重点注意事项')">六、开发重点注意事项</a></li><li><a href="#⚠️-阻塞项（开发前必须确认）" onclick="scrollTo(event, '⚠️-阻塞项（开发前必须确认）')">⚠️ 阻塞项（开发前必须确认）</a></li><li><a href="#核心逻辑" onclick="scrollTo(event, '核心逻辑')">核心逻辑</a></li><li><a href="#七、验收标准" onclick="scrollTo(event, '七、验收标准')">七、验收标准</a></li><li><a href="#八、原型说明" onclick="scrollTo(event, '八、原型说明')">八、原型说明</a></li><li><a href="#版本" onclick="scrollTo(event, '版本')">版本</a></li></ul>
     </nav>
     <main class="main-content">
         <div class="update-info">
             <strong>📅 更新时间：</strong>2026-05-05 &nbsp;|&nbsp; <strong>📌 版本：</strong>v1.11
         </div>
-        <h1>微信登录 &amp; 企业认证 PRD（PC端 + 小程序端）v2.0</h1>
+        <h1>微信登录 &amp; 企业认证 PRD v2.0（PC端 + 小程序端）</h1>
 <blockquote>
-<p><strong>项目概括</strong>：通过微信扫码/授权登录降低注册门槛，登录后引导实名认证（个人/企业），认证不强制但下单前必须完成，支持多端账号打通。</p>
+<p><strong>项目概括</strong>：微信扫码/授权登录 → 登录即注册 → 认证引导（不强制）→ 下单前必须认证 → 多端账号打通</p>
 </blockquote>
 <hr />
 <h2 id="一、需求背景与目标">一、需求背景与目标</h2>
 
-<h3 id="1.1-需求背景">1.1 需求背景</h3>
-
-<p>通过微信登录降低注册门槛，提升用户转化率。登录后引导实名认证，<strong>认证不强制但下单前必须完成</strong>。</p>
-<h3 id="1.2-需求目标">1.2 需求目标</h3>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">优先级</th>
-<th>目标</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">P0</td>
-<td>微信登录</td>
-<td>PC扫码 + 小程序授权，支持多端账号打通</td>
-</tr>
-<tr>
-<td style="text-align: center;">P0</td>
-<td>登录即注册</td>
-<td>首次微信登录绑定手机号完成注册</td>
-</tr>
-<tr>
-<td style="text-align: center;">P0</td>
-<td>下单前认证拦截</td>
-<td>未认证用户下单前必须完成认证</td>
-</tr>
-<tr>
-<td style="text-align: center;">P1</td>
-<td>认证引导弹窗</td>
-<td>登录后引导选择个人/企业认证，可跳过</td>
-</tr>
-<tr>
-<td style="text-align: center;">P1</td>
-<td>多端账号打通</td>
-<td>PC端和小程序端通过unionid识别同一用户</td>
-</tr>
-</tbody>
-</table>
+<p><strong>背景</strong>：通过微信登录降低注册门槛，提升转化率。登录后引导实名认证，<strong>认证不强制但下单前必须完成</strong>。</p>
+<p><strong>目标</strong>：
+| 优先级 | 目标 |
+|:------:|------|
+| P0 | 微信登录（PC扫码 + 小程序授权） |
+| P0 | 登录即注册（首次微信登录绑定手机号） |
+| P0 | 下单前认证拦截（未认证不能下单） |
+| P1 | 认证引导弹窗（登录后可跳过） |
+| P1 | 多端账号打通（PC端和小程序端同一用户） |</p>
 <hr />
 <h2 id="二、核心业务流程">二、核心业务流程</h2>
 
 <pre><code class="language-mermaid">graph TD
-    A[用户打开登录页] --&gt; B{选择登录方式}
+    A[打开登录页] --&gt; B{登录方式}
     B --&gt; C[微信扫码/授权]
     B --&gt; D[账号密码]
     B --&gt; E[短信验证码]
-
-    C --&gt; F{该微信号是否已注册}
-    F --&gt;|已注册| G[直接登录]
-    F --&gt;|未注册| H[绑定手机号]
+    C --&gt; F{已注册?}
+    F --&gt;|是| G[直接登录]
+    F --&gt;|否| H[绑定手机号]
     H --&gt; G
-
-    G --&gt; I{认证状态}
-    I --&gt;|已认证| J[进入首页]
-    I --&gt;|未认证| K[弹出认证选择弹窗]
-    K --&gt;|个人认证| L[跳转个人认证流程]
-    K --&gt;|企业认证| M[跳转企业认证流程]
-    K --&gt;|暂不认证| J
-
-    J --&gt; N[点击提交订单]
-    N --&gt; O{是否已认证}
-    O --&gt;|已认证| P[正常下单]
-    O --&gt;|未认证| Q[弹出认证拦截弹窗]
-    Q --&gt; L
-    Q --&gt; M
+    G --&gt; I{已认证?}
+    I --&gt;|是| J[进入首页]
+    I --&gt;|否| K[认证弹窗]
+    K --&gt; L[个人/企业认证]
+    K --&gt; M[暂不认证]
+    M --&gt; J
+    J --&gt; N[提交订单]
+    N --&gt; O{已认证?}
+    O --&gt;|是| P[正常下单]
+    O --&gt;|否| Q[拦截→认证]
 </code></pre>
 <hr />
-<h2 id="三、功能清单总览">三、功能清单总览</h2>
+<h2 id="三、功能清单">三、功能清单</h2>
 
 <table>
 <thead>
@@ -222,269 +185,58 @@
 <th>终端</th>
 <th>功能</th>
 <th style="text-align: center;">优先级</th>
-<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>登录模块</strong></td>
+<td><strong>登录</strong></td>
 <td></td>
 <td style="text-align: center;"></td>
-<td></td>
 </tr>
 <tr>
 <td>PC端</td>
 <td>微信扫码登录</td>
 <td style="text-align: center;">P0</td>
-<td>展示二维码，扫码授权</td>
 </tr>
 <tr>
 <td>PC端</td>
 <td>微信一键登录</td>
 <td style="text-align: center;">P0</td>
-<td>H5端点击按钮跳转授权页</td>
 </tr>
 <tr>
 <td>PC端</td>
-<td>账号密码登录</td>
+<td>账号密码 / 短信验证码登录</td>
 <td style="text-align: center;">P0</td>
-<td>邮箱/手机号 + 密码</td>
-</tr>
-<tr>
-<td>PC端</td>
-<td>短信验证码登录</td>
-<td style="text-align: center;">P0</td>
-<td>手机号 + 验证码（60s倒计时）</td>
-</tr>
-<tr>
-<td>PC端</td>
-<td>次要登录图标</td>
-<td style="text-align: center;">P1</td>
-<td>每个Tab底部显示其他登录方式图标</td>
 </tr>
 <tr>
 <td>小程序端</td>
-<td>微信授权登录</td>
+<td>微信授权登录 + 手机号绑定</td>
 <td style="text-align: center;">P0</td>
-<td>wx.login获取code完成登录</td>
 </tr>
 <tr>
-<td>小程序端</td>
-<td>手机号授权登录</td>
-<td style="text-align: center;">P0</td>
-<td>一键获取手机号或手动输入</td>
-</tr>
-<tr>
-<td><strong>认证模块</strong></td>
+<td><strong>认证</strong></td>
 <td></td>
 <td style="text-align: center;"></td>
-<td></td>
 </tr>
 <tr>
 <td>全局</td>
-<td>登录后认证选择弹窗</td>
+<td>登录后认证选择弹窗（个人/企业/暂不认证）</td>
 <td style="text-align: center;">P1</td>
-<td>个人认证/企业认证/暂不认证</td>
 </tr>
 <tr>
 <td>全局</td>
 <td>下单认证拦截</td>
 <td style="text-align: center;">P0</td>
-<td>未认证用户下单前拦截</td>
 </tr>
 <tr>
 <td>买家中心</td>
-<td>实名认证入口</td>
+<td>实名认证入口（随时可主动认证）</td>
 <td style="text-align: center;">P1</td>
-<td>随时可主动发起认证</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="四、功能详细说明">四、功能详细说明</h2>
-
-<h3 id="4.1-PC端——登录页">4.1 PC端——登录页</h3>
-
-<h4>4.1.1 微信扫码登录</h4>
-<p><strong>登录流程</strong>：</p>
-<pre><code>展示二维码（5分钟有效期）
-    ↓
-用户扫码并确认
-    ↓
-服务端通过code换取openid + unionid
-    ↓
-┌─ 已绑定账号 → 直接登录成功
-└─ 未绑定账号 → 弹出绑定手机号弹窗 → 绑定成功后登录
-</code></pre>
-<p><strong>验收标准</strong>：
-- 🎯 二维码正常展示，5分钟过期显示刷新按钮
-- 🎯 已注册微信号扫码直接登录
-- 🎯 未注册微信号扫码弹出绑定手机号弹窗</p>
-<h4>4.1.2 微信一键登录</h4>
-<p>点击"微信快捷登录"按钮 → 弹出确认弹窗 → 用户确认 → 跳转微信授权页 → 授权回调完成登录。</p>
-<p><strong>验收标准</strong>：
-- 🎯 点击按钮弹出确认弹窗
-- 🎯 确认后跳转微信授权页</p>
-<h4>4.1.3 账号密码登录 / 短信验证码登录</h4>
-<p>标准表单登录，支持30天免登录。</p>
-<hr />
-<h3 id="4.2-小程序端——登录页">4.2 小程序端——登录页</h3>
-
-<p><strong>微信授权登录流程</strong>：</p>
-<pre><code>点击微信登录按钮
-    ↓
-wx.login() 获取 code
-    ↓
-服务端用 code 换取 openid + unionid
-    ↓
-┌─ unionid已绑定账号 → 直接登录成功
-└─ unionid未绑定 → 弹出手机号绑定页面
-        ↓
-    用户一键获取手机号或手动输入验证码
-        ↓
-    绑定成功，登录成功
-</code></pre>
-<p><strong>验收标准</strong>：
-- 🎯 微信登录成功，老用户直接进入
-- 🎯 新用户弹出手机号绑定页面</p>
-<hr />
-<h3 id="4.3-认证选择弹窗（登录后）">4.3 认证选择弹窗（登录后）</h3>
-
-<p><strong>触发时机</strong>：用户登录成功，认证状态为"未认证"时自动弹出</p>
-<p><strong>弹窗选项</strong>：
-| 选项 | 说明 |
-|------|------|
-| 👤 个人实名认证 | 快速认证，适合个人采购 |
-| 🏢 企业认证 | 认证后享企业专属价与开票（推荐） |
-| 暂不认证 | 可关闭弹窗正常浏览，下单前仍需认证 |</p>
-<p><strong>交互规则</strong>：
-- 仅首次登录弹出，已认证用户不再弹出
-- 选择"暂不认证"可关闭，正常使用
-- 选择认证后跳转到对应认证流程</p>
-<p><strong>验收标准</strong>：
-- 🎯 新用户登录成功后自动弹出
-- 🎯 已认证用户登录不再弹出
-- 🎯 选择"暂不认证"可关闭，正常浏览</p>
-<hr />
-<h3 id="4.4-下单认证拦截">4.4 下单认证拦截</h3>
-
-<p><strong>触发时机</strong>：用户点击"提交订单"时</p>
-<p><strong>拦截逻辑</strong>：</p>
-<pre><code>用户点击提交订单
-    ↓
-检查 auth_status
-    ↓
-┌─ 已认证（personal/enterprise）→ 正常提交订单
-└─ 未认证（none）→ 弹出认证拦截弹窗
-        ↓
-    用户选择认证方式 → 完成认证 → 返回订单页
-        ↓
-    用户再次点击提交订单 → 正常提交
-</code></pre>
-<p><strong>验收标准</strong>：
-- 🎯 未认证用户点击提交订单被拦截
-- 🎯 已认证用户正常提交订单
-- 🎯 完成认证后返回订单页，用户手动提交</p>
-<hr />
-<h3 id="4.5-买家中心——实名认证入口">4.5 买家中心——实名认证入口</h3>
-
-<p><strong>入口位置</strong>：买家中心侧边栏 / 个人中心 → 【实名认证】</p>
-<p><strong>状态显示</strong>：
-| 认证状态 | 显示 |
-|---------|------|
-| 未认证 | 红色提示标识，点击跳转认证选择 |
-| 个人已认证 | 绿色✅ + "个人认证"，可升级为企业认证 |
-| 企业已认证 | 绿色✅ + "企业认证"，可查看认证信息 |</p>
-<p><strong>验收标准</strong>：
-- 🎯 未认证用户看到红色提示标识
-- 🎯 已认证用户看到绿色✅标识</p>
-<hr />
-<h2 id="五、数据表改造">五、数据表改造</h2>
-
-<h3 id="5.1-用户表新增字段">5.1 用户表新增字段</h3>
-
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>auth_status</td>
-<td>varchar(20)</td>
-<td>认证状态：none / personal / enterprise</td>
-</tr>
-<tr>
-<td>auth_time</td>
-<td>datetime</td>
-<td>最近一次认证通过时间</td>
-</tr>
-</tbody>
-</table>
-<h3 id="5.2-微信登录表（wechat_auth）">5.2 微信登录表（wechat_auth）</h3>
-
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>id</td>
-<td>bigint</td>
-<td>主键</td>
-</tr>
-<tr>
-<td>user_id</td>
-<td>bigint</td>
-<td>关联用户ID（绑定后写入）</td>
-</tr>
-<tr>
-<td>openid</td>
-<td>varchar(50)</td>
-<td>微信openid</td>
-</tr>
-<tr>
-<td>unionid</td>
-<td>varchar(50)</td>
-<td>微信unionid（多端打通）</td>
-</tr>
-<tr>
-<td>platform</td>
-<td>varchar(20)</td>
-<td>pc_web / miniapp</td>
-</tr>
-<tr>
-<td>nickname</td>
-<td>varchar(50)</td>
-<td>微信昵称</td>
-</tr>
-<tr>
-<td>avatar_url</td>
-<td>varchar(200)</td>
-<td>微信头像</td>
-</tr>
-<tr>
-<td>created_at</td>
-<td>datetime</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>updated_at</td>
-<td>datetime</td>
-<td>更新时间</td>
-</tr>
-</tbody>
-</table>
-<p><strong>索引</strong>：<code>UNIQUE uk_openid_platform(openid, platform)</code> + <code>INDEX idx_unionid(unionid)</code></p>
-<hr />
-<h2 id="六、关键业务规则">六、关键业务规则</h2>
+<h2 id="四、关键业务规则">四、关键业务规则</h2>
 
 <table>
 <thead>
@@ -495,10 +247,6 @@ wx.login() 获取 code
 </thead>
 <tbody>
 <tr>
-<td>多端身份打通</td>
-<td>同一unionid在PC端和小程序端关联到同一user_id</td>
-</tr>
-<tr>
 <td>登录即注册</td>
 <td>首次微信登录绑定手机号后自动创建账号</td>
 </tr>
@@ -508,131 +256,178 @@ wx.login() 获取 code
 </tr>
 <tr>
 <td>认证可升级不可降级</td>
-<td>个人认证可升级为企业认证，企业认证不可降级为个人认证</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="七、异常场景处理">七、异常场景处理</h2>
-
-<table>
-<thead>
-<tr>
-<th>场景</th>
-<th>处理方式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>微信服务不可用</td>
-<td>引导使用账号密码或短信验证码登录</td>
-</tr>
-<tr>
-<td>unionid为空</td>
-<td>以openid作为该端唯一标识，多端打通功能降级</td>
-</tr>
-<tr>
-<td>同一微信号绑定不同手机号</td>
-<td>拒绝绑定，提示"该微信号已绑定其他手机号"</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="八、验收标准汇总">八、验收标准汇总</h2>
-
-<h3 id="8.1-登录功能验收">8.1 登录功能验收</h3>
-
-<table>
-<thead>
-<tr>
-<th>验收项</th>
-<th>标准</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>PC端扫码登录</td>
-<td>二维码正常显示，扫码后老用户直接登录，新用户跳转绑定手机号</td>
-</tr>
-<tr>
-<td>PC端微信一键登录</td>
-<td>弹出确认弹窗，确认后跳转授权页，授权后正确登录</td>
-</tr>
-<tr>
-<td>小程序微信登录</td>
-<td>wx.login成功，服务端换取openid/unionid，正确登录</td>
+<td>个人认证可升级为企业认证，企业认证不可降级</td>
 </tr>
 <tr>
 <td>多端账号打通</td>
-<td>同一微信号在PC端和小程序端登录到同一账号</td>
-</tr>
-</tbody>
-</table>
-<h3 id="8.2-认证功能验收">8.2 认证功能验收</h3>
-
-<table>
-<thead>
-<tr>
-<th>验收项</th>
-<th>标准</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>认证弹窗触发</td>
-<td>新用户登录成功后弹出，已认证用户不再弹出</td>
-</tr>
-<tr>
-<td>认证弹窗可跳过</td>
-<td>选择"暂不认证"可关闭，正常浏览</td>
-</tr>
-<tr>
-<td>下单认证拦截</td>
-<td>未认证用户提交订单被拦截，引导去认证</td>
-</tr>
-<tr>
-<td>认证完成回跳</td>
-<td>认证完成后返回订单确认页，用户手动提交</td>
-</tr>
-<tr>
-<td>买家中心入口</td>
-<td>随时可主动发起认证，已认证可查看信息</td>
+<td>同一unionid在PC端和小程序端关联到同一user_id</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="九、原型说明">九、原型说明</h2>
+<h2 id="五、数据表改造">五、数据表改造</h2>
 
 <table>
 <thead>
 <tr>
-<th>原型</th>
-<th>位置</th>
+<th>表</th>
+<th>字段</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>PC端登录页原型</td>
-<td><code>pc-prototype.html</code></td>
-<td>包含8个演示状态：扫码登录、绑定手机号、认证选择弹窗、下单拦截等</td>
+<td>用户表</td>
+<td>auth_status</td>
+<td>认证状态：none / personal / enterprise</td>
 </tr>
 <tr>
-<td>小程序端原型</td>
-<td><code>https://u.pmdaniu.com/zvz87</code></td>
-<td>Axure设计稿，包含微信授权登录、手机号绑定、认证流程</td>
+<td>用户表</td>
+<td>auth_time</td>
+<td>最近认证通过时间</td>
+</tr>
+<tr>
+<td>wechat_auth</td>
+<td>openid + platform</td>
+<td>联合唯一索引</td>
+</tr>
+<tr>
+<td>wechat_auth</td>
+<td>unionid</td>
+<td>普通索引（多端打通）</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="十、文档版本">十、文档版本</h2>
+<h2 id="六、开发重点注意事项">六、开发重点注意事项</h2>
+
+<h3 id="⚠️-阻塞项（开发前必须确认）">⚠️ 阻塞项（开发前必须确认）</h3>
+
+<table>
+<thead>
+<tr>
+<th>事项</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC端网站应用 + 小程序必须绑定到<strong>同一微信开放平台主体账号</strong></td>
+<td>unionid不一致，多端无法打通</td>
+</tr>
+<tr>
+<td>登录时<strong>必须同时存储 openid + unionid</strong></td>
+<td>后上线端无法打通</td>
+</tr>
+<tr>
+<td>PC端需配置授权回调域 + HTTPS证书</td>
+<td>二维码无法回调</td>
+</tr>
+<tr>
+<td>wechat_auth表第一期必须建好（含platform、unionid字段）</td>
+<td>后期数据混乱</td>
+</tr>
+</tbody>
+</table>
+<h3 id="核心逻辑">核心逻辑</h3>
+
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>实现要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>二维码</td>
+<td>微信开放平台接口生成，5分钟有效期，过期刷新</td>
+</tr>
+<tr>
+<td>登录绑定</td>
+<td>unionid无账号 → 弹窗绑定手机号 → 关联用户</td>
+</tr>
+<tr>
+<td>认证判断</td>
+<td>auth_status = none → 弹窗引导 / personal/enterprise → 放行</td>
+</tr>
+<tr>
+<td>下单拦截</td>
+<td>提交订单前检查auth_status，未认证弹窗拦截</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七、验收标准">七、验收标准</h2>
+
+<table>
+<thead>
+<tr>
+<th>验收项</th>
+<th>标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>微信扫码登录</td>
+<td>老用户直接登录，新用户跳转绑定手机号</td>
+</tr>
+<tr>
+<td>微信一键登录</td>
+<td>确认弹窗 → 跳转授权页 → 正确登录</td>
+</tr>
+<tr>
+<td>小程序登录</td>
+<td>wx.login成功，老用户直接进，新用户绑定手机号</td>
+</tr>
+<tr>
+<td>认证弹窗</td>
+<td>新用户登录后弹出，已认证用户不再弹出</td>
+</tr>
+<tr>
+<td>认证可跳过</td>
+<td>选择"暂不认证"可关闭，正常浏览</td>
+</tr>
+<tr>
+<td>下单拦截</td>
+<td>未认证用户点击提交订单被拦截</td>
+</tr>
+<tr>
+<td>多端打通</td>
+<td>同一微信号在PC端和小程序端登录到同一账号</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="八、原型说明">八、原型说明</h2>
+
+<table>
+<thead>
+<tr>
+<th>原型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC端原型</td>
+<td><code>pc-prototype.html</code> - 8个演示状态</td>
+</tr>
+<tr>
+<td>小程序端</td>
+<td><code>https://u.pmdaniu.com/zvz87</code> - Axure设计稿</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="版本">版本</h2>
 
 <table>
 <thead>
 <tr>
 <th>版本</th>
 <th>日期</th>
-<th>变更说明</th>
+<th>变更</th>
 </tr>
 </thead>
 <tbody>
@@ -644,132 +439,10 @@ wx.login() 获取 code
 <tr>
 <td>v2.0</td>
 <td>2026-05-06</td>
-<td>精简结构，补充认证逻辑说明，重点突出</td>
+<td>精简结构，突出核心逻辑，补充开发注意事项</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="十一、开发注意事项（重点）">十一、开发注意事项（重点）</h2>
-
-<h3 id="⚠️-阻塞项（开发前必须确认）">⚠️ 阻塞项（开发前必须确认）</h3>
-
-<table>
-<thead>
-<tr>
-<th>事项</th>
-<th>说明</th>
-<th>后果</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>微信开放平台绑定</td>
-<td>PC端网站应用 + 小程序必须绑定到<strong>同一微信开放平台主体账号</strong></td>
-<td>unionid不一致，多端无法打通</td>
-</tr>
-<tr>
-<td>openid + unionid 同时存储</td>
-<td>登录时<strong>必须同时获取并存储 openid + unionid</strong></td>
-<td>后上线端无法打通</td>
-</tr>
-<tr>
-<td>授权回调域名配置</td>
-<td>PC端需在微信开放平台配置授权回调域 + HTTPS证书</td>
-<td>二维码无法回调</td>
-</tr>
-<tr>
-<td>wechat_auth表结构</td>
-<td>第一期必须完整建好（含platform、unionid字段）</td>
-<td>后期数据混乱</td>
-</tr>
-</tbody>
-</table>
-<h3 id="🔑-核心实现要点">🔑 核心实现要点</h3>
-
-<table>
-<thead>
-<tr>
-<th>模块</th>
-<th>实现要点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>二维码生成</strong></td>
-<td>调用微信开放平台接口，5分钟有效期，过期刷新</td>
-</tr>
-<tr>
-<td><strong>登录状态轮询</strong></td>
-<td>前端每2秒轮询一次，服务端通过code换openid+unionid</td>
-</tr>
-<tr>
-<td><strong>首次登录绑定</strong></td>
-<td>unionid无对应账号 → 弹窗绑定手机号 → 关联用户</td>
-</tr>
-<tr>
-<td><strong>认证状态判断</strong></td>
-<td>auth_status = none → 弹窗引导；personal/enterprise → 放行</td>
-</tr>
-<tr>
-<td><strong>下单前拦截</strong></td>
-<td>提交订单前检查auth_status，未认证弹窗拦截</td>
-</tr>
-<tr>
-<td><strong>多端打通</strong></td>
-<td>unionid作为跨端唯一标识，查到则自动关联同一user_id</td>
-</tr>
-</tbody>
-</table>
-<h3 id="📋-接口清单">📋 接口清单</h3>
-
-<table>
-<thead>
-<tr>
-<th>接口</th>
-<th>方法</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>/api/auth/wechat/qrcode</td>
-<td>GET</td>
-<td>获取PC端微信扫码二维码</td>
-</tr>
-<tr>
-<td>/api/auth/wechat/callback</td>
-<td>POST</td>
-<td>微信授权回调</td>
-</tr>
-<tr>
-<td>/api/auth/wechat/bind-phone</td>
-<td>POST</td>
-<td>首次登录绑定手机号</td>
-</tr>
-<tr>
-<td>/api/auth/miniapp/login</td>
-<td>POST</td>
-<td>小程序微信授权登录</td>
-</tr>
-<tr>
-<td>/api/auth/sms/send</td>
-<td>POST</td>
-<td>发送短信验证码</td>
-</tr>
-</tbody>
-</table>
-<h3 id="✅-联调Checklist">✅ 联调Checklist</h3>
-
-<ul>
-<li>[ ] PC端微信扫码登录（老用户直接登录）</li>
-<li>[ ] PC端微信扫码登录（新用户绑定手机号）</li>
-<li>[ ] PC端微信一键登录（H5授权）</li>
-<li>[ ] 小程序微信授权登录（老用户直接登录）</li>
-<li>[ ] 小程序微信授权登录（新用户绑定手机号）</li>
-<li>[ ] 登录后认证选择弹窗（个人/企业/暂不认证）</li>
-<li>[ ] 下单认证拦截（未认证用户被拦截）</li>
-<li>[ ] 同一微信号在PC端和小程序端登录到同一账号（多端打通）</li>
-</ul>
     </main>
     <script>
         function scrollTo(e, id) {
