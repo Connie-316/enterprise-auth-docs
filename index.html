@@ -8,7 +8,6 @@
     <meta http-equiv="Expires" content="0">
     <title>企业认证 · 产品文档中心</title>
     <script>
-        // 自动给文档链接加上当天日期参数，避免CDN缓存问题
         document.addEventListener('DOMContentLoaded', function() {
             var date = new Date().toISOString().slice(0,10).replace(/-/g,'');
             document.querySelectorAll('a.card').forEach(function(card) {
@@ -148,16 +147,6 @@
             font-size: 12px;
             color: #475569;
         }
-        .tag {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        .tag-new { background: #fef3c7; color: #d97706; }
-        .tag-update { background: #dbeafe; color: #2563eb; }
     </style>
 </head>
 <body>
@@ -165,53 +154,49 @@
         <div class="header">
             <div class="icon">📋</div>
             <h1>企业认证 · 产品文档中心</h1>
-            <p class="subtitle">启泰集采商城 · 微信一键登录 & 企业认证功能</p>
-            <span class="badge">微信登录 & 企业认证 PRD v2.0 · PC原型 v1.11 · 小程序 Axure</span>
+            <p class="subtitle">启泰集采商城 · e签宝企业认证功能</p>
+            <span class="badge">PRD v1.2 · 原型 v7.5</span>
         </div>
         <div class="cards">
-            <!-- 微信一键登录PRD -->
-            <a class="card" href="PRD_微信一键登录_v1.11_优化版.html" target="_blank">
+            <a class="card" href="prd.html" target="_blank">
                 <div class="card-icon prd">📋</div>
                 <div class="card-body">
-                    <h2>微信一键登录 PRD <span class="tag tag-new">NEW</span></h2>
-                    <p class="desc">微信扫码/授权登录、绑定手机号、登录后认证引导、下单认证拦截，支持PC端和小程序端</p>
+                    <h2>PRD 需求文档</h2>
+                    <p class="desc">按PRD五段式模板编写，含用户故事、Mermaid流程图、测试用例、D1-D14注意点</p>
                     <div class="meta">
-                        <span>📌 v1.11</span>
-                        <span>🕐 2026-05-05</span>
-                        <span>🔗 登录即注册 · 认证非强制</span>
-                    </div>
-                </div>
-                <div class="card-arrow">→</div>
-            </a>
-            <!-- PC端原型 - 微信一键登录 -->
-            <a class="card" href="原型_登录页_最终版.html" target="_blank">
-                <div class="card-icon pc">🖥</div>
-                <div class="card-body">
-                    <h2>PC端原型 - 微信一键登录 <span class="tag tag-new">NEW</span></h2>
-                    <p class="desc">数智聚模登录页原型，包含扫码登录、密码登录、验证码登录、认证选择弹窗、下单拦截等完整交互</p>
-                    <div class="meta">
-                        <span>📌 v1.11</span>
+                        <span>📌 v1.2</span>
                         <span>🕐 2026-05-06</span>
                     </div>
                 </div>
                 <div class="card-arrow">→</div>
             </a>
-            <!-- 小程序端原型 -->
-            <a class="card" href="https://u.pmdaniu.com/zvz87" target="_blank">
-                <div class="card-icon mini">📱</div>
+            <a class="card" href="pc-prototype.html" target="_blank">
+                <div class="card-icon pc">🖥</div>
                 <div class="card-body">
-                    <h2>小程序端 Axure 原型</h2>
-                    <p class="desc">微信小程序企业认证Axure设计稿，包含微信授权登录、手机号绑定、认证流程等完整页面</p>
+                    <h2>PC端原型</h2>
+                    <p class="desc">Web端企业认证交互原型，4步流程，含场景一/二完整页面与状态流转</p>
                     <div class="meta">
-                        <span>🔗 外部链接</span>
-                        <span>📌 Axure</span>
+                        <span>📌 v7.5</span>
+                        <span>🕐 2026-05-04</span>
                     </div>
                 </div>
-                <div class="card-arrow">↗</div>
+                <div class="card-arrow">→</div>
+            </a>
+            <a class="card" href="mini-prototype.html" target="_blank">
+                <div class="card-icon mini">📱</div>
+                <div class="card-body">
+                    <h2>小程序端原型</h2>
+                    <p class="desc">微信小程序端企业认证交互原型，3步流程，含底部弹窗与分页表单</p>
+                    <div class="meta">
+                        <span>📌 v7.5</span>
+                        <span>🕐 2026-05-04</span>
+                    </div>
+                </div>
+                <div class="card-arrow">→</div>
             </a>
         </div>
         <div class="footer">
-            启泰智能 · 数智聚模商城 · 自动同步更新
+            启泰智能 · 数智聚模商城
         </div>
     </div>
 </body>
