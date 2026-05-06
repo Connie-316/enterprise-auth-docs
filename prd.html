@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>企业认证功能 PRD v1.0</title>
+<title>企业认证功能 PRD v1.2</title>
 <style>
   :root {
     --primary: #1a6ef5;
@@ -244,10 +244,10 @@
 </nav>
 
 <div class="page-header" id="pageHeader">
-  <h1>企业认证功能 PRD v1.0</h1>
+  <h1>企业认证功能 PRD v1.2</h1>
   <div class="meta">
-    <span class="badge">版本：v1.0</span>
-    <span class="badge">更新：2026-05-05</span>
+    <span class="badge">版本：v1.2</span>
+    <span class="badge">更新：2026-05-06</span>
     <span class="badge">关联原型：PC端 v7.5 · 小程序端 v7.5</span>
   </div>
 </div>
@@ -257,8 +257,10 @@
 <!-- ===== 一、需求背景 ===== -->
 <div class="section" id="s1">
   <h2 class="sec-title"><span class="num">1</span>需求背景</h2>
-  <p>本功能基于 e 签宝实现企业实名认证和授权。商城侧<strong>不区分场景</strong>，统一展示表单，<strong>后端判断场景</strong>后传参给 e 签宝，e 签宝 H5 根据后端参数自动适配首次认证/已认证授权流程。</p>
-  <pre style="margin-top:12px;">当前业务流程：用户 → 物料商城 → 企业认证 → e签宝</pre>
+  <p>本功能基于 e 签宝实现个人实名认证和企业实名认证。商城侧提供【个人认证】【企业认证】两个入口，用户选择后进入对应流程。个人认证和企业认证为独立流程，各自有独立的状态和草稿。后端判断企业认证场景后传参给 e 签宝，e 签宝 H5 根据后端参数自动适配首次认证/已认证授权流程。</p>
+  <pre style="margin-top:12px;">当前业务流程：
+用户 → 物料商城 → 【个人认证】→ e签宝（个人）
+用户 → 物料商城 → 【企业认证】→ e签宝（企业）</pre>
 </div>
 
 <!-- ===== 二、需求目标 ===== -->
@@ -307,41 +309,50 @@
   <h3 class="sub-title" id="s4-1">4.1 用户端业务流程</h3>
   <pre class="mermaid">
 flowchart TD
-    A[认证入口页] --> B{是否有历史草稿}
+    A[认证入口页] --> B{选择认证类型}
 
-    B -->|有草稿| C[草稿恢复页]
-    B -->|无草稿| D[企业信息填写页<br/>企查查搜索]
+    B -->|个人认证| P[个人认证流程<br/>姓名+身份证+手机号<br/>跳转e签宝H5]
 
-    C --> E[继续认证 / 重新填写]
-    E --> D
+    B -->|企业认证| C{是否有历史草稿}
 
-    D --> F[过渡页<br/>1-2秒纯前端]
+    C -->|有草稿| D[草稿恢复页]
+    C -->|无草稿| E[企业信息填写页<br/>企查查搜索]
 
-    F --> G[完整认证表单页<br/>法人身份证+经办人信息<br/>场景二：法人身份证自动回填]
+    D --> F[继续认证 / 重新填写]
+    F --> E
 
-    G --> H[提交认证]
+    E --> G[过渡页<br/>1-2秒纯前端]
 
-    H --> I[后端判断场景<br/>前端无感知]
+    G --> H[完整认证表单页<br/>法人身份证+经办人信息<br/>场景二：法人身份证自动回填]
 
-    I --> J[跳转e签宝H5]
+    H --> I[提交认证]
 
-    J --> K{e签宝处理}
+    I --> J[后端判断场景<br/>前端无感知]
 
-    K -->|场景一| L[人脸识别+营业执照<br/>+管理员授权]
-    K -->|场景二| M[仅管理员授权]
+    J --> K[跳转e签宝H5]
 
-    L --> N[回调通知商城]
-    M --> N
+    K --> L{e签宝处理}
 
-    N --> O[结果页]
+    L -->|场景一| M[人脸识别+营业执照<br/>+管理员授权]
+    L -->|场景二| N[仅管理员授权]
 
-    O -->|认证+授权通过| P[成功页]
-    O -->|认证失败| Q[失败页]
-    O -->|等待授权| R[等待授权页]
-    O -->|授权拒绝| S[授权拒绝页<br/>可重新申请]
-    O -->|授权超时| T[超时页]
+    M --> O[回调通知商城]
+    N --> O
+
+    O --> Q[结果页]
+
+    Q -->|认证+授权通过| R[成功页]
+    Q -->|认证失败| S[失败页]
+    Q -->|等待授权| T[等待授权页]
+    Q -->|授权拒绝| U[授权拒绝页<br/>可重新申请]
+    Q -->|授权超时| V[超时页]
+
+    P --> W{e签宝处理}
+    W -->|认证通过| X[回调通知商城]
+    W -->|认证失败| Y[返回失败结果]
+    X --> Z[个人认证结果页]
   </pre>
-  <p style="font-size:13px;color:#666;margin-top:8px;">⚠️ <strong>重要：</strong>场景判断在后端进行，前端用户看到的始终是同一个表单页面。场景二时法人身份证号由后端自动回填并只读。</p>
+  <p style="font-size:13px;color:#666;">⚠️ <strong>重要：</strong>用户需先选择认证类型。个人认证和企业认证为独立流程，各自有独立的状态和草稿（个人认证无草稿机制）。场景判断在后端进行，前端用户看到的始终是同一个表单页面。场景二时法人身份证号由后端自动回填并只读。</p>
 
   <h3 class="sub-title" id="s4-2">4.2 场景差异说明</h3>
   <table>
@@ -358,7 +369,8 @@ flowchart TD
   <h2 class="sec-title"><span class="num">5</span>功能清单</h2>
   <table>
     <tr><th>终端</th><th>模块</th><th>功能</th><th>描述</th></tr>
-    <tr><td>PC/小程序</td><td>企业认证</td><td>认证入口页</td><td>权益引导，未认证用户进入认证流程</td></tr>
+    <tr><td>PC/小程序</td><td>个人认证</td><td>个人认证入口</td><td>跳转个人实名认证流程（姓名+身份证+手机号+e签宝），无草稿机制</td></tr>
+    <tr><td>PC/小程序</td><td>企业认证</td><td>认证入口页</td><td>权益引导，展示【个人认证】【企业认证】双入口</td></tr>
     <tr><td>PC/小程序</td><td>企业认证</td><td>草稿恢复页</td><td>检测历史草稿，可继续或重新填写</td></tr>
     <tr><td>PC/小程序</td><td>企业认证</td><td>企业信息填写</td><td>企查查搜索，自动填充企业信息</td></tr>
     <tr><td>PC/小程序</td><td>企业认证</td><td>过渡页</td><td>纯前端1-2秒，不调接口</td></tr>
@@ -375,19 +387,19 @@ flowchart TD
   <h2 class="sec-title"><span class="num">6</span>功能详述</h2>
 
   <h3 class="sub-title" id="s6-1">6.1 认证入口页</h3>
-  <p><strong>原型描述：</strong>权益引导页，展示认证价值和当前状态。未认证显示【去认证】按钮，已认证显示认证状态。</p>
-  <div class="user-story">作为一个<strong>未认证企业用户</strong>，我想要<strong>了解认证价值和流程</strong>，以便于<strong>决定是否进行认证</strong>。</div>
+  <p><strong>原型描述：</strong>权益引导页，展示认证价值和当前状态。未认证显示【个人认证】【企业认证】两个入口按钮，已认证显示认证状态。</p>
+  <div class="user-story">作为一个<strong>未认证用户</strong>，我想要<strong>了解认证价值和流程</strong>，以便于<strong>决定是否进行认证</strong>。</div>
   <p><strong>前置条件：</strong>用户已登录</p>
-  <p><strong>核心逻辑：</strong>检查企业认证状态 → 有草稿则显示【继续认证】/ 无草稿则显示【去认证】</p>
-  <p><strong>边界条件：</strong>已认证通过显示成功状态；已认证待授权显示等待状态；有草稿允许恢复或重新填写</p>
+  <p><strong>核心逻辑：</strong>检查用户认证状态 → 点【个人认证】进入个人认证流程 / 点【企业认证】进入企业认证流程</p>
+  <p><strong>边界条件：</strong>已认证通过显示成功状态；已认证待授权显示等待状态；个人/企业各有独立草稿</p>
   <p><strong>验收标准：</strong></p>
   <ul>
     <li><span class="check-item">✅</span> 用户能看到认证价值说明</li>
-    <li><span class="check-item">✅</span> 未认证用户能看到【去认证】入口</li>
+    <li><span class="check-item">✅</span> 未认证用户能看到【个人认证】和【企业认证】两个入口</li>
     <li><span class="check-item">✅</span> 已认证用户能看到当前认证状态</li>
   </ul>
 
-  <h3 class="sub-title" id="s6-2">6.2 草稿恢复页</h3>
+  <h3 class="sub-title" id="s6-2">6.2 草稿恢复页（企业认证）</h3>
   <p><strong>原型描述：</strong>检测到历史草稿时显示，提供【继续认证】和【重新填写】两个选项。</p>
   <div class="user-story">作为一个<strong>有历史草稿的企业用户</strong>，我想要<strong>快速恢复之前的填写进度</strong>，以便于<strong>节省时间</strong>。</div>
   <p><strong>前置条件：</strong>用户有未提交的认证草稿</p>
@@ -399,10 +411,10 @@ flowchart TD
     <li><span class="check-item">✅</span> 重新填写能清空草稿</li>
   </ul>
 
-  <h3 class="sub-title" id="s6-3">6.3 企业信息填写页</h3>
+  <h3 class="sub-title" id="s6-3">6.3 企业信息填写页（企业认证）</h3>
   <p><strong>原型描述：</strong>企查查搜索框，输入≥2字触发模糊搜索，选中企业后自动填充4个字段。</p>
   <div class="user-story">作为一个<strong>企业用户</strong>，我想要<strong>快速填写企业信息</strong>，以便于<strong>减少手动输入</strong>。</div>
-  <p><strong>前置条件：</strong>用户点击【去认证】或【继续认证】</p>
+  <p><strong>前置条件：</strong>用户点击【企业认证】入口后，进入企业信息填写页</p>
   <p><strong>核心逻辑：</strong>企查查搜索 → 选中后自动填充企业名称/统一社会信用代码/法定代表人/注册地址 → 【下一步】进入过渡页</p>
   <p><strong>边界条件：</strong>搜索无结果提示"未找到企业"；信息不完整【下一步】禁用</p>
   <p><strong>验收标准：</strong></p>
@@ -460,6 +472,7 @@ flowchart TD
     <tr><td>授权超时</td><td>24小时</td><td>超时自动失效，需重新申请</td></tr>
     <tr><td>认证失败</td><td>可重新认证</td><td>点【重新认证】跳转表单并回填数据</td></tr>
     <tr><td>场景二表单</td><td>法人身份证</td><td>后端自动回填，前端只读</td></tr>
+    <tr><td>个人认证</td><td>无草稿</td><td>个人认证不设草稿机制，提交后直接跳转e签宝</td></tr>
   </table>
 </div>
 
@@ -470,7 +483,7 @@ flowchart TD
   <h3 class="sub-title" id="s8-1">8.1 状态机</h3>
   <table>
     <tr><th>状态值</th><th>状态名</th><th>含义</th><th>下一步</th></tr>
-    <tr><td><span class="status s-unverified">UNVERIFIED (0)</span></td><td>未认证</td><td>初始状态</td><td>点【去认证】进入流程</td></tr>
+    <tr><td><span class="status s-unverified">UNVERIFIED (0)</span></td><td>未认证</td><td>初始状态</td><td>点【个人认证】或【企业认证】进入对应流程</td></tr>
     <tr><td><span class="status s-draft">DRAFT (1)</span></td><td>草稿</td><td>有未完成的认证草稿</td><td>【继续认证】回填 / 【重新填写】清空</td></tr>
     <tr><td><span class="status s-verifying">VERIFYING (2)</span></td><td>认证中</td><td>已提交，等待e签宝回调</td><td>等待，可点【刷新状态】</td></tr>
     <tr><td><span class="status s-rejected">REJECTED (4)</span></td><td>认证失败</td><td>展示失败原因</td><td>点【重新认证】→ 跳表单回填</td></tr>
@@ -537,12 +550,13 @@ flowchart TD
     <tr><th>版本</th><th>日期</th><th>修改内容</th></tr>
     <tr><td>v1.0</td><td>2026-05-05</td><td>按PRD模板规范重写，流程图聚焦用户视角，注意点前置，补充e签宝接口参考</td></tr>
     <tr><td>v1.1</td><td>2026-05-05</td><td>修复目录导航与功能清单过时条目；优化注意点标题和说明；红色提示框移至3.1节内；明确D1-D14分组逻辑；修正6.5节"自动适配"表述为"前端不做场景判断"</td></tr>
+    <tr><td>v1.2</td><td>2026-05-06</td><td>认证入口从单一按钮改为【个人认证】【企业认证】双入口；业务流程图增加个人认证分支；功能清单增加个人认证入口；边界条件增加个人认证无草稿说明；6.2/6.3节标题明确为"企业认证"</td></tr>
   </table>
 </div>
 
 <hr>
 <p style="color:var(--muted);font-size:12px;text-align:center;padding:14px 0;">
-  企业认证功能 PRD v1.0 · 2026-05-05 · 产品部
+  企业认证功能 PRD v1.2 · 2026-05-06 · 产品部
 </p>
 
 </div>
